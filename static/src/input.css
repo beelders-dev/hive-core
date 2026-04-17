@@ -1,0 +1,4 @@
+@import "tailwindcss";
+
+/* This tells Tailwind to look at EVERY html file in the entire project folder */
+@source "../../**/*.html";
