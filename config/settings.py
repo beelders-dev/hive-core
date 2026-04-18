@@ -37,12 +37,14 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # Third party
+    "django_browser_reload",
+    "crispy_forms",
+    "crispy_tailwind",
     # Local
     "accounts.apps.AccountsConfig",
     "pages.apps.PagesConfig",
     "products.apps.ProductsConfig",
-    # Third party
-    "django_browser_reload",
 ]
 
 MIDDLEWARE = [
@@ -126,3 +128,5 @@ STATICFILES_DIRS = [
     BASE_DIR / "static",
 ]
 AUTH_USER_MODEL = "accounts.CustomUser"
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+CRISPY_TEMPLATE_PACK = "tailwind"

@@ -9,6 +9,7 @@ services:
       - "POSTGRES_DB=postgres"
       - "POSTGRES_USER=postgres"
       - "POSTGRES_PASSWORD=postgres"
+      - CHOKIDAR_USEPOLLING=true
 
   web:
     build: .
@@ -20,6 +21,14 @@ services:
       - "DEBUG=1"
     depends_on:
       - db
+
+  tailwind:
+    image: node:18-slim # Or a specific tailwind image
+    working_dir: /code
+    volumes:
+      - .:/code
+    # This runs your exact command inside the container
+    command: ./tailwindcss -i ./static/src/input.css -o ./static/dist/styles.css --watch
 
 volumes:
   postgres_data:
