@@ -1,0 +1,16 @@
+{% extends "_base.html" %}
+
+{% block content %}
+    <div class="flex justify-center">
+        <div class="product-card w-1/2 text-center ">
+            <h1 class="my-5 text-3xl font-bold ">{{ product.name }}</h1>
+            
+            <p>Stock: {{ product.stock }}</p>
+            <p>Price: P{{ product.price }}</p>
+            <p>Created: {{ product.created_at }}</p>
+            <p>Modified: {{ product.updated_at }}</p>
+            <p class="my-5">{{ product.full_description }}</p>
+        </div>
+    </div>
+<a href="{% url 'product_list' %}">Back</a>
+{% endblock %}
