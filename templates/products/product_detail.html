@@ -12,8 +12,10 @@
     </div>
     <div class="flex flex-col gap-2">
         <div class="flex gap-4 mb-2">
-            <a href="{% url 'product_delete' product.pk %}" class="text-amber-700">Delete</a>
-            <a href="{% url 'product_update' product.pk %}" class="text-red-200">Update</a>
+            <a href="{% url 'product_delete' product.pk %}"
+               class="rounded text-white bg-red-700 p-2 shadow-xs">Delete</a>
+            <a href="{% url 'product_update' product.pk %}"
+               class="rounded text-white bg-green-800 p-2 shadow-xs">Update</a>
         </div>
         <a href="{% url 'product_list' %}">Back</a>
     </div>
