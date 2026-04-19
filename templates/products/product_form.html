@@ -1,0 +1,6 @@
+{% extends "_base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="w-3/4">{% crispy form %}</div>
+    <a href="{% url 'product_list' %}">Back</a>
+{% endblock content %}

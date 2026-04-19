@@ -9,7 +9,7 @@ services:
       - "POSTGRES_DB=postgres"
       - "POSTGRES_USER=postgres"
       - "POSTGRES_PASSWORD=postgres"
-      - CHOKIDAR_USEPOLLING=true
+      # - CHOKIDAR_USEPOLLING=true
 
   web:
     build: .
@@ -24,11 +24,17 @@ services:
 
   tailwind:
     image: node:18-slim # Or a specific tailwind image
-    working_dir: /code
+    working_dir: /app
+    tty: true
+    stdin_open: true
     volumes:
-      - .:/code
+      - .:/app
     # This runs your exact command inside the container
-    command: ./tailwindcss -i ./static/src/input.css -o ./static/dist/styles.css --watch
+    # command: >
+    #   sh -c "npm install && 
+    #          npx tailwindcss -i ./static/src/input.css -o ./static/dist/styles.css --watch --poll 100"
+    # environment:
+    #   - CHOKIDAR_USEPOLLING=true
 
 volumes:
   postgres_data:
