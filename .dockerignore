@@ -1,0 +1,24 @@
+# Git
+.git
+.gitignore
+
+# Docker
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Python
+venv/
+__pycache__/
+*.pyc
+.env
+db.sqlite3
+
+# Frontend (Crucial)
+# Let Docker run 'npm install' and 'npm run build' inside the container
+node_modules/
+static/src/
+
+# Logs and temp files
+*.log
+.pytest_cache/

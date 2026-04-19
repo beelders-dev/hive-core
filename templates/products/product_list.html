@@ -1,19 +1,29 @@
 {% extends "_base.html" %}
-
 {% block content %}
-    <h1 class="m-5 text-3xl font-bold ">Products</h1>
-    <ul class="flex">
+    <div class="flex items-center gap-4 m-5">
+        <h1 class="text-3xl font-bold">Products</h1>
+        <a href="{% url 'product_create' %}"
+           class="hover:scale-110 transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 fill="none"
+                 viewBox="0 0 24 24"
+                 stroke-width="1.5"
+                 stroke="currentColor"
+                 class="size-8 text-white bg-green-600 rounded shadow-md">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+        </a>
+    </div>
+    <ul class="flex flex-wrap justify-center gap-4">
         {% for product in product_list %}
             <a href="{{ product.get_absolute_url }}">
-                <li class="m-2 p-2 w-auto border border-gray-50 rounded content-center text-center bg-gray-100 shadow-xl">
+                <li class="m-2 w-80 p-2  border border-gray-50 rounded content-center text-center bg-gray-100 shadow-xl">
                     <p class="text-2xl my-5">{{ product.name }}</p>
                     <p>Stock: {{ product.stock }}</p>
                     <p>Price: P{{ product.price }}</p>
                     <p class="my-5">{{ product.short_description }}</p>
-                
                 </li>
             </a>
-
         {% endfor %}
     </ul>
 {% endblock %}
