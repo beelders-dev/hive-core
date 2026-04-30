@@ -1,4 +1,5 @@
 from django.test import TestCase
+import uuid
 from django.urls import reverse
 from .models import Product
 
@@ -24,6 +25,6 @@ class ProductTests(TestCase):
         self.assertEqual(self.product.price, 120.00)
         self.assertEqual(self.product.stock, 100)
 
-    def test_template_used(self):
+    def test_product_list_template_used(self):
         response = self.client.get(reverse("product_list"))
         self.assertTemplateUsed(response, "products/product_list.html")
