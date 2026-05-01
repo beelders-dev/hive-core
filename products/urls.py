@@ -7,6 +7,8 @@ from .views import (
     ProductUpdateView,
 )
 
+app_name = "products"
+
 urlpatterns = [
     path("<uuid:pk>/", ProductDetailView.as_view(), name="product_detail"),
     path("", ProductListView.as_view(), name="product_list"),
