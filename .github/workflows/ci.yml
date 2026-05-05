@@ -1,6 +1,5 @@
 name: CI Pipeline
 
-# Trigger the workflow on push or pull request to the main branch
 on:
   push:
     branches: [ "main" ]
@@ -11,18 +10,15 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    # Set up a services container for your database if you scale past SQLite later
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/checkout@v4
-      # This is the official GitHub action to configure the Python environment
       uses: actions/setup-python@v5
       with:
         python-version: '3.12'
-        cache: 'pip' # Caching pip speed up subsequent workflow runs
+        cache: 'pip'
 
     - name: Install Dependencies
       run: |
