@@ -5,6 +5,8 @@ __pycache__/
 venv/
 .env
 db.sqlite3
+# Executables
+*.exe
 
 # Tailwind / Node
 node_modules/
