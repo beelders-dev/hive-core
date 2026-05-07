@@ -4,8 +4,20 @@
     <div class="max-w-md mx-auto my-12 px-4 font-sans">
         <div class="bg-white border border-slate-300 rounded-xl overflow-hidden shadow-sm p-6 sm:p-8">
             <div class="mb-6">
-                <h2 class="text-xl font-bold text-slate-800">Add New Ingredient</h2>
-                <p class="text-sm text-slate-500 mt-1">Fill in the details below to update your inventory stock.</p>
+                <h2 class="text-xl font-bold text-slate-800">
+                    {% if object %}
+                        Edit {{ object.name }}
+                    {% else %}
+                        Add New Ingredient
+                    {% endif %}
+                </h2>
+                <p class="text-sm text-slate-500 mt-1">
+                    {% if object %}
+                        Update the details of this ingredient below.
+                    {% else %}
+                        Fill in the details below to update your inventory stock.
+                    {% endif %}
+                </p>
             </div>
             <form action="" method="post" class="space-y-5">
                 {% csrf_token %}
@@ -17,7 +29,11 @@
                     </a>
                     <button type="submit"
                             class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        Add Ingredient
+                        {% if object %}
+                            Save Changes
+                        {% else %}
+                            Add Ingredient
+                        {% endif %}
                     </button>
                 </div>
             </form>

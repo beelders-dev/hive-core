@@ -1,4 +1,10 @@
-from django.views.generic import ListView, CreateView, DeleteView, DetailView
+from django.views.generic import (
+    ListView,
+    CreateView,
+    DeleteView,
+    DetailView,
+    UpdateView,
+)
 from django.urls import reverse_lazy
 
 from .models import Ingredient
@@ -14,7 +20,7 @@ class IngredientListView(ListView):
 
 class IngredientCreateView(CreateView):
     model = Ingredient
-    template_name = "inventory/ingredient_add.html"
+    template_name = "inventory/ingredient_form.html"
     fields = ["name", "stock_qty", "price"]
     success_url = reverse_lazy("inventory:ingredient_list")
 
@@ -28,3 +34,10 @@ class IngredientDeleteView(DeleteView):
 class IngredientDetailView(DetailView):
     model = Ingredient
     template_name = "inventory/ingredient_detail.html"
+
+
+class IngredientUpdateView(UpdateView):
+    model = Ingredient
+    template_name = "inventory/ingredient_form.html"
+    fields = ["name", "stock_qty", "price"]
+    success_url = reverse_lazy("inventory:ingredient_list")
