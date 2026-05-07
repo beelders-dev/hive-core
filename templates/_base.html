@@ -4,14 +4,21 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description"
+              content="Hive Core - Manage your inventory and more with our web application.">
+        <meta name="keywords" content="inventory, management, hive core, web app">
         <link rel="stylesheet" href="{% static 'dist/styles.css' %}">
         <title>Hive Core</title>
     </head>
     <body>
         <header class="bg-gray-600 p-2 text-center text-white columns-3">
-            <div>1st column</div>
+            <div>
+                <a href="{% url 'home' %}">Home</a>
+            </div>
             <div>Hive Core</div>
-            <div>3rd column</div>
+            <div>
+                <a href="{% url 'inventory:ingredient_list' %}">Inventory</a>
+            </div>
         </header>
         <main class="p-5">
             {% block content %}
