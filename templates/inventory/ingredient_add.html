@@ -1,8 +1,26 @@
 {% extends "_base.html" %}
-{% load crispy_form_tags %}
+{% load crispy_forms_tags %}
 {% block content %}
-    <form action="" method="post">
-        {% csrf_token %}
-        {{ form|crispy }}
-    </form>
+    <div class="max-w-md mx-auto my-12 px-4 font-sans">
+        <div class="bg-white border border-slate-300 rounded-xl overflow-hidden shadow-sm p-6 sm:p-8">
+            <div class="mb-6">
+                <h2 class="text-xl font-bold text-slate-800">Add New Ingredient</h2>
+                <p class="text-sm text-slate-500 mt-1">Fill in the details below to update your inventory stock.</p>
+            </div>
+            <form action="" method="post" class="space-y-5">
+                {% csrf_token %}
+                <div class="text-slate-700">{{ form|crispy }}</div>
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                    <a href="{% url 'inventory:ingredient_list' %}"
+                       class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-50 border border-slate-200 rounded-lg transition-all duration-150">
+                        Cancel
+                    </a>
+                    <button type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                        Add Ingredient
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock content %}
