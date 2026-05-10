@@ -1,11 +1,65 @@
 {% extends "_base.html" %}
 {% block content %}
-    <h1 class="text-4xl font-bold text-gray-400">Recipe List</h1>
-    <ul>
-        {% for recipe in recipe_list %}
-            <li>
-                <a href="{{ recipe.get_absolute_url }}">{{ recipe.name }}</a>
-            </li>
-        {% endfor %}
-    </ul>
+    <div class="max-w-5xl mx-auto my-8 px-4 font-sans">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-slate-800 tracking-tight">Recipe Book</h2>
+            <a href="{% url 'production:recipe_add' %}"
+               class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg shadow-sm transition-all duration-200 flex items-center gap-2">
+                <svg class="w-4 h-4"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"></path>
+                </svg>
+                Create New Recipe
+            </a>
+        </div>
+        <div class="flex flex-col border border-slate-300 rounded-xl overflow-hidden shadow-sm bg-white">
+            <div class="grid grid-cols-12 items-stretch bg-slate-50 border-b-2 border-slate-300 text-xs font-semibold uppercase tracking-wider text-slate-600">
+                <div class="col-span-4 p-4 border-r border-slate-300">Recipe Name</div>
+                <div class="col-span-6 p-4 border-r border-slate-300">Description</div>
+                <div class="col-span-2 p-4 text-right">Actions</div>
+            </div>
+            {% for recipe in recipe_list %}
+                <div class="grid grid-cols-12 items-stretch border-b border-slate-200 last:border-b-0 hover:bg-slate-50/80 transition-colors duration-150 group">
+                    <div class="col-span-4 p-4 border-r border-slate-200 flex items-center">
+                        <a href="{{ recipe.get_absolute_url }}"
+                           class="font-semibold text-slate-900 group-hover:text-blue-600 transition-colors">
+                            {{ recipe.name }}
+                        </a>
+                    </div>
+                    <div class="col-span-6 p-4 border-r border-slate-200 flex items-center">
+                        <p class="text-sm text-slate-500 line-clamp-1">
+                            {% if recipe.description %}
+                                {{ recipe.description }}
+                            {% else %}
+                                <span class="italic text-slate-400">No description provided.</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="col-span-2 p-4 flex items-center justify-end gap-3 text-right">
+                        <a href="{{ recipe.get_absolute_url }}"
+                           class="text-xs font-bold text-blue-600 hover:text-blue-800 uppercase tracking-tighter">
+                            Open
+                        </a>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="p-16 text-center bg-white">
+                    <div class="mx-auto w-12 h-12 text-slate-300 mb-4">
+                        <svg fill="none"
+                             stroke="currentColor"
+                             stroke-width="1.5"
+                             viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25">
+                            </path>
+                        </svg>
+                    </div>
+                    <p class="text-slate-500 font-medium">No recipes found.</p>
+                    <p class="text-slate-400 text-sm mt-1">Start by adding your first culinary masterpiece.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endblock content %}

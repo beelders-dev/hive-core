@@ -16,7 +16,7 @@ class Recipe(models.Model):
     )
 
     def get_absolute_url(self):
-        return reverse("production:recipe_detail", kwargs={"pk": self.pk})
+        return reverse("production:recipe", kwargs={"pk": self.pk})
 
     def get_all_ingredients(self):
         return self.ingredient_requirements.all()
