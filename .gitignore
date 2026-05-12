@@ -14,7 +14,7 @@ node_modules/
 
 # Tailwind Build Output (Optional)
 # Only ignore if you want the server to build the CSS during deployment
-# static/dist/
+static/dist/
 
 # IDEs
 .vscode/
