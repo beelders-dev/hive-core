@@ -1,0 +1,7 @@
+<input type="text"
+       name="q"
+       hx-get="{% url 'inventory:ingredient_list' %}?use_case=recipe_add_form"
+       hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
+       hx-target="#search-results"
+       xh-indicator=".htmx-indicator"
+       placeholder="Search...">

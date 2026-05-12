@@ -14,8 +14,26 @@ from .models import Ingredient
 
 class IngredientListView(ListView):
     model = Ingredient
-    template_name = "inventory/ingredient_list.html"
+    # template_name = "inventory/ingredient_list.html"
     context_object_name = "ingredient_list"
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+        q = self.request.GET.get("q", "")
+
+        if q:
+            qs = qs.filter(name__icontains=q)
+        return qs
+
+    def get_template_names(self):
+
+        if "HX-Request" in self.request.headers:
+            use_case = self.request.GET.get("use_case")
+
+            if use_case == "recipe_add_form":
+                return ["inventory/partials/_ingredient_results.html"]
+
+        return ["inventory/ingredient_list.html"]
 
 
 class IngredientCreateView(CreateView):
