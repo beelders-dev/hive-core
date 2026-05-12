@@ -1,0 +1,5 @@
+<input hx-get="{% url 'inventory:ingredient_list' %}?layout=recipe"
+       type="search"
+       name="q"
+       hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
+       hx-target="#results">
