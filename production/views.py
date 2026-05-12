@@ -33,7 +33,7 @@ class RecipeCreateView(CreateWithInlinesView):
     model = Recipe
     inlines = [IngredientInline]
     fields = ["name"]
-    template_name = "production/recipe_form.html"
+    template_name = "production/recipe/recipe_form.html"
     success_url = reverse_lazy("production:recipe_list")
 
 
@@ -46,3 +46,4 @@ class RecipeUpdateView(UpdateView):
 class RecipeDeleteView(DeleteView):
     model = Recipe
     template_name = "production/recipe/recipe_delete.html"
+    success_url = reverse_lazy("production:recipe_list")
