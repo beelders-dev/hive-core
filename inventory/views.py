@@ -14,7 +14,7 @@ from .models import Ingredient
 
 class IngredientListView(ListView):
     model = Ingredient
-    # template_name = "inventory/ingredient_list.html"
+    template_name = "inventory/ingredient_list.html"
     context_object_name = "ingredient_list"
 
     def get_queryset(self):
@@ -33,7 +33,7 @@ class IngredientListView(ListView):
             if use_case == "recipe_add_form":
                 return ["inventory/partials/_ingredient_results.html"]
 
-        return ["inventory/ingredient_list.html"]
+        return [self.template_name]
 
 
 class IngredientCreateView(CreateView):
