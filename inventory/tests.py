@@ -25,13 +25,13 @@ class IngredientModelTests(TestCase):
         expected = "egg  (12.00g)"
         self.assertEqual(str(self.ingredient), expected)
 
-    def test_get_absolute_url(self):
+    def test_get_absolute_url_returns_correct_url(self):
         self.assertEqual(
             self.ingredient.get_absolute_url(),
             reverse("inventory:ingredient", kwargs={"pk": self.ingredient.pk}),
         )
 
-    def test_get_total_amount(self):
+    def test_get_total_amount_calculates_correctly(self):
         self.assertEqual(self.ingredient.get_total_amount(), Decimal(300.00))
 
     def test_stock_cannot_be_negative(self):
@@ -49,21 +49,163 @@ class IngredientModelTests(TestCase):
             invalid_ingredient.full_clean()
 
 
-class IngredientViewTests(TestCase):
+class IngredientListViewTests(TestCase):
 
-    @classmethod
     def setUp(self):
-        self.response = self.client.get(reverse("inventory:ingredient_list"))
+        self.ingredient = Ingredient.objects.create(name="Egg", stock_qty=10, price=20)
+        self.url = reverse("inventory:ingredient_list")
+        self.response = self.client.get(self.url)
 
-    def test_ingredient_list_view_returns_200(self):
+    def test_list_view_returns_200(self):
         self.assertEqual(self.response.status_code, 200)
 
-    def test_ingredient_list_uses_correct_template(self):
+    def test_list_view_uses_correct_template(self):
         self.assertTemplateUsed(self.response, "inventory/ingredient_list.html")
 
-    def test_ingredient_list_displays_ingredients(self):
-
-        Ingredient.objects.create(name="Egg", stock_qty=10, price=20)
-        response = self.client.get(reverse("inventory:ingredient_list"))
-        ingredients = response.context["ingredient_list"]
+    def test_list_view_displays_ingredients(self):
+        ingredients = self.response.context["ingredient_list"]
         self.assertEqual(len(ingredients), 1)
+
+
+class IngredientDetailViewTests(TestCase):
+
+    def setUp(self):
+        self.ingredient = Ingredient.objects.create(name="Egg", stock_qty=10, price=20)
+        self.url = reverse("inventory:ingredient", kwargs={"pk": self.ingredient.pk})
+        self.response = self.client.get(self.url)
+
+    def test_detail_view_returns_200(self):
+        self.assertEqual(self.response.status_code, 200)
+
+    def test_detail_view_uses_correct_template(self):
+        self.assertTemplateUsed(self.response, "inventory/ingredient_detail.html")
+
+    def test_detail_view_displays_correctly(self):
+        self.assertEqual(self.response.context["ingredient"], self.ingredient)
+
+
+class IngredientCreateViewTests(TestCase):
+
+    def setUp(self):
+        self.url = reverse("inventory:ingredient_add")
+
+    def test_create_view_returns_200(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_create_view_uses_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertTemplateUsed(response, "inventory/ingredient_form.html")
+
+    def test_create_view_valid_post_creates_ingredient(self):
+        self.client.post(
+            self.url,
+            {
+                "name": "Butter",
+                "stock_qty": 20,
+                "price": 15,
+            },
+        )
+        self.assertEqual(Ingredient.objects.count(), 1)
+
+    def test_create_view_invalid_post_does_not_create_ingredient(self):
+        response = self.client.post(
+            self.url,
+            {
+                "name": "",
+                "stock_qty": 20,
+                "price": 15,
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Ingredient.objects.count(), 0)
+
+    def test_create_view_successful_post_redirects(self):
+        response = self.client.post(
+            self.url,
+            {
+                "name": "Butter",
+                "stock_qty": 20,
+                "price": 12,
+            },
+        )
+        self.assertRedirects(response, reverse("inventory:ingredient_list"))
+
+
+class IngredientUpdateViewTests(TestCase):
+
+    def setUp(self):
+        self.ingredient = Ingredient.objects.create(name="Egg", stock_qty=10, price=20)
+        self.url = reverse(
+            "inventory:ingredient_update", kwargs={"pk": self.ingredient.pk}
+        )
+
+    def test_update_view_returns_200(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_update_view_uses_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertTemplateUsed(response, "inventory/ingredient_form.html")
+
+    def test_update_view_valid_post_updates_ingredient(self):
+        self.client.post(
+            self.url,
+            {
+                "name": "Egg",
+                "stock_qty": 20,
+                "price": 20,
+            },
+        )
+        self.ingredient.refresh_from_db()
+        self.assertEqual(self.ingredient.stock_qty, 20)
+
+    def test_update_view_invalid_post_does_not_update_ingredient(self):
+        original_name = self.ingredient.name
+        response = self.client.post(
+            self.url,
+            {
+                "name": "",
+                "stock_qty": 10,
+                "price": 20,
+            },
+        )
+        self.ingredient.refresh_from_db()
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.ingredient.name, original_name)
+
+    def test_update_view_successful_post_redirects(self):
+        response = self.client.post(
+            self.url,
+            {
+                "name": "Butter",
+                "stock_qty": 20,
+                "price": 12,
+            },
+        )
+        self.assertRedirects(response, reverse("inventory:ingredient_list"))
+
+
+class IngredientDeleteViewTests(TestCase):
+
+    def setUp(self):
+        self.ingredient = Ingredient.objects.create(name="Egg", stock_qty=10, price=20)
+        self.url = reverse(
+            "inventory:ingredient_delete", kwargs={"pk": self.ingredient.pk}
+        )
+
+    def test_delete_view_returns_200(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+
+    def test_delete_view_uses_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertTemplateUsed(response, "inventory/ingredient_delete.html")
+
+    def test_delete_view_deletes_ingredient(self):
+        self.client.post(self.url)
+        self.assertEqual(Ingredient.objects.count(), 0)
+
+    def test_delete_view_redirects_after_successful_post(self):
+        response = self.client.post(self.url)
+        self.assertRedirects(response, reverse("inventory:ingredient_list"))
