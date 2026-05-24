@@ -18,11 +18,6 @@
         <div class="col-span-2 p-4 flex items-center justify-center text-right">
             <a href="{{ ingredient.get_absolute_url }}"
                class="text-sm font-medium text-blue-600 hover:underline">View</a>
-            {% if ingredient.stock_qty > 0 %}
-                <button class="border border-gray-200 rounded-lg p-2 shadow-md"
-                        hx-post="{% url 'production:recipe_ingredient_add' ingredient.id %}"
-                        hx-target="#selected-ingredients">Button</button>
-            {% endif %}
         </div>
     </div>
 {% empty %}

@@ -1,5 +1,10 @@
+from django.views import View
+from django.shortcuts import render
 from django.urls import reverse_lazy
-from extra_views import CreateWithInlinesView
+
+from .services import RecipeBuilder
+from inventory.models import Ingredient
+
 from django.views.generic import (
     ListView,
     DetailView,
@@ -8,7 +13,6 @@ from django.views.generic import (
     UpdateView,
 )
 from .models import Recipe
-from .forms import IngredientInline
 
 
 # Create your views here.
@@ -29,12 +33,25 @@ class RecipeDetailView(DetailView):
         )
 
 
-class RecipeCreateView(CreateWithInlinesView):
+class RecipeCreateView(CreateView):
     model = Recipe
-    inlines = [IngredientInline]
     fields = ["name"]
     template_name = "production/recipe/recipe_form.html"
     success_url = reverse_lazy("production:recipe_list")
+
+    def form_valid(self, form):
+
+        response = super().form_valid(form)
+
+        builder = RecipeBuilder(self.request.session)
+
+        builder.create_recipe_ingredients(
+            recipe=self.object, post_data=self.request.POST
+        )
+
+        builder.clear()
+
+        return response
 
 
 class RecipeUpdateView(UpdateView):
@@ -47,3 +64,35 @@ class RecipeDeleteView(DeleteView):
     model = Recipe
     template_name = "production/recipe/recipe_delete.html"
     success_url = reverse_lazy("production:recipe_list")
+
+
+class RecipeIngredientAddView(
+    View
+):  # Change function name later to a more appropriate one
+
+    def post(self, request, pk):
+
+        builder = RecipeBuilder(request.session)
+
+        builder.add(pk)
+
+        return render(
+            request,
+            "production/recipe/partials/_selected_ingredients_table.html",
+            {"ingredients": builder.get_ingredients()},
+        )
+
+
+class SelectedIngredientsView(View):
+
+    def get(self, request):
+
+        selected = request.session.get("selected_ingredients", [])
+
+        ingredients = Ingredient.objects.filter(id__in=selected)
+
+        return render(
+            request,
+            "production/recipe/partials/_selected_ingredients_table.html",
+            {"ingredients": ingredients},
+        )

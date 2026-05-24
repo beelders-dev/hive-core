@@ -1,7 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
-    <!-- SEARCH BAR -->
-    {% include "production/recipe/partials/_search_bar.html" %}
-    <div id="search-results" class="w-1/2"></div>
-    <!-- TABLE -->
+    <form action="" method="post">
+        {% csrf_token %}
+        <input type="text" name="name" id="recipe-name">
+        <div class="grid grid-cols-12">
+            <div class="col-span-6">
+                <!-- SEARCH BAR -->
+                <div>{% include "production/recipe/partials/_search_bar.html" %}</div>
+                <!-- FILTERED RESULTS -->
+                <div id="search-results" class="w-1/2"></div>
+            </div>
+            <!-- TABLE -->
+            <div id="selected-ingredients"
+                 class="col-span-6"
+                 hx-get="{% url 'production:selected_ingredients' %}"
+                 hx-trigger="load"></div>
+        </div>
+        <input type="submit" value="submit">
+    </form>
 {% endblock content %}

@@ -6,6 +6,8 @@ from .views import (
     RecipeCreateView,
     RecipeDeleteView,
     RecipeUpdateView,
+    RecipeIngredientAddView,
+    SelectedIngredientsView,
 )
 
 app_name = "production"
@@ -13,8 +15,20 @@ app_name = "production"
 urlpatterns = [
     path("", TemplateView.as_view(template_name="temp.html")),
     path("recipes/", RecipeListView.as_view(), name="recipe_list"),
-    path("recipes/add", RecipeCreateView.as_view(), name="recipe_add"),
+    path(
+        "recipes/add/", RecipeCreateView.as_view(), name="recipe_add"
+    ),  # endpoint name will need to change
     path("recipes/<uuid:pk>/", RecipeDetailView.as_view(), name="recipe"),
+    path(
+        "recipes/add/selected-ingredients",
+        SelectedIngredientsView.as_view(),
+        name="selected_ingredients",
+    ),
+    path(
+        "recipes/<uuid:pk>/add/",
+        RecipeIngredientAddView.as_view(),
+        name="recipe_ingredient_add",
+    ),
     path("recipes/<uuid:pk>/delete/", RecipeDeleteView.as_view(), name="recipe_delete"),
     path("recipes/<uuid:pk>/edit/", RecipeUpdateView.as_view(), name="recipe_edit"),
 ]
