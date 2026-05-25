@@ -8,8 +8,8 @@
                 Add Ingredient
             </a>
         </div>
-        <div class="flex flex-col border border-slate-300 rounded-xl overflow-hidden shadow-sm">
-            {% include "inventory/partials/_ingredient_results.html" %}
-        </div>
+        {% include "production/recipe/partials/_search_bar.html" with target_id="ingredients_search_results" %}
+        <div class="flex flex-col border border-slate-300 rounded-xl overflow-hidden shadow-sm"
+             id="ingredients_search_results">{% include "inventory/partials/_ingredient_results.html" %}</div>
     </div>
 {% endblock content %}

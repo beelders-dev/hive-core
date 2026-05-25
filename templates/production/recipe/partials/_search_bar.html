@@ -1,7 +1,41 @@
-<input type="text"
-       name="q"
-       hx-get="{% url 'inventory:ingredient_list' %}?use_case=recipe_add_form"
-       hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
-       hx-target="#search-results"
-       xh-indicator=".htmx-indicator"
-       placeholder="Search...">
+<div class="relative w-full group">
+       <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
+              <svg class="w-5 h-5"
+                   fill="none"
+                   stroke="currentColor"
+                   viewBox="0 0 24 24"
+                   xmlns="http://www.w3.org/2000/svg">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z">
+                     </path>
+              </svg>
+       </div>
+       <input type="text"
+              name="q"
+              hx-get="{% url 'inventory:ingredient_list' %}?use_case=recipe_add_form"
+              hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
+              hx-target="#{{ target_id }}"
+              hx-indicator="#search-loading-spinner"
+              placeholder="Search ingredients by name, CAS number, or SKU..."
+              class="w-full rounded-xl border border-slate-200 bg-white pl-11 pr-12 py-3 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent shadow-sm transition-all duration-150">
+       <div id="search-loading-spinner"
+            class="htmx-indicator absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
+              <svg class="animate-spin h-5 w-5 text-blue-600"
+                   xmlns="http://www.w3.org/2000/svg"
+                   fill="none"
+                   viewBox="0 0 24 24">
+                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3"></circle>
+                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                     </path>
+              </svg>
+       </div>
+</div>
+<style>
+    .htmx-indicator {
+        opacity: 0;
+        transition: opacity 150ms ease-in;
+    }
+    .htmx-request .htmx-indicator, 
+    .htmx-request.htmx-indicator {
+        opacity: 1;
+    }
+</style>

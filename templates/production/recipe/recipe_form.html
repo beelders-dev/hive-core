@@ -1,21 +1,46 @@
 {% extends "base.html" %}
 {% block content %}
-    <form action="" method="post">
-        {% csrf_token %}
-        <input type="text" name="name" id="recipe-name">
-        <div class="grid grid-cols-12">
-            <div class="col-span-6">
-                <!-- SEARCH BAR -->
-                <div>{% include "production/recipe/partials/_search_bar.html" %}</div>
-                <!-- FILTERED RESULTS -->
-                <div id="search-results" class="w-1/2"></div>
+    <div class="py-10 px-6">
+        <form action="" method="post" class="space-y-8">
+            {% csrf_token %}
+            <section class="space-y-2 max-w-xl">
+                <label class="block text-sm font-semibold text-gray-700">Recipe Name</label>
+                <input type="text"
+                       name="name"
+                       placeholder="Enter recipe name..."
+                       class="w-full rounded-xl border border-gray-300 px-4 py-2.5 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </section>
+            <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start w-full">
+                <div class="space-y-4 w-full lg:col-span-5">
+                    <div class="space-y-2">
+                        <h2 class="text-lg font-semibold text-gray-800">Search Ingredients</h2>
+                        {% include "production/recipe/partials/_search_bar.html" with target_id="search-results" %}
+                    </div>
+                    <div id="search-results"
+                         class="rounded-2xl border border-gray-200 bg-gray-50 p-4 min-h-[260px] shadow-sm"></div>
+                </div>
+                <div class="space-y-4 w-full lg:col-span-3">
+                    <div class="rounded-2xl border border-gray-200 bg-white shadow-sm">
+                        <div class="border-b px-5 py-4">
+                            <h2 class="text-lg font-semibold text-gray-800">Selected Ingredients</h2>
+                        </div>
+                        <div class="p-5">
+                            <div id="selected-ingredients"
+                                 hx-get="{% url 'production:selected_ingredients' %}"
+                                 hx-trigger="load"
+                                 hx-target="this">
+                                <span class="text-sm text-gray-400 italic">Loading draft...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <div class="pt-2">
+                <button type="submit"
+                        class="rounded-xl bg-blue-600 px-6 py-2.5 font-medium text-white shadow-sm hover:bg-blue-700 transition">
+                    Save Recipe
+                </button>
             </div>
-            <!-- TABLE -->
-            <div id="selected-ingredients"
-                 class="col-span-6"
-                 hx-get="{% url 'production:selected_ingredients' %}"
-                 hx-trigger="load"></div>
-        </div>
-        <input type="submit" value="submit">
-    </form>
+        </form>
+    </div>
 {% endblock content %}
