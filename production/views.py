@@ -111,3 +111,18 @@ class ClearDraftIngredientsView(View):
             "production/recipe/partials/_selected_ingredients_table.html",
             {"selected_ingredients": []},
         )
+
+
+class RecipeIngredientRemoveView(View):
+
+    def post(self, request, pk):
+
+        builder = RecipeBuilder(request.session)
+
+        builder.remove(pk)
+
+        return render(
+            request,
+            "production/recipe/partials/_selected_ingredients_table.html",
+            {"ingredients": builder.get_ingredients()},
+        )

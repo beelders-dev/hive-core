@@ -49,3 +49,13 @@ class RecipeBuilder:
                 ingredient_id=ingredient_id,
                 quantity_needed=quantity,
             )
+
+    def remove(self, ingredient_id):
+        selected = self.get_selected()
+
+        ingredient_id = str(ingredient_id)
+
+        selected.remove(ingredient_id)
+
+        self.session[self.SESSION_KEY] = selected
+        self.session.modified = True
