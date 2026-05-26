@@ -24,6 +24,9 @@
                     <div class="rounded-2xl border border-gray-200 bg-white shadow-sm">
                         <div class="border-b px-5 py-4">
                             <h2 class="text-lg font-semibold text-gray-800">Selected Ingredients</h2>
+                            <button hx-post="{% url 'production:recipe_ingredient_clear' %}"
+                                    hx-target="#selected-ingredients"
+                                    hx-swap="innerHTML">button</button>
                         </div>
                         <div class="p-5">
                             <div id="selected-ingredients"

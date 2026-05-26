@@ -96,3 +96,18 @@ class SelectedIngredientsView(View):
             "production/recipe/partials/_selected_ingredients_table.html",
             {"ingredients": ingredients},
         )
+
+
+class ClearDraftIngredientsView(View):
+
+    def post(self, request):
+
+        builder = RecipeBuilder(request.session)
+
+        builder.clear()
+
+        return render(
+            request,
+            "production/recipe/partials/_selected_ingredients_table.html",
+            {"selected_ingredients": []},
+        )
