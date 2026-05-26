@@ -86,7 +86,7 @@ class RecipeIngredientAddView(
 class SelectedIngredientsView(View):
 
     def get(self, request):
-
+        # request.session.flush()
         selected = request.session.get("selected_ingredients", [])
 
         ingredients = Ingredient.objects.filter(id__in=selected)

@@ -39,6 +39,10 @@ class RecipeBuilder:
 
         for ingredient_id in selected:
             quantity = post_data.get(f"quantity_{ingredient_id}")
+            print(post_data)
+            print("SESSION: ", self.get_selected())
+            if not quantity:
+                raise ValueError(f"Ingredient {ingredient_id} missing quantity.")
 
             RecipeIngredient.objects.create(
                 recipe=recipe,
