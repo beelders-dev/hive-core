@@ -15,6 +15,8 @@ from django.views.generic import (
 )
 from .models import Recipe
 
+SELECTED_INGEREDIENT_TABLE_TEMPLATE = "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table.html"
+
 
 # Create your views here.
 class RecipeListView(ListView):
@@ -34,6 +36,18 @@ class RecipeDetailView(DetailView):
         )
 
 
+class RecipeUpdateView(UpdateView):
+    model = Recipe
+    template_name = "production/recipe/recipe_add.html"
+    fields = ["name", "ingredients"]
+
+
+class RecipeDeleteView(DeleteView):
+    model = Recipe
+    template_name = "production/recipe/recipe_delete.html"
+    success_url = reverse_lazy("production:recipe_list")
+
+
 class RecipeCreateView(CreateView):
     model = Recipe
     fields = ["name"]
@@ -46,25 +60,11 @@ class RecipeCreateView(CreateView):
 
         builder = RecipeBuilder(self.request.session)
 
-        builder.create_recipe_ingredients(
-            recipe=self.object, post_data=self.request.POST
-        )
+        builder.create_recipe_ingredients(recipe=self.object)
 
         builder.clear()
 
         return response
-
-
-class RecipeUpdateView(UpdateView):
-    model = Recipe
-    template_name = "production/recipe/recipe_add.html"
-    fields = ["name", "ingredients"]
-
-
-class RecipeDeleteView(DeleteView):
-    model = Recipe
-    template_name = "production/recipe/recipe_delete.html"
-    success_url = reverse_lazy("production:recipe_list")
 
 
 class RecipeIngredientAddView(
@@ -79,7 +79,7 @@ class RecipeIngredientAddView(
 
         return render(
             request,
-            "production/recipe/partials/_selected_ingredients_table.html",
+            SELECTED_INGEREDIENT_TABLE_TEMPLATE,
             {"ingredients": builder.get_ingredients()},
         )
 
@@ -100,7 +100,7 @@ class SelectedIngredientsView(View):
 
         return render(
             request,
-            "production/recipe/partials/_selected_ingredients_table.html",
+            SELECTED_INGEREDIENT_TABLE_TEMPLATE,
             {"ingredients": ingredients},
         )
 
@@ -115,7 +115,7 @@ class ClearDraftIngredientsView(View):
 
         return render(
             request,
-            "production/recipe/partials/_selected_ingredients_table.html",
+            SELECTED_INGEREDIENT_TABLE_TEMPLATE,
             {"selected_ingredients": {}},
         )
 
@@ -128,26 +128,14 @@ class RecipeIngredientRemoveView(View):
 
         selected = builder.get_selected()
 
-        # Sync current input values first
-        for key, value in request.POST.items():
-
-            if key.startswith("quantity_"):
-
-                ingredient_id = key.replace("quantity_", "")
-
-                if ingredient_id in selected:
-
-                    selected[ingredient_id]["quantity"] = value
-
         request.session[builder.SESSION_KEY] = selected
         request.session.modified = True
 
-        # Now remove ingredient
         builder.remove(pk)
 
         return render(
             request,
-            "production/recipe/partials/_selected_ingredients_table.html",
+            SELECTED_INGEREDIENT_TABLE_TEMPLATE,
             {"ingredients": builder.get_ingredients()},
         )
 
@@ -164,11 +152,9 @@ class RecipeIngredientQuantityUpdateView(View):
 
         ingredient_id = str(pk)
 
-        if ingredient_id in selected and quantity is not None:
+        if ingredient_id in selected:
             selected[ingredient_id]["quantity"] = quantity
 
         request.session[builder.SESSION_KEY] = selected
-        print("HERE IS THE PID: ", ingredient_id)
 
-        print("HERE IS THE QTY: ", quantity)
         return HttpResponse(status=204)

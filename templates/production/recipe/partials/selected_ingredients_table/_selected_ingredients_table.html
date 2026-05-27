@@ -12,26 +12,11 @@
             </div>
             <div class="col-span-4 border-r p-3 flex items-center justify-center bg-transparent">
                 <div class="relative w-full max-w-[120px]">
-                    <input type="number"
-                           name="quantity_{{ ingredient.id }}"
-                           id="quantity_{{ ingredient.id }}"
-                           min="0"
-                           required
-                           step="any"
-                           placeholder="0.00"
-                           value="{{ ingredient.quantity }}"
-                           hx-post="{% url 'production:recipe_ingredient_quantity_update' ingredient.id %}"
-                           hx-trigger="change"
-                           hx-include="this"
-                           class="w-full text-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 font-mono text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 shadow-sm transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                    {% include "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table_qty_input.html" %}
                 </div>
             </div>
             <div class="col-span-4 p-3 flex items-center justify-center bg-transparent">
-                <button hx-post="{% url 'production:recipe_ingredient_remove' ingredient.id %}"
-                        hx-include="#selected-ingredients-table"
-                        class="rounded-md bg-red-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-600 transition-colors">
-                    Remove
-                </button>
+                {% include "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table_rm_button.html" %}
             </div>
         </div>
     {% empty %}
