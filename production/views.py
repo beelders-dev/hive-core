@@ -1,6 +1,7 @@
 from django.views import View
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.http import HttpResponse
 
 from .services import RecipeBuilder
 from inventory.models import Ingredient
@@ -86,10 +87,16 @@ class RecipeIngredientAddView(
 class SelectedIngredientsView(View):
 
     def get(self, request):
-        # request.session.flush()
-        selected = request.session.get("selected_ingredients", [])
 
-        ingredients = Ingredient.objects.filter(id__in=selected)
+        selected = request.session.get("selected_ingredients", {})
+
+        ingredients = Ingredient.objects.filter(id__in=selected.keys())
+
+        for ingredient in ingredients:
+
+            ingredient.quantity = selected.get(str(ingredient.id), {}).get(
+                "quantity", ""
+            )
 
         return render(
             request,
@@ -109,7 +116,7 @@ class ClearDraftIngredientsView(View):
         return render(
             request,
             "production/recipe/partials/_selected_ingredients_table.html",
-            {"selected_ingredients": []},
+            {"selected_ingredients": {}},
         )
 
 
@@ -119,6 +126,23 @@ class RecipeIngredientRemoveView(View):
 
         builder = RecipeBuilder(request.session)
 
+        selected = builder.get_selected()
+
+        # Sync current input values first
+        for key, value in request.POST.items():
+
+            if key.startswith("quantity_"):
+
+                ingredient_id = key.replace("quantity_", "")
+
+                if ingredient_id in selected:
+
+                    selected[ingredient_id]["quantity"] = value
+
+        request.session[builder.SESSION_KEY] = selected
+        request.session.modified = True
+
+        # Now remove ingredient
         builder.remove(pk)
 
         return render(
@@ -126,3 +150,25 @@ class RecipeIngredientRemoveView(View):
             "production/recipe/partials/_selected_ingredients_table.html",
             {"ingredients": builder.get_ingredients()},
         )
+
+
+class RecipeIngredientQuantityUpdateView(View):
+
+    def post(self, request, pk):
+
+        builder = RecipeBuilder(request.session)
+
+        quantity = request.POST.get(f"quantity_{pk}")
+
+        selected = builder.get_selected()
+
+        ingredient_id = str(pk)
+
+        if ingredient_id in selected and quantity is not None:
+            selected[ingredient_id]["quantity"] = quantity
+
+        request.session[builder.SESSION_KEY] = selected
+        print("HERE IS THE PID: ", ingredient_id)
+
+        print("HERE IS THE QTY: ", quantity)
+        return HttpResponse(status=204)

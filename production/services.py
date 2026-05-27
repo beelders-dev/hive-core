@@ -10,25 +10,45 @@ class RecipeBuilder:
         self.session = session
 
     def get_selected(self):
-        return self.session.get(self.SESSION_KEY, [])
+
+        selected = self.session.get(self.SESSION_KEY, {})
+
+        if isinstance(selected, list):
+
+            selected = {str(i): {"quantity": None} for i in selected}
+
+            self.session[self.SESSION_KEY] = selected
+            self.session.modified = True
+
+        return selected
 
     def add(self, ingredient_id):
+
         selected = self.get_selected()
 
         ingredient_id = str(ingredient_id)
-
         if ingredient_id not in selected:
-            selected.append(ingredient_id)
+            selected[ingredient_id] = {"quantity": None}
 
         self.session[self.SESSION_KEY] = selected
+        self.session.modified = True
 
     def get_ingredients(self):
+
         selected = self.get_selected()
 
-        return Ingredient.objects.filter(id__in=selected)
+        ingredients = Ingredient.objects.filter(id__in=selected.keys())
+
+        for ingredient in ingredients:
+
+            ingredient.quantity = selected.get(str(ingredient.id), {}).get(
+                "quantity", ""
+            )
+
+        return ingredients
 
     def clear(self):
-        self.session[self.SESSION_KEY] = []
+        self.session[self.SESSION_KEY] = {}
 
     def create_recipe_ingredients(
         self,
@@ -38,7 +58,7 @@ class RecipeBuilder:
         selected = self.get_selected()
 
         for ingredient_id in selected:
-            quantity = post_data.get(f"quantity_{ingredient_id}")
+            quantity = post_data.get("quantity")
             print(post_data)
             print("SESSION: ", self.get_selected())
             if not quantity:
@@ -55,7 +75,7 @@ class RecipeBuilder:
 
         ingredient_id = str(ingredient_id)
 
-        selected.remove(ingredient_id)
+        del selected[ingredient_id]
 
         self.session[self.SESSION_KEY] = selected
         self.session.modified = True

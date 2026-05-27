@@ -1,4 +1,5 @@
-<div class="overflow-hidden bg-transparent">
+<div class="overflow-hidden bg-transparent"
+     id="selected-ingredients-table">
     <div class="grid grid-cols-12 items-stretch bg-slate-50 border-b-2 border-slate-300 text-xs font-semibold uppercase tracking-wider text-slate-600">
         <div class="col-span-4 p-4 border-r border-slate-300">Ingredient Name</div>
         <div class="col-span-4 p-4 border-r text-center">Required Quantity</div>
@@ -18,11 +19,19 @@
                            required
                            step="any"
                            placeholder="0.00"
+                           value="{{ ingredient.quantity }}"
+                           hx-post="{% url 'production:recipe_ingredient_quantity_update' ingredient.id %}"
+                           hx-trigger="change"
+                           hx-include="this"
                            class="w-full text-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 font-mono text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 shadow-sm transition-all [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
                 </div>
             </div>
             <div class="col-span-4 p-3 flex items-center justify-center bg-transparent">
-                <button hx-post={% url 'production:recipe_ingredient_remove' ingredient.id %}>Remove</button>
+                <button hx-post="{% url 'production:recipe_ingredient_remove' ingredient.id %}"
+                        hx-include="#selected-ingredients-table"
+                        class="rounded-md bg-red-500 px-3 py-1.5 text-sm font-medium text-white hover:bg-red-600 transition-colors">
+                    Remove
+                </button>
             </div>
         </div>
     {% empty %}
