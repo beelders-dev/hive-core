@@ -15,7 +15,7 @@ from django.views.generic import (
 )
 from .models import Recipe
 
-SELECTED_INGEREDIENT_TABLE_TEMPLATE = "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table.html"
+SELECTED_INGREDIENT_TABLE_TEMPLATE = "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table.html"
 
 
 # Create your views here.
@@ -55,106 +55,74 @@ class RecipeCreateView(CreateView):
     success_url = reverse_lazy("production:recipe_list")
 
     def form_valid(self, form):
-
         response = super().form_valid(form)
-
         builder = RecipeBuilder(self.request.session)
-
         builder.create_recipe_ingredients(recipe=self.object)
-
         builder.clear()
 
         return response
 
 
-class RecipeIngredientAddView(
-    View
-):  # Change function name later to a more appropriate one
+class DraftIngredientAddView(View):
 
     def post(self, request, pk):
-
         builder = RecipeBuilder(request.session)
-
         builder.add(pk)
 
         return render(
             request,
-            SELECTED_INGEREDIENT_TABLE_TEMPLATE,
+            SELECTED_INGREDIENT_TABLE_TEMPLATE,
             {"ingredients": builder.get_ingredients()},
         )
 
 
-class SelectedIngredientsView(View):
+class DraftIngredientView(View):
 
     def get(self, request):
-
-        selected = request.session.get("selected_ingredients", {})
-
-        ingredients = Ingredient.objects.filter(id__in=selected.keys())
-
-        for ingredient in ingredients:
-
-            ingredient.quantity = selected.get(str(ingredient.id), {}).get(
-                "quantity", ""
-            )
+        builder = RecipeBuilder(request.session)
 
         return render(
             request,
-            SELECTED_INGEREDIENT_TABLE_TEMPLATE,
-            {"ingredients": ingredients},
+            SELECTED_INGREDIENT_TABLE_TEMPLATE,
+            {"ingredients": builder.get_ingredients()},
         )
 
 
-class ClearDraftIngredientsView(View):
+class DraftIngredientClearView(View):
 
     def post(self, request):
-
         builder = RecipeBuilder(request.session)
-
         builder.clear()
 
         return render(
             request,
-            SELECTED_INGEREDIENT_TABLE_TEMPLATE,
-            {"selected_ingredients": {}},
+            SELECTED_INGREDIENT_TABLE_TEMPLATE,
+            {"selected_ingredients": builder.get_ingredients()},
         )
 
 
-class RecipeIngredientRemoveView(View):
+class DraftIngredientRemoveView(View):
 
     def post(self, request, pk):
-
         builder = RecipeBuilder(request.session)
-
-        selected = builder.get_selected()
-
-        request.session[builder.SESSION_KEY] = selected
-        request.session.modified = True
-
         builder.remove(pk)
 
         return render(
             request,
-            SELECTED_INGEREDIENT_TABLE_TEMPLATE,
+            SELECTED_INGREDIENT_TABLE_TEMPLATE,
             {"ingredients": builder.get_ingredients()},
         )
 
 
-class RecipeIngredientQuantityUpdateView(View):
+class DraftIngredientQuantityUpdateView(View):
 
     def post(self, request, pk):
-
         builder = RecipeBuilder(request.session)
-
         quantity = request.POST.get(f"quantity_{pk}")
+        builder.update_quantity(pk, quantity)
 
-        selected = builder.get_selected()
-
-        ingredient_id = str(pk)
-
-        if ingredient_id in selected:
-            selected[ingredient_id]["quantity"] = quantity
-
-        request.session[builder.SESSION_KEY] = selected
-
-        return HttpResponse(status=204)
+        return render(
+            request,
+            SELECTED_INGREDIENT_TABLE_TEMPLATE,
+            {"ingredients": builder.get_ingredients()},
+        )

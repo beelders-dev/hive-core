@@ -11,16 +11,7 @@ class RecipeBuilder:
 
     def get_selected(self):
 
-        selected = self.session.get(self.SESSION_KEY, {})
-
-        if isinstance(selected, list):
-
-            selected = {str(i): {"quantity": None} for i in selected}
-
-            self.session[self.SESSION_KEY] = selected
-            self.session.modified = True
-
-        return selected
+        return self.session.get(self.SESSION_KEY, {})
 
     def add(self, ingredient_id):
 
@@ -49,6 +40,7 @@ class RecipeBuilder:
 
     def clear(self):
         self.session[self.SESSION_KEY] = {}
+        self.session.modified = True
 
     def create_recipe_ingredients(
         self,
@@ -75,6 +67,17 @@ class RecipeBuilder:
         ingredient_id = str(ingredient_id)
 
         del selected[ingredient_id]
+
+        self.session[self.SESSION_KEY] = selected
+        self.session.modified = True
+
+    def update_quantity(self, ingredient_id, new_quantity):
+        selected = self.get_selected()
+
+        ingredient_id = str(ingredient_id)
+
+        if ingredient_id in selected:
+            selected[ingredient_id]["quantity"] = new_quantity
 
         self.session[self.SESSION_KEY] = selected
         self.session.modified = True
