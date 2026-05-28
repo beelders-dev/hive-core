@@ -43,6 +43,13 @@ class IngredientCreateView(CreateView):
     success_url = reverse_lazy("inventory:ingredient_list")
 
 
+class IngredientUpdateView(UpdateView):
+    model = Ingredient
+    template_name = "inventory/ingredient_form.html"
+    fields = ["name", "stock_qty", "price"]
+    success_url = reverse_lazy("inventory:ingredient_list")
+
+
 class IngredientDeleteView(DeleteView):
     model = Ingredient
     template_name = "inventory/ingredient_delete.html"
@@ -53,10 +60,3 @@ class IngredientDetailView(DetailView):
     model = Ingredient
     template_name = "inventory/ingredient_detail.html"
     context_object_name = "ingredient"
-
-
-class IngredientUpdateView(UpdateView):
-    model = Ingredient
-    template_name = "inventory/ingredient_form.html"
-    fields = ["name", "stock_qty", "price"]
-    success_url = reverse_lazy("inventory:ingredient_list")

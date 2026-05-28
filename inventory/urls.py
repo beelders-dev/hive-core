@@ -6,6 +6,7 @@ from .views import (
     IngredientDetailView,
     IngredientDeleteView,
     IngredientUpdateView,
+    # FilteredIngredientListView,
 )
 
 app_name = "inventory"
