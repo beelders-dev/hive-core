@@ -1,5 +1,7 @@
 from production.models import RecipeIngredient
 from inventory.models import Ingredient
+from decimal import Decimal, InvalidOperation
+from django.db import transaction
 
 
 class RecipeBuilder:
@@ -44,7 +46,6 @@ class RecipeBuilder:
         return ingredients
 
     def clear(self):
-        self.session.flush()
         self.session[self.SESSION_KEY] = {}
         self.session.modified = True
 
@@ -57,8 +58,15 @@ class RecipeBuilder:
         for ingredient_id, data in draft["ingredients"].items():
             quantity = data.get("required_quantity")
 
-            if quantity in [None, "", 0]:
-                raise ValueError(f"Ingredient {ingredient_id} missing quantity.")
+            try:
+                quantity = Decimal(quantity)
+            except (TypeError, InvalidOperation):
+                raise ValueError(f"Ingredient {ingredient_id} missing quantity")
+
+            if quantity <= 0:
+                raise ValueError(
+                    f"Ingredient {ingredient_id} quantity must be greater than 0."
+                )
 
             RecipeIngredient.objects.create(
                 recipe=recipe,

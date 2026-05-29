@@ -2,9 +2,9 @@ from django.views import View
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.http import HttpResponse
-
+from django.db import transaction
 from .services import RecipeBuilder
-from inventory.models import Ingredient
+
 
 from django.views.generic import (
     ListView,
@@ -54,12 +54,14 @@ class RecipeCreateView(CreateView):
     template_name = "production/recipe/recipe_form.html"
     success_url = reverse_lazy("production:recipe_list")
 
+    @transaction.atomic
     def form_valid(self, form):
         response = super().form_valid(form)
         builder = RecipeBuilder(self.request.session)
-        builder.create_recipe_ingredients(recipe=self.object)
-        builder.clear()
 
+        builder.create_recipe_ingredients(recipe=self.object)
+
+        builder.clear()
         return response
 
 
