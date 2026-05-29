@@ -76,7 +76,7 @@ class DraftIngredientAddView(View):
         )
 
 
-class DraftIngredientView(View):
+class DraftIngredientListView(View):
 
     def get(self, request):
         builder = RecipeBuilder(request.session)
@@ -97,7 +97,7 @@ class DraftIngredientClearView(View):
         return render(
             request,
             SELECTED_INGREDIENT_TABLE_TEMPLATE,
-            {"selected_ingredients": builder.get_ingredients()},
+            {"ingredients": builder.get_ingredients()},
         )
 
 
@@ -121,8 +121,28 @@ class DraftIngredientQuantityUpdateView(View):
         quantity = request.POST.get(f"quantity_{pk}")
         builder.update_quantity(pk, quantity)
 
+        return HttpResponse(status=204)
+
+
+class DraftRecipeNameUpdateView(View):
+
+    def post(self, request):
+
+        builder = RecipeBuilder(request.session)
+        name = request.POST.get("name")
+        builder.update_name(name)
+
+        return HttpResponse(status=204)
+
+
+class DraftRecipeNameView(View):
+
+    def get(self, request):
+
+        builder = RecipeBuilder(request.session)
+
         return render(
             request,
-            SELECTED_INGREDIENT_TABLE_TEMPLATE,
-            {"ingredients": builder.get_ingredients()},
+            "production/recipe/partials/recipe_form/_recipe_name_input.html",
+            {"recipe_name": builder.get_name()},
         )
