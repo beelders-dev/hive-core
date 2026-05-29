@@ -30,7 +30,6 @@ class RecipeBuilder:
 
     def get_ingredients(self):
         draft = self.get_draft()
-        print("EMPTY?", draft)
 
         ingredients = Ingredient.objects.filter(id__in=draft["ingredients"].keys())
 
