@@ -10,7 +10,6 @@ class RecipeBuilder:
         self.session = session
 
     def get_draft(self):
-
         draft = self.session.get(self.SESSION_KEY, {})
 
         draft.setdefault("name", "")
@@ -19,7 +18,6 @@ class RecipeBuilder:
         return draft
 
     def add(self, ingredient_id):
-
         draft = self.get_draft()
 
         ingredient_id = str(ingredient_id)
@@ -31,7 +29,6 @@ class RecipeBuilder:
         self.session.modified = True
 
     def get_ingredients(self):
-
         draft = self.get_draft()
         print("EMPTY?", draft)
 
@@ -59,7 +56,6 @@ class RecipeBuilder:
         draft = self.get_draft()
 
         for ingredient_id, data in draft["ingredients"].items():
-
             quantity = data.get("required_quantity")
 
             if quantity in [None, "", 0]:
@@ -94,7 +90,6 @@ class RecipeBuilder:
 
     def update_name(self, new_name):
         draft = self.get_draft()
-
         draft["name"] = new_name
 
         self.session[self.SESSION_KEY] = draft

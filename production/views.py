@@ -127,7 +127,6 @@ class DraftIngredientQuantityUpdateView(View):
 class DraftRecipeNameUpdateView(View):
 
     def post(self, request):
-
         builder = RecipeBuilder(request.session)
         name = request.POST.get("name")
         builder.update_name(name)
@@ -138,7 +137,6 @@ class DraftRecipeNameUpdateView(View):
 class DraftRecipeNameView(View):
 
     def get(self, request):
-
         builder = RecipeBuilder(request.session)
 
         return render(
