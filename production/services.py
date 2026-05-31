@@ -89,16 +89,12 @@ class RecipeService:
         self.builder = RecipeBuilder(session)
 
     @transaction.atomic
-    def create_recipe(self, form):
+    def create_recipe(self):
 
         draft = self.builder.get_draft()
-
         self.validate_draft(draft)
-
         recipe = Recipe.objects.create(name=draft["name"])
-
         self.create_ingredients(recipe, draft)
-
         self.builder.clear()
 
     def validate_draft(self, draft):

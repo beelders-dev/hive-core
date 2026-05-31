@@ -1,15 +1,15 @@
 from django.views import View
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.http import HttpResponse
-from django.db import transaction
+
+
 from .services import RecipeBuilder, RecipeService
 
 
 from django.views.generic import (
     ListView,
     DetailView,
-    CreateView,
     DeleteView,
     UpdateView,
 )
@@ -48,19 +48,24 @@ class RecipeDeleteView(DeleteView):
     success_url = reverse_lazy("production:recipe_list")
 
 
-class RecipeCreateView(CreateView):
-    model = Recipe
-    fields = ["name"]
+class RecipeCreateView(View):
+
     template_name = "production/recipe/recipe_form.html"
-    success_url = reverse_lazy("production:recipe_list")
 
-    def form_valid(self, form):
-
-        service = RecipeService(self.request.session)
-
+    def post(self, request):
+        service = RecipeService(request.session)
         service.create_recipe()
+        return redirect("production:recipe_list")
 
-        return super().form_valid(form)
+    def get(self, request):
+        builder = RecipeBuilder(request.session)
+
+        context = {
+            "recipe_name": builder.get_name(),
+            "ingredients": builder.get_ingredients(),
+        }
+
+        return render(request, self.template_name, context)
 
 
 class DraftIngredientAddView(View):
