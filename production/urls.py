@@ -21,7 +21,7 @@ urlpatterns = [
     path("", TemplateView.as_view(template_name="temp.html")),
     path("recipes/", RecipeListView.as_view(), name="recipe_list"),
     path(
-        "recipes/add/", RecipeCreateView.as_view(), name="recipe_add"
+        "recipes/create/", RecipeCreateView.as_view(), name="recipe_create"
     ),  # endpoint name will need to change
     path("recipes/<uuid:pk>/", RecipeDetailView.as_view(), name="recipe"),
     path(

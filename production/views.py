@@ -4,7 +4,8 @@ from django.urls import reverse_lazy
 from django.http import HttpResponse
 
 
-from .services import RecipeBuilder, RecipeService
+from .services.recipe_builder import RecipeBuilder
+from .services.recipe_service import RecipeService
 
 
 from django.views.generic import (
