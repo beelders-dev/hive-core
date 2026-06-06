@@ -27,17 +27,14 @@
                             <div class="col-span-6">{% include "production/recipe/partials/recipe_form/_clear_draft_button.html" %}</div>
                         </div>
                         <div class="p-5">
-                            <div id="selected-ingredients"
-                                 hx-get="{% url 'production:selected_ingredients' %}"
-                                 hx-trigger="load"
-                                 hx-target="this">
-                                <span class="text-sm text-gray-400 italic">Loading draft...</span>
+                            <div class="h-80 overflow-y-auto">
+                                {% include "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table.html" %}
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
-            <div class="pt-2">{% include "production/recipe/partials/recipe_form/_save_recipe_button.html" %}</div>
-        </form>
-    </div>
+            </div>
+        </section>
+        <div class="pt-2">{% include "production/recipe/partials/recipe_form/_save_recipe_button.html" %}</div>
+    </form>
 {% endblock content %}

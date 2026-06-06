@@ -1,5 +1,5 @@
 from django.views import View
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.http import HttpResponse
 
@@ -107,17 +107,11 @@ class DraftIngredientClearView(View):
         )
 
 
-class DraftIngredientRemoveView(View):
+class IngredientRemoveView(View):
 
     def post(self, request, pk):
-        builder = RecipeBuilder(request.session)
-        builder.remove(pk)
 
-        return render(
-            request,
-            SELECTED_INGREDIENT_TABLE_TEMPLATE,
-            {"ingredients": builder.get_ingredients()},
-        )
+        return HttpResponse("")
 
 
 class DraftIngredientQuantityUpdateView(View):
@@ -150,3 +144,31 @@ class DraftRecipeNameView(View):
             "production/recipe/partials/recipe_form/_recipe_name_input.html",
             {"recipe_name": builder.get_name()},
         )
+
+
+from inventory.models import Ingredient
+
+
+class AddIngredientView(View):
+
+    def post(self, request, pk):
+
+        ingredient = get_object_or_404(Ingredient, pk=pk)
+
+        existing_ids = request.POST.getlist("ingredient_ids")
+
+        if str(pk) in existing_ids:
+            return HttpResponse("")
+
+        return render(
+            request,
+            "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table_row.html",
+            {"ingredient": ingredient},
+        )
+
+
+class DisplayIngredientsView(View):
+
+    def get(self, request):
+
+        return HttpResponse("")

@@ -9,10 +9,13 @@ from .views import (
     DraftIngredientAddView,
     DraftIngredientListView,
     DraftIngredientClearView,
-    DraftIngredientRemoveView,
     DraftIngredientQuantityUpdateView,
     DraftRecipeNameUpdateView,
     DraftRecipeNameView,
+    ## Experimental ##
+    IngredientRemoveView,
+    AddIngredientView,
+    DisplayIngredientsView,
 )
 
 app_name = "production"
@@ -25,11 +28,6 @@ urlpatterns = [
     ),  # endpoint name will need to change
     path("recipes/<uuid:pk>/", RecipeDetailView.as_view(), name="recipe"),
     path(
-        "recipes/draft/selected-ingredients-view",
-        DraftIngredientListView.as_view(),
-        name="selected_ingredients",
-    ),
-    path(
         "recipes/draft/<uuid:pk>/add-item/",
         DraftIngredientAddView.as_view(),
         name="add_ingredient_to_draft",
@@ -41,7 +39,7 @@ urlpatterns = [
     ),
     path(
         "recipes/draft/<uuid:pk>/remove/",
-        DraftIngredientRemoveView.as_view(),
+        IngredientRemoveView.as_view(),
         name="update_draft_remove_ingredient",
     ),
     path(
@@ -61,4 +59,14 @@ urlpatterns = [
     ),
     path("recipes/<uuid:pk>/delete/", RecipeDeleteView.as_view(), name="recipe_delete"),
     path("recipes/<uuid:pk>/edit/", RecipeUpdateView.as_view(), name="recipe_edit"),
+    path(
+        "recipes/draft/<uuid:pk>/add-ingredient/",
+        AddIngredientView.as_view(),
+        name="add_ingredient",
+    ),
+    path(
+        "recipes/draft/selected-ingredients/",
+        DisplayIngredientsView.as_view(),
+        name="selected_ingredients",
+    ),
 ]

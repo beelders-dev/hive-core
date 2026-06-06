@@ -1,0 +1,6 @@
+<button type="submit"
+        hx-post="{% url 'production:add_ingredient' ingredient.pk %}"
+        hx-target="#selected-ingredients-row"
+        hx-swap="beforeend"
+        hx-include="[name='ingredient_ids']"
+        class="rounded-md bg-green-500 text-white p-2">Add Ingredient</button>

@@ -21,11 +21,7 @@
             <div class="col-span-2 p-4 flex items-center justify-center gap-2">
                 <a href="{{ ingredient.get_absolute_url }}"
                    class="text-sm font-medium text-blue-600 hover:underline">View</a>
-                {% if ingredient.stock_qty > 0 %}
-                    <button class="rounded-lg border border-slate-300 px-3 py-1.5 text-sm shadow-sm hover:bg-slate-100"
-                            hx-post="{% url 'production:add_ingredient_to_draft' ingredient.id %}"
-                            hx-target="#selected-ingredients">Add</button>
-                {% endif %}
+                {% include "production/recipe/partials/recipe_form/_add_ingredient_button.html" %}
             </div>
         </div>
     {% empty %}

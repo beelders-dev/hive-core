@@ -33,3 +33,23 @@ class RecipeIngredient(models.Model):
     )
     ingredient = models.ForeignKey("inventory.Ingredient", on_delete=models.CASCADE)
     quantity_needed = models.DecimalField(max_digits=10, decimal_places=2)
+
+
+## DRAFT ##
+
+
+class RecipeDraft(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+    name = models.CharField(max_length=100, blank=True)
+
+
+class RecipeDraftIngredient(models.Model):
+    draft = models.ForeignKey(RecipeDraft, on_delete=models.CASCADE)
+    ingredient = models.ForeignKey("inventory.Ingredient", on_delete=models.CASCADE)
+    required_quantity = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True
+    )
