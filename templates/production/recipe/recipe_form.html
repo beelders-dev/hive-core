@@ -4,12 +4,7 @@
         <form action="" method="post" class="space-y-8">
             {% csrf_token %}
             <section class="space-y-2 max-w-xl">
-                <div id="recipe-name"
-                     hx-get="{% url 'production:draft_recipe_name_view' %}"
-                     hx-trigger="load"
-                     hx-include="this">
-                    {% include "production/recipe/partials/recipe_form/_recipe_name_input.html" %}
-                </div>
+                <div id="recipe-name">{% include "production/recipe/partials/recipe_form/_recipe_name_input.html" %}</div>
             </section>
             <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start w-full">
                 <div class="space-y-4 w-full lg:col-span-5">
@@ -24,7 +19,6 @@
                     <div class="rounded-2xl border border-gray-200 bg-white shadow-sm">
                         <div class="border-b px-5 py-4 grid grid-cols-12">
                             <h2 class="col-span-6 text-lg font-semibold text-gray-800">Selected Ingredients</h2>
-                            <div class="col-span-6">{% include "production/recipe/partials/recipe_form/_clear_draft_button.html" %}</div>
                         </div>
                         <div class="p-5">
                             <div class="h-80 overflow-y-auto">
