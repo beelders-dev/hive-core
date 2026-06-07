@@ -12,7 +12,8 @@ from django.views.generic import (
     DeleteView,
     UpdateView,
 )
-from .models import Recipe, RecipeIngredient
+from .models import Recipe
+from .services import RecipeService
 
 SELECTED_INGREDIENT_TABLE_TEMPLATE = "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table.html"
 
@@ -49,29 +50,30 @@ class RecipeDeleteView(DeleteView):
 
 class RecipeCreateView(View):
 
-    template_name = "production/recipe/recipe_form.html"
-
     def post(self, request):
 
-        recipe_name = request.POST.get("recipe_name")
-        recipe = Recipe.objects.create(name=recipe_name)
+        ingredients = []
 
-        ingredient_ids = request.POST.getlist("ingredient_ids")
-
-        for ingredient_id in ingredient_ids:
-            quantity = request.POST.get(f"quantity_{ingredient_id}")
-
-            RecipeIngredient.objects.create(
-                recipe=recipe,
-                ingredient_id=ingredient_id,
-                quantity_needed=quantity,
+        for ingredient_id in request.POST.getlist("ingredient_ids"):
+            ingredients.append(
+                {
+                    "ingredient_id": ingredient_id,
+                    "quantity": request.POST.get(f"quantity_{ingredient_id}"),
+                }
             )
+
+        service = RecipeService()
+
+        service.create_recipe(
+            recipe_name=request.POST.get("recipe_name"),
+            ingredients=ingredients,
+        )
 
         return redirect("production:recipe_list")
 
     def get(self, request):
 
-        return render(request, self.template_name)
+        return render(request, "production/recipe/recipe_form.html")
 
 
 class RemoveIngredientView(View):
