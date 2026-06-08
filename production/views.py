@@ -5,7 +5,6 @@ from django.http import HttpResponse
 
 from inventory.models import Ingredient
 
-
 from django.views.generic import (
     ListView,
     DetailView,
@@ -52,6 +51,7 @@ class RecipeCreateView(View):
 
     def post(self, request):
 
+        service = RecipeService()
         ingredients = []
 
         for ingredient_id in request.POST.getlist("ingredient_ids"):
@@ -61,8 +61,6 @@ class RecipeCreateView(View):
                     "quantity": request.POST.get(f"quantity_{ingredient_id}"),
                 }
             )
-
-        service = RecipeService()
 
         service.create_recipe(
             recipe_name=request.POST.get("recipe_name"),
