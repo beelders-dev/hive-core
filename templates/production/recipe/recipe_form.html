@@ -10,7 +10,7 @@
                 <div class="space-y-4 w-full lg:col-span-5">
                     <div class="space-y-2">
                         <h2 class="text-lg font-semibold text-gray-800">Search Ingredients</h2>
-                        {% include "production/recipe/partials/_search_bar.html" with target_id="search-results" %}
+                        {% include "production/recipe/partials/_search_bar.html" with target_id="search-results" use_case="recipe_add_form" %}
                     </div>
                     <div id="search-results"
                          class="rounded-2xl border border-gray-200 bg-gray-50 p-4 min-h-[260px] shadow-sm"></div>

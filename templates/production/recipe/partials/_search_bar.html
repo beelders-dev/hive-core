@@ -11,7 +11,7 @@
        </div>
        <input type="search"
               name="q"
-              hx-get="{% url 'inventory:ingredient_list' %}?use_case=recipe_add_form"
+              hx-get="{% url 'inventory:ingredient_list' %}{% if use_case %}?use_case={{ use_case }}{% endif %}"
               hx-trigger="input changed delay:500ms, keyup[key=='Enter'], load"
               hx-target="#{{ target_id }}"
               hx-indicator="#search-loading-spinner"

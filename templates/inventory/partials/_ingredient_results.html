@@ -21,7 +21,9 @@
             <div class="col-span-2 p-4 flex items-center justify-center gap-2">
                 <a href="{{ ingredient.get_absolute_url }}"
                    class="text-sm font-medium text-blue-600 hover:underline">View</a>
-                {% include "production/recipe/partials/recipe_form/_add_ingredient_button.html" %}
+                {% if show_add_button %}
+                    {% include "production/recipe/partials/recipe_form/_add_ingredient_button.html" %}
+                {% endif %}
             </div>
         </div>
     {% empty %}

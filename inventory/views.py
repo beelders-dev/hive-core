@@ -25,13 +25,19 @@ class IngredientListView(ListView):
             qs = qs.filter(name__icontains=q)
         return qs
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["show_add_button"] = (
+            self.request.GET.get("use_case") == "recipe_add_form"
+        )
+
+        return context
+
     def get_template_names(self):
 
         if "HX-Request" in self.request.headers:
-            use_case = self.request.GET.get("use_case")
-
-            if use_case == "recipe_add_form":
-                return ["inventory/partials/_ingredient_results.html"]
+            return ["inventory/partials/_ingredient_results.html"]
 
         return [self.template_name]
 
