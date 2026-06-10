@@ -1,11 +1,7 @@
-<label class="block text-sm font-semibold text-gray-700">Recipe Name</label>
+<label class="mb-2 block text-sm font-semibold text-slate-700">Recipe Name</label>
 <input type="search"
        name="recipe_name"
        value="{{ recipe_name }}"
        placeholder="Enter recipe name..."
        required
-       {% comment %}
-       hx-post="{% url 'production:update_draft_recipe_name' %}"
-       hx-trigger="input changed delay:500ms"
-       {% endcomment %}
-       class="w-full rounded-xl border border-gray-300 px-4 py-2.5 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+       class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100">

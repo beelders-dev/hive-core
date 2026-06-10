@@ -64,6 +64,7 @@ class RecipeCreateView(View):
 
         service.create_recipe(
             recipe_name=request.POST.get("recipe_name"),
+            recipe_description=request.POST.get("recipe_description"),
             ingredients=ingredients,
         )
 

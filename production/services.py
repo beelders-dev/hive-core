@@ -6,14 +6,14 @@ from decimal import Decimal
 class RecipeService:
 
     @transaction.atomic()
-    def create_recipe(self, recipe_name, ingredients):
+    def create_recipe(self, recipe_name, recipe_description, ingredients):
 
         recipe_name = recipe_name.strip()
 
         if not recipe_name:
             raise ValueError("Recipe name is required.")
 
-        recipe = Recipe.objects.create(name=recipe_name)
+        recipe = Recipe.objects.create(name=recipe_name, description=recipe_description)
 
         if not ingredients:
             raise ValueError("You need at least 1 ingredient.")
@@ -21,7 +21,7 @@ class RecipeService:
         for ingredient in ingredients:
 
             ingredient_id = ingredient["ingredient_id"]
-            quantity = Decimal(ingredient["quantity"], None)
+            quantity = Decimal(ingredient["quantity"])
 
             if quantity <= 0:
                 raise ValueError("Quantity must be greater than zero.")

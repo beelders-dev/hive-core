@@ -1,0 +1,6 @@
+<h2 class="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-500">Description</h2>
+{% if recipe.description %}
+    <p class="leading-relaxed text-slate-700 whitespace-pre-line">{{ recipe.description }}</p>
+{% else %}
+    <p class="italic text-slate-400">No description provided.</p>
+{% endif %}
