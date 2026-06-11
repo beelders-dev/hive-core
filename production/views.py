@@ -62,13 +62,31 @@ class RecipeCreateView(View):
                 }
             )
 
-        service.create_recipe(
-            recipe_name=request.POST.get("recipe_name"),
-            recipe_description=request.POST.get("recipe_description"),
-            ingredients=ingredients,
-        )
+        try:
+            service.create_recipe(
+                recipe_name=request.POST.get("recipe_name"),
+                recipe_description=request.POST.get("recipe_description"),
+                ingredients=ingredients,
+            )
 
-        return redirect("production:recipe_list")
+        except ValueError as e:
+            return render(
+                request,
+                "production/recipe/partials/_message.html",
+                {
+                    "message": str(e),
+                    "type": "error",
+                },
+            )
+
+        return render(
+            request,
+            "production/recipe/partials/_recipe_create_success.html",
+            {
+                "message": "Recipe created successfully.",
+                "type": "success",
+            },
+        )
 
     def get(self, request):
 

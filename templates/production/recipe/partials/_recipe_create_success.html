@@ -1,0 +1,13 @@
+{% comment %} MESSAGE {% endcomment %}
+{% include "production/recipe/partials/_message.html" with message=message type=type %}
+{% comment %} SELECTED INGREDIENTS TABLE ROW {% endcomment %}
+<div id="selected-ingredients-row" hx-swap-oob="innerHTML">
+    {% include "production/recipe/partials/_empty_placeholder.html" %}
+</div>
+{% comment %} BASIC FIELDS {% endcomment %}
+<div id="recipe-basic-fields"
+     class="space-y-6 max-w-3xl"
+     hx-swap-oob="outerHTML">
+    {% include "production/recipe/partials/recipe_form/_recipe_name_input.html" %}
+    {% include "production/recipe/partials/recipe_form/_recipe_description_input.html" %}
+</div>
