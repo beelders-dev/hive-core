@@ -31,7 +31,7 @@ class ViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "production/recipe/recipe_form.html")
 
-    def test_recipe_create_view_creates_ingredient_successfully(self):
+    def test_recipe_create_view_creates_recipe_successfully(self):
 
         response = self.client.post(
             reverse("production:recipe_create"),
@@ -44,3 +44,40 @@ class ViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Recipe.objects.count(), 1)
+
+    def test_recipe_create_view_displays_success_message(self):
+
+        response = self.client.post(
+            reverse("production:recipe_create"),
+            data={
+                "recipe_name": "Chocolate bar",
+                "ingredient_ids": [str(self.ingredient.pk)],
+                f"quantity_{self.ingredient.pk}": 1,
+            },
+        )
+        self.assertContains(response, "Recipe created successfully.")
+        self.assertEqual(Recipe.objects.count(), 1)
+
+    def test_recipe_create_view_displays_error_message_for_invalid_quantity(self):
+
+        response = self.client.post(
+            reverse("production:recipe_create"),
+            data={
+                "recipe_name": "Chocolate bar",
+                "ingredient_ids": [str(self.ingredient.pk)],
+                f"quantity_{self.ingredient.pk}": -1,
+            },
+        )
+        self.assertContains(response, "Quantity must be greater than zero.")
+        self.assertEqual(Recipe.objects.count(), 0)
+
+    def test_recipe_create_view_displays_error_message_when_no_ingredient_added(self):
+
+        response = self.client.post(
+            reverse("production:recipe_create"),
+            data={
+                "recipe_name": "Chocolate bar",
+            },
+        )
+        self.assertContains(response, "You need at least 1 ingredient.")
+        self.assertEqual(Recipe.objects.count(), 0)

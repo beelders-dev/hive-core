@@ -1,4 +1,119 @@
-{% extends "base.html" %}
-{% block content %}
-    <h1 class="text-5xl text-center">Temporary Template</h1>
-{% endblock content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <!-- Header -->
+    <div class="mb-8">
+        <p class="text-sm font-medium text-blue-600">Hive Core</p>
+        <h1 class="text-3xl font-bold text-slate-900">Dashboard</h1>
+        <p class="mt-2 text-slate-600">Placeholder overview for inventory, recipes, and future production planning.</p>
+    </div>
+    <!-- Stats Cards -->
+    <div class="flex flex-wrap gap-4 mb-8">
+        <div class="flex-1 min-w-[220px] rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+            <p class="text-sm font-medium text-slate-500">Total Ingredients</p>
+            <p class="mt-2 text-3xl font-bold text-slate-900">120</p>
+            <p class="mt-1 text-sm text-slate-500">Placeholder count</p>
+        </div>
+        <div class="flex-1 min-w-[220px] rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+            <p class="text-sm font-medium text-slate-500">Total Recipes</p>
+            <p class="mt-2 text-3xl font-bold text-slate-900">35</p>
+            <p class="mt-1 text-sm text-slate-500">Placeholder count</p>
+        </div>
+        <div class="flex-1 min-w-[220px] rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+            <p class="text-sm font-medium text-slate-500">Low Stock Items</p>
+            <p class="mt-2 text-3xl font-bold text-amber-600">8</p>
+            <p class="mt-1 text-sm text-slate-500">Needs attention soon</p>
+        </div>
+        <div class="flex-1 min-w-[220px] rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+            <p class="text-sm font-medium text-slate-500">Out of Stock</p>
+            <p class="mt-2 text-3xl font-bold text-red-600">2</p>
+            <p class="mt-1 text-sm text-slate-500">Requires restocking</p>
+        </div>
+    </div>
+    <!-- Main Flex Layout -->
+    <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Left Column -->
+        <div class="flex flex-col gap-8 flex-[2]">
+            <!-- Quick Actions -->
+            <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 class="text-lg font-semibold text-slate-900 mb-4">Quick Actions</h2>
+                <div class="flex flex-wrap gap-3">
+                    <a href="#"
+                       class="flex-1 min-w-[180px] rounded-lg bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-blue-700">
+                        + Add Ingredient
+                    </a>
+                    <a href="#"
+                       class="flex-1 min-w-[180px] rounded-lg bg-slate-900 px-4 py-3 text-center text-sm font-semibold text-white hover:bg-slate-800">
+                        + Create Recipe
+                    </a>
+                    <a href="#"
+                       class="flex-1 min-w-[180px] rounded-lg border border-slate-300 px-4 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                        View Inventory
+                    </a>
+                    <a href="#"
+                       class="flex-1 min-w-[180px] rounded-lg border border-slate-300 px-4 py-3 text-center text-sm font-semibold text-slate-700 hover:bg-slate-50">
+                        View Recipes
+                    </a>
+                </div>
+            </div>
+            <!-- Low Stock Ingredients -->
+            <div class="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                <div class="border-b border-slate-200 px-6 py-4">
+                    <h2 class="text-lg font-semibold text-slate-900">Low Stock Ingredients</h2>
+                    <p class="text-sm text-slate-500">Placeholder data for planning.</p>
+                </div>
+                <div class="divide-y divide-slate-200">
+                    <div class="flex items-center justify-between gap-4 px-6 py-4 text-sm">
+                        <span class="font-medium text-slate-900">Cocoa Powder</span>
+                        <span class="text-slate-600">0.50 kg</span>
+                        <span class="text-amber-600 font-medium">Low Stock</span>
+                    </div>
+                    <div class="flex items-center justify-between gap-4 px-6 py-4 text-sm">
+                        <span class="font-medium text-slate-900">Butter</span>
+                        <span class="text-slate-600">1.00 kg</span>
+                        <span class="text-amber-600 font-medium">Low Stock</span>
+                    </div>
+                    <div class="flex items-center justify-between gap-4 px-6 py-4 text-sm">
+                        <span class="font-medium text-slate-900">Flour</span>
+                        <span class="text-slate-600">0.75 kg</span>
+                        <span class="text-amber-600 font-medium">Low Stock</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Right Column -->
+        <div class="flex flex-col gap-8 flex-1">
+            <!-- Recently Added Recipes -->
+            <div class="rounded-xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+                <div class="border-b border-slate-200 px-6 py-4">
+                    <h2 class="text-lg font-semibold text-slate-900">Recently Added Recipes</h2>
+                    <p class="text-sm text-slate-500">Placeholder recent activity.</p>
+                </div>
+                <div class="divide-y divide-slate-200">
+                    <div class="px-6 py-4">
+                        <p class="font-medium text-slate-900">Chocolate Brownies</p>
+                        <p class="text-sm text-slate-500">Added 2 days ago</p>
+                    </div>
+                    <div class="px-6 py-4">
+                        <p class="font-medium text-slate-900">Banana Cake</p>
+                        <p class="text-sm text-slate-500">Added 4 days ago</p>
+                    </div>
+                    <div class="px-6 py-4">
+                        <p class="font-medium text-slate-900">Chocolate Chip Cookies</p>
+                        <p class="text-sm text-slate-500">Added 1 week ago</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Development Roadmap -->
+            <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                <h2 class="text-lg font-semibold text-slate-900 mb-4">Development Roadmap</h2>
+                <div class="flex flex-col gap-3 text-sm">
+                    <div class="rounded-lg bg-green-50 px-4 py-3 text-green-700 font-medium">✓ Ingredient Management</div>
+                    <div class="rounded-lg bg-green-50 px-4 py-3 text-green-700 font-medium">✓ Recipe Management</div>
+                    <div class="rounded-lg bg-slate-50 px-4 py-3 text-slate-600">□ Authentication</div>
+                    <div class="rounded-lg bg-slate-50 px-4 py-3 text-slate-600">□ Recipe Costing</div>
+                    <div class="rounded-lg bg-slate-50 px-4 py-3 text-slate-600">□ Inventory Transactions</div>
+                    <div class="rounded-lg bg-slate-50 px-4 py-3 text-slate-600">□ Reports</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
