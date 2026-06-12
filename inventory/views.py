@@ -45,7 +45,7 @@ class IngredientListView(ListView):
 class IngredientCreateView(CreateView):
     model = Ingredient
     template_name = "inventory/ingredient_form.html"
-    fields = ["name", "stock_qty", "price"]
+    fields = ["name", "unit", "stock_qty", "price"]
     success_url = reverse_lazy("inventory:ingredient_list")
 
 

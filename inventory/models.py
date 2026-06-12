@@ -12,6 +12,8 @@ class Ingredient(models.Model):
     stock_qty = models.DecimalField(
         max_digits=10, decimal_places=2, default=0.00, validators=[MinValueValidator(0)]
     )
+    UNIT_CHOICES = {"g": "Grams", "ml": "Mililiter"}
+    unit = models.CharField(max_length=2, choices=UNIT_CHOICES, default="g")
     price = models.DecimalField(
         max_digits=6, decimal_places=2, default=1.00, validators=[MinValueValidator(1)]
     )

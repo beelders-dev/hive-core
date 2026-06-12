@@ -4,9 +4,10 @@
     <div class="col-span-5 px-4 py-4">
         <p class="truncate font-medium text-slate-900">{{ ingredient.name }}</p>
     </div>
-    <div class="col-span-4 px-4 py-4">
+    <div class="col-span-3 px-4 py-4">
         {% include "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table_qty_input.html" %}
     </div>
+    <div class="col-span-1 px-4 py-4 text-center text-sm font-medium text-slate-600">{{ ingredient.unit }}</div>
     <div class="col-span-3 px-4 py-4 text-center">
         {% include "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table_rm_button.html" %}
     </div>
