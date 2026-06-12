@@ -58,6 +58,19 @@ class ViewTests(TestCase):
         self.assertContains(response, "Recipe created successfully.")
         self.assertEqual(Recipe.objects.count(), 1)
 
+    def test_recipe_create_view_displays_error_message_when_name_is_blank(self):
+
+        response = self.client.post(
+            reverse("production:recipe_create"),
+            data={
+                "recipe_name": "",
+                "ingredient_ids": [str(self.ingredient.pk)],
+                f"quantity_{self.ingredient.pk}": 1,
+            },
+        )
+        self.assertContains(response, "Recipe name is required.")
+        self.assertEqual(Recipe.objects.count(), 0)
+
     def test_recipe_create_view_displays_error_message_for_invalid_quantity(self):
 
         response = self.client.post(
