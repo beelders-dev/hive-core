@@ -1,8 +1,7 @@
 {% extends "base.html" %}
-{% load crispy_forms_tags %}
 {% block content %}
-    <div class="max-w-md mx-auto my-12 px-4 font-sans">
-        <div class="bg-white border border-slate-300 rounded-xl overflow-hidden shadow-sm p-6 sm:p-8">
+    <div class="mx-auto my-12 max-w-md px-4 font-sans">
+        <div class="overflow-hidden rounded-xl border border-slate-300 bg-white p-6 shadow-sm sm:p-8">
             <div class="mb-6">
                 <h2 class="text-xl font-bold text-slate-800">
                     {% if object %}
@@ -11,7 +10,7 @@
                         Add New Ingredient
                     {% endif %}
                 </h2>
-                <p class="text-sm text-slate-500 mt-1">
+                <p class="mt-1 text-sm text-slate-500">
                     {% if object %}
                         Update the details of this ingredient below.
                     {% else %}
@@ -21,14 +20,37 @@
             </div>
             <form action="" method="post" class="space-y-5">
                 {% csrf_token %}
-                <div class="text-slate-700">{{ form|crispy }}</div>
-                <div class="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                <div>
+                    <label for="{{ form.name.id_for_label }}"
+                           class="mb-1 block text-sm font-medium text-slate-700">Name</label>
+                    {{ form.name }}
+                    <span class="text-red-500 text-sm">{{ form.name.errors }}</span>
+                </div>
+                <div>
+                    <label for="{{ form.stock_qty.id_for_label }}"
+                           class="mb-1 block text-sm font-medium text-slate-700">Stock Quantity</label>
+                    {{ form.stock_qty }}
+                    <span class="text-red-500 text-sm">{{ form.stock_qty.errors }}</span>
+                </div>
+                <div>
+                    <label for="{{ form.price.id_for_label }}"
+                           class="mb-1 block text-sm font-medium text-slate-700">Price</label>
+                    {{ form.price }}
+                    <span class="text-red-500 text-sm">{{ form.price.errors }}</span>
+                </div>
+                <div>
+                    <label for="{{ form.unit.id_for_label }}"
+                           class="mb-1 block text-sm font-medium text-slate-700">Unit</label>
+                    {{ form.unit }}
+                    <span class="text-red-500 text-sm">{{ form.unit.errors }}</span>
+                </div>
+                <div class="flex items-center justify-end gap-3 border-t border-slate-100 pt-4">
                     <a href="{% url 'inventory:ingredient_list' %}"
-                       class="px-4 py-2 text-sm font-medium text-slate-600 hover:text-slate-800 hover:bg-slate-50 border border-slate-200 rounded-lg transition-all duration-150">
+                       class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 transition-all duration-150 hover:bg-slate-50 hover:text-slate-800">
                         Cancel
                     </a>
                     <button type="submit"
-                            class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2 rounded-lg shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                            class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white shadow-sm transition-colors duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                         {% if object %}
                             Save Changes
                         {% else %}

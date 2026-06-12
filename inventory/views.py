@@ -8,6 +8,7 @@ from django.views.generic import (
 from django.urls import reverse_lazy
 
 from .models import Ingredient
+from .forms import IngredientForm
 
 # Create your views here.
 
@@ -45,14 +46,14 @@ class IngredientListView(ListView):
 class IngredientCreateView(CreateView):
     model = Ingredient
     template_name = "inventory/ingredient_form.html"
-    fields = ["name", "unit", "stock_qty", "price"]
+    form_class = IngredientForm
     success_url = reverse_lazy("inventory:ingredient_list")
 
 
 class IngredientUpdateView(UpdateView):
     model = Ingredient
     template_name = "inventory/ingredient_form.html"
-    fields = ["name", "unit", "stock_qty", "price"]
+    form_class = IngredientForm
     success_url = reverse_lazy("inventory:ingredient_list")
 
 
