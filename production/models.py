@@ -1,6 +1,8 @@
 import uuid
+from decimal import Decimal
 from django.urls import reverse
 from django.db import models
+from django.core.validators import MinValueValidator
 
 
 # Create your models here.
@@ -34,4 +36,6 @@ class RecipeIngredient(models.Model):
     )
 
     ingredient = models.ForeignKey("inventory.Ingredient", on_delete=models.CASCADE)
-    quantity_needed = models.DecimalField(max_digits=10, decimal_places=2)
+    quantity_needed = models.DecimalField(
+        max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal("0.01"))]
+    )

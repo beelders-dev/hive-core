@@ -26,8 +26,11 @@ class RecipeService:
             if quantity <= 0:
                 raise ValueError("Quantity must be greater than zero.")
 
-            RecipeIngredient.objects.create(
+            recipe_ingredient = RecipeIngredient(
                 recipe=recipe,
                 ingredient_id=ingredient_id,
                 quantity_needed=quantity,
             )
+
+            recipe_ingredient.full_clean()
+            recipe_ingredient.save()
