@@ -1,6 +1,7 @@
 from .models import Recipe, RecipeIngredient
 from django.db import transaction
 from decimal import Decimal
+from django.core.exceptions import ValidationError
 
 
 class RecipeService:
@@ -10,21 +11,17 @@ class RecipeService:
 
         recipe_name = recipe_name.strip()
 
-        if not recipe_name:
-            raise ValueError("Recipe name is required.")
-
-        recipe = Recipe.objects.create(name=recipe_name, description=recipe_description)
-
         if not ingredients:
-            raise ValueError("You need at least 1 ingredient.")
+            raise ValidationError({"ingredients": ["Add at least 1 ingredient."]})
+
+        recipe = Recipe(name=recipe_name, description=recipe_description)
+        recipe.full_clean()
+        recipe.save()
 
         for ingredient in ingredients:
 
             ingredient_id = ingredient["ingredient_id"]
             quantity = Decimal(ingredient["quantity"])
-
-            if quantity <= 0:
-                raise ValueError("Quantity must be greater than zero.")
 
             recipe_ingredient = RecipeIngredient(
                 recipe=recipe,

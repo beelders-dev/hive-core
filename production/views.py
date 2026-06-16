@@ -2,6 +2,7 @@ from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.http import HttpResponse
+from django.core.exceptions import ValidationError
 
 from inventory.models import Ingredient
 
@@ -55,12 +56,14 @@ class RecipeCreateView(View):
         ingredients = []
 
         for ingredient_id in request.POST.getlist("ingredient_ids"):
-            ingredients.append(
-                {
-                    "ingredient_id": ingredient_id,
-                    "quantity": request.POST.get(f"quantity_{ingredient_id}"),
-                }
-            )
+            ingredient_id.strip()
+            if ingredient_id:
+                ingredients.append(
+                    {
+                        "ingredient_id": ingredient_id,
+                        "quantity": request.POST.get(f"quantity_{ingredient_id}"),
+                    }
+                )
 
         try:
             service.create_recipe(
@@ -69,12 +72,13 @@ class RecipeCreateView(View):
                 ingredients=ingredients,
             )
 
-        except ValueError as e:
+        except ValidationError as e:
+            message = next(iter(e.message_dict.values()))[0]
             return render(
                 request,
                 "production/recipe/partials/_message.html",
                 {
-                    "message": str(e),
+                    "message": str(message),
                     "type": "error",
                 },
             )

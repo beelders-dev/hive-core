@@ -12,10 +12,19 @@ class Recipe(models.Model):
         default=uuid.uuid4,
         editable=False,
     )
-    name = models.CharField(max_length=100)
+    name = models.CharField(
+        max_length=100,
+        blank=False,
+        null=False,
+        error_messages={
+            "blank": "Recipe name cannot be blank.",
+            "max_length": "Max characters for recipe name: 100",
+        },
+    )
     description = models.TextField(blank=True, null=True)
     ingredients = models.ManyToManyField(
-        "inventory.Ingredient", through="RecipeIngredient"
+        "inventory.Ingredient",
+        through="RecipeIngredient",
     )
 
     def get_absolute_url(self):
@@ -35,7 +44,17 @@ class RecipeIngredient(models.Model):
         related_name="ingredient_requirements",
     )
 
-    ingredient = models.ForeignKey("inventory.Ingredient", on_delete=models.CASCADE)
+    ingredient = models.ForeignKey(
+        "inventory.Ingredient",
+        on_delete=models.CASCADE,
+    )
     quantity_needed = models.DecimalField(
-        max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal("0.01"))]
+        max_digits=10,
+        decimal_places=2,
+        validators=[
+            MinValueValidator(
+                Decimal("0.01"),
+                message="Quantity must be greater than or equal to 0.01.",
+            )
+        ],
     )
