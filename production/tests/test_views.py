@@ -68,7 +68,22 @@ class ViewTests(TestCase):
                 f"quantity_{self.ingredient.pk}": 1,
             },
         )
-        self.assertContains(response, "Recipe name is required.")
+        self.assertContains(response, "Recipe name cannot be blank.")
+        self.assertEqual(Recipe.objects.count(), 0)
+
+    def test_recipe_create_view_displays_error_message_when_recipe_name_chars_exceeds_100(
+        self,
+    ):
+
+        response = self.client.post(
+            reverse("production:recipe_create"),
+            data={
+                "recipe_name": "Chocolate Cake" * 101,
+                "ingredient_ids": [str(self.ingredient.pk)],
+                f"quantity_{self.ingredient.pk}": 1,
+            },
+        )
+        self.assertContains(response, "Max characters for recipe name: 100")
         self.assertEqual(Recipe.objects.count(), 0)
 
     def test_recipe_create_view_displays_error_message_for_invalid_quantity(self):
@@ -76,12 +91,12 @@ class ViewTests(TestCase):
         response = self.client.post(
             reverse("production:recipe_create"),
             data={
-                "recipe_name": "Chocolate bar",
+                "recipe_name": "Chocolate cake",
                 "ingredient_ids": [str(self.ingredient.pk)],
                 f"quantity_{self.ingredient.pk}": -1,
             },
         )
-        self.assertContains(response, "Quantity must be greater than zero.")
+        self.assertContains(response, "Quantity must be greater than or equal to 0.01.")
         self.assertEqual(Recipe.objects.count(), 0)
 
     def test_recipe_create_view_displays_error_message_when_no_ingredient_added(self):
@@ -89,8 +104,8 @@ class ViewTests(TestCase):
         response = self.client.post(
             reverse("production:recipe_create"),
             data={
-                "recipe_name": "Chocolate bar",
+                "recipe_name": "Chocolate cake",
             },
         )
-        self.assertContains(response, "You need at least 1 ingredient.")
+        self.assertContains(response, "Add at least 1 ingredient.")
         self.assertEqual(Recipe.objects.count(), 0)
