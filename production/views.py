@@ -36,10 +36,20 @@ class RecipeDetailView(DetailView):
         )
 
 
-class RecipeUpdateView(UpdateView):
-    model = Recipe
-    template_name = "production/recipe/recipe_add.html"
-    fields = ["name", "ingredients"]
+class RecipeUpdateView(View):
+
+    def get(self, request, pk):
+
+        recipe = Recipe.objects.get(pk=pk)
+        for ingredient in recipe.get_all_ingredients():
+            print(ingredient.ingredient.name)
+            print(ingredient.quantity_needed)
+
+        return render(
+            request,
+            "production/recipe/recipe_form.html",
+            {"recipe": recipe, "recipe_ingredients": recipe.get_all_ingredients()},
+        )
 
 
 class RecipeDeleteView(DeleteView):
@@ -73,6 +83,7 @@ class RecipeCreateView(View):
             )
 
         except ValidationError as e:
+
             message = next(iter(e.message_dict.values()))[0]
             return render(
                 request,
