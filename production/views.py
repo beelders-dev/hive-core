@@ -51,6 +51,7 @@ class RecipeUpdateView(View):
     def post(self, request, pk):
 
         recipe = Recipe.objects.get(pk=pk)
+        service = RecipeService()
 
         new_recipe_name = request.POST.get("recipe_name")
         new_description = request.POST.get("recipe_description")
@@ -66,8 +67,6 @@ class RecipeUpdateView(View):
                         "quantity": request.POST.get(f"quantity_{ingredient_id}"),
                     }
                 )
-
-        service = RecipeService()
 
         try:
             service.update_recipe(
