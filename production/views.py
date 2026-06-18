@@ -41,14 +41,59 @@ class RecipeUpdateView(View):
     def get(self, request, pk):
 
         recipe = Recipe.objects.get(pk=pk)
-        for ingredient in recipe.get_all_ingredients():
-            print(ingredient.ingredient.name)
-            print(ingredient.quantity_needed)
 
         return render(
             request,
             "production/recipe/recipe_form.html",
             {"recipe": recipe, "recipe_ingredients": recipe.get_all_ingredients()},
+        )
+
+    def post(self, request, pk):
+
+        recipe = Recipe.objects.get(pk=pk)
+
+        new_recipe_name = request.POST.get("recipe_name")
+        new_description = request.POST.get("recipe_description")
+
+        ingredients = []
+
+        for ingredient_id in request.POST.getlist("ingredient_ids"):
+            ingredient_id = ingredient_id.strip()
+            if ingredient_id:
+                ingredients.append(
+                    {
+                        "ingredient_id": ingredient_id,
+                        "quantity": request.POST.get(f"quantity_{ingredient_id}"),
+                    }
+                )
+
+        service = RecipeService()
+
+        try:
+            service.update_recipe(
+                recipe=recipe,
+                new_recipe_name=new_recipe_name,
+                new_recipe_description=new_description,
+                new_ingredients=ingredients,
+            )
+        except ValidationError as e:
+            message = next(iter(e.message_dict.values()))[0]
+            return render(
+                request,
+                "production/recipe/partials/_message.html",
+                {
+                    "message": str(message),
+                    "type": "error",
+                },
+            )
+
+        return render(
+            request,
+            "production/recipe/partials/_recipe_create_success.html",
+            {
+                "message": "Recipe updated successfully.",
+                "type": "success",
+            },
         )
 
 
@@ -66,7 +111,7 @@ class RecipeCreateView(View):
         ingredients = []
 
         for ingredient_id in request.POST.getlist("ingredient_ids"):
-            ingredient_id.strip()
+            ingredient_id = ingredient_id.strip()
             if ingredient_id:
                 ingredients.append(
                     {

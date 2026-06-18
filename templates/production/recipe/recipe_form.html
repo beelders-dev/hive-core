@@ -6,7 +6,7 @@
               method="post"
               class="mx-auto max-w-7xl space-y-8"
               id="recipe-form"
-              hx-post="{% url 'production:recipe_create' %}"
+              hx-post="{% if recipe %} {% url 'production:recipe_edit' recipe.pk %} {% else %} {% url 'production:recipe_create' %} {% endif %}"
               hx-target="#form-messages"
               hx-swap="innerHTML">
             {% csrf_token %}
