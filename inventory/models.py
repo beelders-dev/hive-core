@@ -30,7 +30,7 @@ class Ingredient(models.Model):
         default=0.00,
         validators=[
             MinValueValidator(
-                Decimal(0.01), message=("Price cannot be less than 0.01")
+                Decimal(0.01), message=("Price cannot be less than 0.01.")
             ),
         ],
     )
