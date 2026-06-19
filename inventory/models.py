@@ -1,4 +1,5 @@
 import uuid
+from decimal import Decimal
 from django.core.validators import MinValueValidator
 from django.db import models
 from django.urls import reverse
@@ -10,12 +11,26 @@ class Ingredient(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100)
     stock_qty = models.DecimalField(
-        max_digits=10, decimal_places=2, default=0.00, validators=[MinValueValidator(0)]
+        max_digits=10,
+        decimal_places=2,
+        default=0.00,
+        validators=[
+            MinValueValidator(
+                Decimal(0.01), message=("Stock quantity cannot be less than 0.01.")
+            ),
+        ],
     )
     UNIT_CHOICES = {"g": "Grams", "ml": "Mililiter"}
     unit = models.CharField(max_length=2, choices=UNIT_CHOICES, default="g")
     price = models.DecimalField(
-        max_digits=6, decimal_places=2, default=1.00, validators=[MinValueValidator(1)]
+        max_digits=6,
+        decimal_places=2,
+        default=0.00,
+        validators=[
+            MinValueValidator(
+                Decimal(0.01), message=("Price cannot be less than 0.01")
+            ),
+        ],
     )
 
     def get_total_amount(self):
