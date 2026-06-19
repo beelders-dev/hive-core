@@ -1,0 +1,189 @@
+# Hive Core
+
+Hive Core is an inventory and production management system designed for small bakeries and home-based baking businesses.
+
+The system helps users manage ingredients, monitor inventory levels, create recipes, and calculate ingredient consumption during production.
+
+---
+
+## Features
+
+### Inventory Management
+
+- Add, update, and delete ingredients
+- Track current stock quantities
+- Store ingredient pricing information
+- Low-stock monitoring
+
+### Recipe Management
+
+- Create recipes
+- Add multiple ingredients to recipes
+- Define required quantities per ingredient
+- Update existing recipes
+- Remove ingredients from recipes
+
+### Production Planning
+
+- Link recipes to ingredient requirements
+- Prepare inventory deduction workflow for future production runs
+
+---
+
+## Screenshots
+
+> Screenshots coming soon.
+
+---
+
+## Tech Stack
+
+### Backend
+
+- Python 3.12
+- Django 6
+- SQLite (development)
+- PostgreSQL (planned/production)
+
+### Frontend
+
+- HTMX
+- Tailwind CSS
+
+### Development Tools
+
+- Docker
+- Git
+- GitHub
+- Django Debug Toolbar
+
+### Testing
+
+- Django Test Framework
+
+---
+
+## Project Structure
+
+```text
+hive-core/
+├── inventory/
+├── production/
+├── templates/
+├── static/
+├── tests/
+└── manage.py
+```
+
+---
+
+## Installation
+
+### Clone Repository
+
+```bash
+git clone https://github.com/your-username/hive-core.git
+cd hive-core
+```
+
+### Create Virtual Environment
+
+```bash
+python -m venv .venv
+```
+
+Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+Linux / Mac:
+
+```bash
+source .venv/bin/activate
+```
+
+### Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### Run Migrations
+
+```bash
+python manage.py migrate
+```
+
+### Create Superuser
+
+```bash
+python manage.py createsuperuser
+```
+
+### Start Development Server
+
+```bash
+python manage.py runserver
+```
+
+Open:
+
+```text
+http://127.0.0.1:8000
+```
+
+---
+
+## Running Tests
+
+```bash
+python manage.py test
+```
+
+---
+
+## Current Development Status
+
+Hive Core is currently under active development.
+
+### Completed
+
+- Ingredient CRUD
+- Recipe CRUD
+- Recipe Ingredient Management
+- Server-side Validation
+- Automated Tests
+
+### Planned
+
+- Authentication
+- Production Runs
+- Inventory Deduction
+- Cost Calculation
+- Dashboard & Analytics
+- Notifications
+
+---
+
+## Design Goals
+
+The project follows:
+
+- Django best practices
+- Service layer architecture
+- Reusable partial templates
+- HTMX-driven interactions
+- Test-driven development where appropriate
+- Separation of business logic from views
+
+---
+
+## Author
+
+Michael Uy
+
+Backend Developer (Python / Django)
+
+GitHub: https://github.com/your-github-username
