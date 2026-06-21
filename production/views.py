@@ -57,7 +57,7 @@ class RecipeUpdateView(LoginRequiredMixin, View):
 
     def post(self, request, pk):
 
-        recipe = Recipe.objects.filter(user=self.request.user)
+        recipe = Recipe.objects.get(user=self.request.user, pk=pk)
         service = RecipeService()
 
         new_recipe_name = request.POST.get("recipe_name")
