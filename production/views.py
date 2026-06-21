@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -19,7 +20,7 @@ SELECTED_INGREDIENT_TABLE_TEMPLATE = "production/recipe/partials/selected_ingred
 
 
 # Create your views here.
-class RecipeListView(ListView):
+class RecipeListView(LoginRequiredMixin, ListView):
     model = Recipe
     template_name = "production/recipe/recipe_list.html"
     context_object_name = "recipe_list"
@@ -102,7 +103,7 @@ class RecipeDeleteView(DeleteView):
     success_url = reverse_lazy("production:recipe_list")
 
 
-class RecipeCreateView(View):
+class RecipeCreateView(LoginRequiredMixin, View):
 
     def post(self, request):
 
