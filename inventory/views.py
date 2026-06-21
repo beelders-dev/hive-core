@@ -63,6 +63,10 @@ class IngredientUpdateView(LoginRequiredMixin, UpdateView):
     form_class = IngredientForm
     success_url = reverse_lazy("inventory:ingredient_list")
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
 
 class IngredientDeleteView(LoginRequiredMixin, DeleteView):
     model = Ingredient
@@ -70,7 +74,7 @@ class IngredientDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("inventory:ingredient_list")
 
 
-class IngredientDetailView(DetailView):
+class IngredientDetailView(LoginRequiredMixin, DetailView):
     model = Ingredient
     template_name = "inventory/ingredient_detail.html"
     context_object_name = "ingredient"
