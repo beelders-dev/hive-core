@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import get_user_model
 from django.views.generic import (
     ListView,
     CreateView,
@@ -20,8 +21,9 @@ class IngredientListView(LoginRequiredMixin, ListView):
     context_object_name = "ingredient_list"
 
     def get_queryset(self):
-        qs = super().get_queryset()
-        q = self.request.GET.get("q", "")
+        user = self.request.user
+        qs = Ingredient.objects.filter(user=user)
+        q = self.request.GET.get("q", "").strip()
 
         if q:
             qs = qs.filter(name__icontains=q)
@@ -49,6 +51,10 @@ class IngredientCreateView(LoginRequiredMixin, CreateView):
     template_name = "inventory/ingredient_form.html"
     form_class = IngredientForm
     success_url = reverse_lazy("inventory:ingredient_list")
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
 
 
 class IngredientUpdateView(LoginRequiredMixin, UpdateView):
