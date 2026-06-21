@@ -7,14 +7,14 @@ from django.core.exceptions import ValidationError
 class RecipeService:
 
     @transaction.atomic()
-    def create_recipe(self, recipe_name, recipe_description, ingredients):
+    def create_recipe(self, user, recipe_name, recipe_description, ingredients):
 
         recipe_name = recipe_name.strip()
 
         if not ingredients:
             raise ValidationError({"ingredients": ["Add at least 1 ingredient."]})
 
-        recipe = Recipe(name=recipe_name, description=recipe_description)
+        recipe = Recipe(user=user, name=recipe_name, description=recipe_description)
         recipe.full_clean()
         recipe.save()
 

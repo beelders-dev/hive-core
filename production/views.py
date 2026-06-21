@@ -1,4 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+from django.db.models.query import QuerySet
 from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -25,8 +28,11 @@ class RecipeListView(LoginRequiredMixin, ListView):
     template_name = "production/recipe/recipe_list.html"
     context_object_name = "recipe_list"
 
+    def get_queryset(self):
+        return Recipe.objects.filter(user=self.request.user)
 
-class RecipeDetailView(DetailView):
+
+class RecipeDetailView(LoginRequiredMixin, DetailView):
     model = Recipe
     template_name = "production/recipe/recipe_detail.html"
     context_object_name = "recipe"
@@ -37,7 +43,7 @@ class RecipeDetailView(DetailView):
         )
 
 
-class RecipeUpdateView(View):
+class RecipeUpdateView(LoginRequiredMixin, View):
 
     def get(self, request, pk):
 
@@ -51,7 +57,7 @@ class RecipeUpdateView(View):
 
     def post(self, request, pk):
 
-        recipe = Recipe.objects.get(pk=pk)
+        recipe = Recipe.objects.filter(user=self.request.user)
         service = RecipeService()
 
         new_recipe_name = request.POST.get("recipe_name")
@@ -97,7 +103,7 @@ class RecipeUpdateView(View):
         )
 
 
-class RecipeDeleteView(DeleteView):
+class RecipeDeleteView(LoginRequiredMixin, DeleteView):
     model = Recipe
     template_name = "production/recipe/recipe_delete.html"
     success_url = reverse_lazy("production:recipe_list")
@@ -122,6 +128,7 @@ class RecipeCreateView(LoginRequiredMixin, View):
 
         try:
             service.create_recipe(
+                user=self.request.user,
                 recipe_name=request.POST.get("recipe_name"),
                 recipe_description=request.POST.get("recipe_description"),
                 ingredients=ingredients,
@@ -153,14 +160,14 @@ class RecipeCreateView(LoginRequiredMixin, View):
         return render(request, "production/recipe/recipe_form.html")
 
 
-class RemoveIngredientView(View):
+class RemoveIngredientView(LoginRequiredMixin, View):
 
     def post(self, request, pk):
 
         return HttpResponse("")
 
 
-class AddIngredientView(View):
+class AddIngredientView(LoginRequiredMixin, View):
 
     def post(self, request, pk):
 
