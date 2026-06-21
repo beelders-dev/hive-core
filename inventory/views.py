@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import (
     ListView,
     CreateView,
@@ -13,7 +14,7 @@ from .forms import IngredientForm
 # Create your views here.
 
 
-class IngredientListView(ListView):
+class IngredientListView(LoginRequiredMixin, ListView):
     model = Ingredient
     template_name = "inventory/ingredient_list.html"
     context_object_name = "ingredient_list"
@@ -43,21 +44,21 @@ class IngredientListView(ListView):
         return [self.template_name]
 
 
-class IngredientCreateView(CreateView):
+class IngredientCreateView(LoginRequiredMixin, CreateView):
     model = Ingredient
     template_name = "inventory/ingredient_form.html"
     form_class = IngredientForm
     success_url = reverse_lazy("inventory:ingredient_list")
 
 
-class IngredientUpdateView(UpdateView):
+class IngredientUpdateView(LoginRequiredMixin, UpdateView):
     model = Ingredient
     template_name = "inventory/ingredient_form.html"
     form_class = IngredientForm
     success_url = reverse_lazy("inventory:ingredient_list")
 
 
-class IngredientDeleteView(DeleteView):
+class IngredientDeleteView(LoginRequiredMixin, DeleteView):
     model = Ingredient
     template_name = "inventory/ingredient_delete.html"
     success_url = reverse_lazy("inventory:ingredient_list")
