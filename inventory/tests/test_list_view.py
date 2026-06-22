@@ -28,3 +28,12 @@ class IngredientListViewTests(TestCase):
     def test_list_view_displays_ingredients(self):
         ingredients = self.response.context["ingredient_list"]
         self.assertEqual(len(ingredients), 1)
+
+    def test_list_view_does_not_display_content_when_user_logs_out(self):
+
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
