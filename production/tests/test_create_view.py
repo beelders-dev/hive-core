@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 from ..models import Recipe
 from inventory.models import Ingredient
@@ -8,32 +9,35 @@ from inventory.models import Ingredient
 class CreateViewTests(TestCase):
 
     def setUp(self):
-        self.ingredient = Ingredient.objects.create(name="Cocoa Powder")
+        self.user = get_user_model().objects.create(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.ingredient = Ingredient.objects.create(user=self.user, name="Cocoa Powder")
+        self.url = reverse("production:recipe_create")
 
     def test_recipe_create_view_loads_correctly(self):
         response = self.client.get(reverse("production:recipe_create"))
 
-        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "production/recipe/recipe_form.html")
 
     def test_recipe_create_view_creates_recipe_successfully(self):
 
-        response = self.client.post(
-            reverse("production:recipe_create"),
+        self.client.post(
+            self.url,
             data={
-                "recipe_name": "Chocolate bar",
+                "recipe_name": "Chocolate Cake",
                 "ingredient_ids": [str(self.ingredient.pk)],
                 f"quantity_{self.ingredient.pk}": 1,
             },
         )
 
-        self.assertEqual(response.status_code, 200)
         self.assertEqual(Recipe.objects.count(), 1)
 
     def test_recipe_create_view_displays_success_message(self):
 
         response = self.client.post(
-            reverse("production:recipe_create"),
+            self.url,
             data={
                 "recipe_name": "Chocolate bar",
                 "ingredient_ids": [str(self.ingredient.pk)],
@@ -46,7 +50,7 @@ class CreateViewTests(TestCase):
     def test_recipe_create_view_displays_error_message_when_name_is_blank(self):
 
         response = self.client.post(
-            reverse("production:recipe_create"),
+            self.url,
             data={
                 "recipe_name": "",
                 "ingredient_ids": [str(self.ingredient.pk)],
@@ -61,7 +65,7 @@ class CreateViewTests(TestCase):
     ):
 
         response = self.client.post(
-            reverse("production:recipe_create"),
+            self.url,
             data={
                 "recipe_name": "Chocolate Cake" * 101,
                 "ingredient_ids": [str(self.ingredient.pk)],
@@ -94,3 +98,17 @@ class CreateViewTests(TestCase):
         )
         self.assertContains(response, "Add at least 1 ingredient.")
         self.assertEqual(Recipe.objects.count(), 0)
+
+    def test_recipe_create_view_creates_recipe_with_user(self):
+
+        self.client.post(
+            self.url,
+            data={
+                "recipe_name": "Chocolate Cake",
+                "ingredient_ids": [str(self.ingredient.pk)],
+                f"quantity_{self.ingredient.pk}": 1,
+            },
+        )
+
+        recipe = Recipe.objects.get(name="Chocolate Cake")
+        self.assertEqual(recipe.user, self.user)

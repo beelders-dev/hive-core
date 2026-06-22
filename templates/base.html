@@ -46,7 +46,7 @@
                            class="text-sm font-medium text-slate-300 hover:text-white transition-colors">Recipes</a>
                         <div class="ml-4 pl-4 border-l border-slate-700 flex items-center gap-3">
                             <div class="w-8 h-8 rounded-full bg-slate-600 flex items-center justify-center text-xs font-bold text-slate-200">
-                                AD
+                                {% if user.is_authenticated %}{{ user.get_short_name }}{% endif %}
                             </div>
                             {% if user.is_authenticated %}
                                 <form action={% url 'logout' %} method="post">

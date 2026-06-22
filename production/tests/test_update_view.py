@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from decimal import Decimal
+from django.contrib.auth import get_user_model
 from ..models import Recipe, RecipeIngredient
 from inventory.models import Ingredient
 
@@ -8,8 +9,12 @@ from inventory.models import Ingredient
 class UpdateViewTests(TestCase):
 
     def setUp(self):
-        self.ingredient = Ingredient.objects.create(name="Cocoa powder")
-        self.recipe = Recipe.objects.create(name="Brownies")
+        user = get_user_model().objects.create(username="Mike", password="testpass123")
+        self.client.force_login(user)
+        self.ingredient = Ingredient.objects.create(user=user, name="Cocoa Powder")
+
+        self.recipe = Recipe.objects.create(user=user, name="Brownies")
+
         RecipeIngredient.objects.create(
             recipe=self.recipe,
             ingredient=self.ingredient,
