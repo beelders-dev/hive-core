@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 from ..models import Ingredient
 
@@ -7,7 +8,13 @@ from ..models import Ingredient
 class IngredientUpdateViewTests(TestCase):
 
     def setUp(self):
-        self.ingredient = Ingredient.objects.create(name="Egg", stock_qty=10, price=20)
+        self.user = get_user_model().objects.create(
+            username="mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.ingredient = Ingredient.objects.create(
+            user=self.user, name="Egg", stock_qty=10, price=20
+        )
         self.url = reverse(
             "inventory:ingredient_update", kwargs={"pk": self.ingredient.pk}
         )
@@ -21,6 +28,7 @@ class IngredientUpdateViewTests(TestCase):
         response = self.client.post(
             self.url,
             data={
+                "user": self.user,
                 "name": "Egg",
                 "unit": "g",
                 "stock_qty": 20,
@@ -36,6 +44,7 @@ class IngredientUpdateViewTests(TestCase):
         response = self.client.post(
             self.url,
             data={
+                "user": self.user,
                 "name": "",
                 "unit": "g",
                 "stock_qty": 10,
@@ -50,6 +59,7 @@ class IngredientUpdateViewTests(TestCase):
         response = self.client.post(
             self.url,
             data={
+                "user": self.user,
                 "name": "Butter",
                 "unit": "g",
                 "stock_qty": 20,

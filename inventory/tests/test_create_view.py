@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 from ..models import Ingredient
 
@@ -8,6 +9,10 @@ class IngredientCreateViewTests(TestCase):
 
     def setUp(self):
         self.url = reverse("inventory:ingredient_add")
+        self.user = get_user_model().objects.create(
+            username="mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
 
     def test_create_view_returns_200(self):
         response = self.client.get(self.url)
@@ -54,3 +59,6 @@ class IngredientCreateViewTests(TestCase):
         )
 
         self.assertRedirects(response, reverse("inventory:ingredient_list"))
+
+    def test_create_view_displays_content_for_logged_in_user(self):
+        pass
