@@ -1,11 +1,14 @@
-from django.test import SimpleTestCase
+from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 # Create your tests here.
 
 
-class HomePageTests(SimpleTestCase):
+class HomePageTests(TestCase):
     def setUp(self):
+        user = get_user_model().objects.create(username="Mike", password="testpass123")
+        self.client.force_login(user)
         url = reverse("home")
         self.response = self.client.get(url)
 

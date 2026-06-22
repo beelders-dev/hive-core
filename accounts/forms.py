@@ -8,6 +8,8 @@ class CustomUserCreationForm(UserCreationForm):
         fields = (
             "email",
             "username",
+            "first_name",
+            "last_name",
         )
 
     def __init__(self, *args, **kwargs):
@@ -30,4 +32,6 @@ class CustomUserChangeForm(UserChangeForm):
         fields = (
             "email",
             "username",
+            "first_name",
+            "last_name",
         )
