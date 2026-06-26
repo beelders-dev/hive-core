@@ -1,0 +1,46 @@
+<div class="bg-white border border-slate-300 rounded-xl shadow-sm overflow-hidden">
+    <!-- Card Header -->
+    {% if purchases %}
+        <div class="max-h-[450px] overflow-y-auto">
+            <table class="min-w-full divide-y divide-slate-200 text-sm">
+                <thead class="sticky top-0 bg-slate-50 z-10">
+                    <tr>
+                        <th class="px-4 py-3 text-left font-medium text-slate-500">Purchased</th>
+                        <th class="px-4 py-3 text-left font-medium text-slate-500">Expiration</th>
+                        <th class="px-4 py-3 text-right font-medium text-slate-500">Purchased Qty</th>
+                        <th class="px-4 py-3 text-right font-medium text-slate-500">Remaining Qty</th>
+                        <th class="px-4 py-3 text-right font-medium text-slate-500">Total Cost</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-100 bg-white">
+                    {% for purchase in purchases %}
+                        <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-4 py-3 text-slate-900">{{ purchase.purchased_at|date:"M d, Y" }}</td>
+                            <td class="px-4 py-3 text-slate-600">
+                                {% if purchase.exp_date %}
+                                    {{ purchase.exp_date|date:"M d, Y" }}
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
+                            <td class="px-4 py-3 text-right font-medium text-slate-900">{{ purchase.qty_purchased }}</td>
+                            <td class="px-4 py-3 text-right">
+                                {% if purchase.qty_remaining > 0 %}
+                                    <span class="font-medium text-emerald-600">{{ purchase.qty_remaining }}</span>
+                                {% else %}
+                                    <span class="font-medium text-rose-600">0</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-4 py-3 text-right font-medium text-slate-900">₱{{ purchase.total_cost }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <div class="px-6 py-12 text-center">
+            <div class="mb-2 text-slate-400">No purchases recorded yet.</div>
+            <p class="text-sm text-slate-500">Add your first purchase using the form above.</p>
+        </div>
+    {% endif %}
+</div>

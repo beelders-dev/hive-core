@@ -1,0 +1,34 @@
+<div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Status</p>
+    {% if ingredient.current_stock == 0 %}
+        <div class="mt-3 inline-flex rounded-full border border-red-200 bg-red-50 px-3 py-1 text-sm font-medium text-red-700">
+            Out of Stock
+        </div>
+    {% elif ingredient.current_stock <= ingredient.low_stock_threshold %}
+        <div class="mt-3 inline-flex rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-sm font-medium text-amber-700">
+            Low Stock
+        </div>
+    {% else %}
+        <div class="mt-3 inline-flex rounded-full border border-green-200 bg-green-50 px-3 py-1 text-sm font-medium text-green-700">
+            In Stock
+        </div>
+    {% endif %}
+</div>
+<div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Current Stock</p>
+    <div class="mt-2 flex items-end gap-1">
+        <span class="text-3xl font-bold text-slate-900">{{ ingredient.current_stock }}</span>
+        <span class="mb-1 text-sm text-slate-500">{{ ingredient.get_unit_display }}</span>
+    </div>
+    <p class="mt-3 text-xs text-slate-500">
+        Reorder at
+        <span class="font-semibold text-slate-700">
+            {{ ingredient.low_stock_threshold }}
+            {{ ingredient.get_unit_display }}
+        </span>
+    </p>
+</div>
+<div class="rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+    <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Average Cost / {{ ingredient.unit }}</p>
+    <p class="mt-2 text-3xl font-bold text-slate-900">₱{{ ingredient.average_unit_cost|floatformat:2 }}</p>
+</div>

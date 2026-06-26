@@ -12,9 +12,9 @@
                 </h2>
                 <p class="mt-1 text-sm text-slate-500">
                     {% if object %}
-                        Update the details of this ingredient below.
+                        Update this ingredient's basic details.
                     {% else %}
-                        Fill in the details below to update your inventory stock.
+                        Create the ingredient first. You can add stock later by recording a purchase.
                     {% endif %}
                 </p>
             </div>
@@ -24,25 +24,20 @@
                     <label for="{{ form.name.id_for_label }}"
                            class="mb-1 block text-sm font-medium text-slate-700">Name</label>
                     {{ form.name }}
-                    <span class="text-red-500 text-sm">{{ form.name.errors }}</span>
-                </div>
-                <div>
-                    <label for="{{ form.stock_qty.id_for_label }}"
-                           class="mb-1 block text-sm font-medium text-slate-700">Stock Quantity</label>
-                    {{ form.stock_qty }}
-                    <span class="text-red-500 text-sm">{{ form.stock_qty.errors }}</span>
-                </div>
-                <div>
-                    <label for="{{ form.price.id_for_label }}"
-                           class="mb-1 block text-sm font-medium text-slate-700">Price</label>
-                    {{ form.price }}
-                    <span class="text-red-500 text-sm">{{ form.price.errors }}</span>
+                    <span class="text-sm text-red-500">{{ form.name.errors }}</span>
                 </div>
                 <div>
                     <label for="{{ form.unit.id_for_label }}"
-                           class="mb-1 block text-sm font-medium text-slate-700">Unit</label>
+                           class="mb-1 block text-sm font-medium text-slate-700">Base Unit</label>
                     {{ form.unit }}
-                    <span class="text-red-500 text-sm">{{ form.unit.errors }}</span>
+                    <span class="text-sm text-red-500">{{ form.unit.errors }}</span>
+                </div>
+                <div>
+                    <label for="{{ form.low_stock_threshold.id_for_label }}"
+                           class="mb-1 block text-sm font-medium text-slate-700">Low Stock Alert</label>
+                    {{ form.low_stock_threshold }}
+                    <p class="mt-1 text-xs text-slate-500">Choose when the system should warn you that this ingredient is running low.</p>
+                    <span class="text-sm text-red-500">{{ form.low_stock_threshold.errors }}</span>
                 </div>
                 <div class="flex items-center justify-end gap-3 border-t border-slate-100 pt-4">
                     <a href="{% url 'inventory:ingredient_list' %}"

@@ -1,5 +1,8 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth import get_user_model
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+from django.views.generic import View, TemplateView
 from django.views.generic import (
     ListView,
     CreateView,
@@ -9,8 +12,8 @@ from django.views.generic import (
 )
 from django.urls import reverse_lazy
 
-from .models import Ingredient
-from .forms import IngredientForm
+from .models import Ingredient, IngredientPurchase
+from .forms import IngredientForm, IngredientPurchaseForm
 
 # Create your views here.
 
@@ -78,3 +81,58 @@ class IngredientDetailView(LoginRequiredMixin, DetailView):
     model = Ingredient
     template_name = "inventory/ingredient_detail.html"
     context_object_name = "ingredient"
+
+
+class IngredientPurchaseListView(LoginRequiredMixin, View):
+    template_name = "inventory/partials/_ingredient_purchase_list.html"
+
+    def get(self, request, pk):
+        ingredient = get_object_or_404(
+            Ingredient,
+            pk=pk,
+            user=request.user,
+        )
+
+        purchases = ingredient.purchases.all()
+
+        return render(request, self.template_name, {"purchases": purchases})
+
+
+class IngredientPurchaseCreateView(LoginRequiredMixin, View):
+
+    template_name = "inventory/partials/_ingredient_purchase_form.html"
+
+    def post(self, request, pk):
+
+        ingredient = get_object_or_404(Ingredient, pk=pk)
+
+        form = IngredientPurchaseForm(request.POST)
+
+        if form.is_valid():
+            purchase = form.save(commit=False)
+            purchase.ingredient = ingredient
+            purchase.qty_remaining = purchase.qty_purchased
+            purchase.save()
+
+            purchases = ingredient.purchases.all().order_by("-purchased_at")
+
+            return render(
+                request,
+                "inventory/partials/_ingredient_purchase_create_success.html",
+                {
+                    "form": IngredientPurchaseForm(),
+                    "ingredient": ingredient,
+                    "purchases": purchases,
+                },
+            )
+
+        return HttpResponse(status=404)
+
+    def get(self, request, pk):
+        ingredient = get_object_or_404(Ingredient, pk=pk, user=request.user)
+
+        form = IngredientPurchaseForm()
+
+        return render(
+            request, self.template_name, {"form": form, "ingredient": ingredient}
+        )

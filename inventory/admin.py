@@ -1,22 +1,24 @@
 from django.contrib import admin
 
-from .models import Ingredient
-
-# Register your models here.
-
-
-# class RecipeRequirementInline(admin.TabularInline):
-#     model = RecipeRequirement
-#     fk_name = "parent_recipe"
-#     extra = 1
+from .models import Ingredient, IngredientPurchase
 
 
 class IngredientAdmin(admin.ModelAdmin):
     list_display = [
         "name",
-        "stock_qty",
-        "price",
+        "unit",
+        "low_stock_threshold",
+    ]
+
+
+class IngredientPurchaseAdmin(admin.ModelAdmin):
+    list_display = [
+        "purchased_at",
+        "exp_date",
+        "qty_purchased",
+        "total_cost",
     ]
 
 
 admin.site.register(Ingredient, IngredientAdmin)
+admin.site.register(IngredientPurchase, IngredientPurchaseAdmin)
