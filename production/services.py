@@ -88,7 +88,7 @@ class ProductionService:
                 raise ValidationError("Ingredient not found.")
 
             if ingredient.current_stock < qty_to_deduct:
-                raise ValidationError("Stock is short.")
+                raise ValidationError("Insufficient stock.")
 
             for purchase in ingredient.purchases.order_by("purchased_at"):
 

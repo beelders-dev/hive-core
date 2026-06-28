@@ -191,6 +191,27 @@ class RecipeProduceView(LoginRequiredMixin, View):
         recipe = Recipe.objects.get(user=request.user, pk=pk)
 
         production = ProductionService()
-        production.produce_recipe(recipe)
+        try:
+            production.produce_recipe(recipe)
 
-        return HttpResponse(status=200)
+        except ValidationError as e:
+
+            return render(
+                request,
+                "production/recipe/partials/_message.html",
+                {
+                    "message": "Recipe cannot be produced: " + str(e.message),
+                    "type": "error",
+                },
+            )
+        recipe.refresh_from_db()
+
+        return render(
+            request,
+            "production/recipe/partials/_recipe_produce_message.html",
+            {
+                "recipe": recipe,
+                "message": "Recipe produced successfully.",
+                "type": "success",
+            },
+        )

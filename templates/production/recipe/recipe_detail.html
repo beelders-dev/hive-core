@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
+    <div class="text-center" id="recipe-produce-message"></div>
     <div class="mx-auto my-12 max-w-6xl px-4 font-sans">
         <!-- Header -->
         <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -86,7 +87,8 @@
                                         </a>
                                         <p class="mt-1 text-xs text-slate-500">Unit: {{ item.ingredient.unit }}</p>
                                     </td>
-                                    <td class="whitespace-nowrap px-5 py-4 text-right font-mono text-slate-700">
+                                    <td id="current-stock-{{ item.ingredient.id }}"
+                                        class="whitespace-nowrap px-5 py-4 text-right font-mono text-slate-700">
                                         {{ item.ingredient.current_stock }}
                                         <span class="text-xs text-slate-400">{{ item.ingredient.unit }}</span>
                                     </td>
@@ -106,7 +108,7 @@
                                         {% elif item.ingredient.current_stock <= item.ingredient.low_stock_threshold %}
                                             <span class="inline-flex rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700">Low</span>
                                         {% else %}
-                                            <span class="inline-flex rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700">Ready</span>
+                                            <span class="inline-flex rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700 ">Ready</span>
                                         {% endif %}
                                     </td>
                                 </tr>
@@ -136,7 +138,8 @@
             </div>
         </div>
         <div class="flex justify-end">
-            <button hx-post="{% url 'production:recipe_produce' recipe.id %}"
+            <button hx-post="{% url 'production:recipe_produce' recipe.pk %}"
+                    hx-target="#recipe-produce-message"
                     class="border p-2 rounded-md border-gray-200 bg-blue-500 text-white m-2 active:scale-95">
                 Produce Recipe
             </button>
