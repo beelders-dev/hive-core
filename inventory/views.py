@@ -108,13 +108,13 @@ class IngredientPurchaseCreateView(LoginRequiredMixin, View):
 
         form = IngredientPurchaseForm(request.POST)
 
+        purchases = ingredient.purchases.all().order_by("purchased_at")
+
         if form.is_valid():
             purchase = form.save(commit=False)
             purchase.ingredient = ingredient
             purchase.qty_remaining = purchase.qty_purchased
             purchase.save()
-
-            purchases = ingredient.purchases.all().order_by("-purchased_at")
 
             return render(
                 request,
@@ -126,7 +126,15 @@ class IngredientPurchaseCreateView(LoginRequiredMixin, View):
                 },
             )
 
-        return HttpResponse(status=404)
+        return render(
+            request,
+            "inventory/partials/_ingredient_purchase_create_success.html",
+            {
+                "form": IngredientPurchaseForm(),
+                "ingredient": ingredient,
+                "purchases": purchases,
+            },
+        )
 
     def get(self, request, pk):
         ingredient = get_object_or_404(Ingredient, pk=pk, user=request.user)
