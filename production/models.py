@@ -66,3 +66,7 @@ class RecipeIngredient(models.Model):
             )
         ],
     )
+
+    @property
+    def total_cost(self):
+        return self.ingredient.average_unit_cost * self.quantity_needed

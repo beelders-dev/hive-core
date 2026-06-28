@@ -17,7 +17,7 @@ from django.views.generic import (
     UpdateView,
 )
 from .models import Recipe
-from .services import RecipeService
+from .services import RecipeService, ProductionService
 
 SELECTED_INGREDIENT_TABLE_TEMPLATE = "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table.html"
 
@@ -183,3 +183,14 @@ class AddIngredientView(LoginRequiredMixin, View):
             "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table_row.html",
             {"ingredient": ingredient},
         )
+
+
+class RecipeProduceView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+
+        recipe = Recipe.objects.get(user=request.user, pk=pk)
+
+        production = ProductionService()
+        production.produce_recipe(recipe)
+
+        return HttpResponse(status=200)

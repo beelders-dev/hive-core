@@ -1,7 +1,10 @@
-from .models import Recipe, RecipeIngredient
-from django.db import transaction
 from decimal import Decimal
+from django.db import transaction
+from django.shortcuts import get_object_or_404
 from django.core.exceptions import ValidationError
+
+from inventory.models import Ingredient
+from .models import Recipe, RecipeIngredient
 
 
 class RecipeService:
@@ -69,3 +72,35 @@ class RecipeService:
             recipe_ingredient.save()
 
         return recipe
+
+
+class ProductionService:
+
+    @transaction.atomic
+    def produce_recipe(self, recipe, batches=1):
+
+        for requirement in recipe.get_all_ingredients():
+            qty_to_deduct = requirement.quantity_needed * batches
+
+            ingredient = requirement.ingredient
+
+            if not ingredient:
+                raise ValidationError("Ingredient not found.")
+
+            if ingredient.current_stock < qty_to_deduct:
+                raise ValidationError("Stock is short.")
+
+            for purchase in ingredient.purchases.order_by("purchased_at"):
+
+                if qty_to_deduct <= 0:
+                    break
+
+                if purchase.qty_remaining >= qty_to_deduct:
+                    purchase.qty_remaining -= qty_to_deduct
+                    qty_to_deduct = 0
+                    purchase.save()
+
+                else:
+                    qty_to_deduct -= purchase.qty_remaining
+                    purchase.qty_remaining = 0
+                    purchase.save()
