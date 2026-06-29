@@ -29,7 +29,7 @@
                     <p class="mt-2 font-mono text-2xl font-bold text-slate-900">
                         ₱
                         {% if recipe.total_cost %}
-                            {{ recipe.total_cost }}
+                            {{ recipe.total_cost | floatformat:2 }}
                         {% else %}
                             0.00
                         {% endif %}
@@ -67,10 +67,10 @@
                                     Required
                                 </th>
                                 <th class="whitespace-nowrap px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
-                                    Avg. Cost
+                                    Avg. Unit Cost
                                 </th>
                                 <th class="whitespace-nowrap px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
-                                    Est. Cost
+                                    Est. Total Cost
                                 </th>
                                 <th class="whitespace-nowrap px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-slate-500">
                                     Status
@@ -96,9 +96,11 @@
                                         {{ item.quantity_needed }}
                                         <span class="text-xs text-slate-400">{{ item.ingredient.unit }}</span>
                                     </td>
-                                    <td class="whitespace-nowrap px-5 py-4 text-right font-mono text-slate-700">₱{{ item.total_cost| floatformat:2 }}</td>
+                                    <td class="whitespace-nowrap px-5 py-4 text-right font-mono text-slate-700">
+                                        ₱{{ item.ingredient.average_unit_cost | floatformat:2 }}
+                                    </td>
                                     <td class="whitespace-nowrap px-5 py-4 text-right font-mono font-semibold text-slate-900">
-                                        ₱{{ item.estimated_cost }}
+                                        ₱{{ item.ingredient_cost | floatformat:2 }}
                                     </td>
                                     <td class="whitespace-nowrap px-5 py-4 text-center">
                                         {% if item.ingredient.current_stock == 0 %}
@@ -129,7 +131,7 @@
                     <p class="font-mono text-xl font-bold text-slate-900">
                         ₱
                         {% if recipe.total_cost %}
-                            {{ recipe.total_cost }}
+                            {{ recipe.total_cost | floatformat:2 }}
                         {% else %}
                             0.00
                         {% endif %}

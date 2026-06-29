@@ -44,6 +44,13 @@ class Recipe(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+    @property
+    def total_cost(self):
+        total_cost = 0
+        for ingredient in self.get_all_ingredients():
+            total_cost += ingredient.ingredient_cost
+        return total_cost
+
 
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
@@ -68,5 +75,5 @@ class RecipeIngredient(models.Model):
     )
 
     @property
-    def total_cost(self):
+    def ingredient_cost(self):
         return self.ingredient.average_unit_cost * self.quantity_needed

@@ -116,16 +116,6 @@ class IngredientPurchaseCreateView(LoginRequiredMixin, View):
             purchase.qty_remaining = purchase.qty_purchased
             purchase.save()
 
-            return render(
-                request,
-                "inventory/partials/_ingredient_purchase_create_success.html",
-                {
-                    "form": IngredientPurchaseForm(),
-                    "ingredient": ingredient,
-                    "purchases": purchases,
-                },
-            )
-
         return render(
             request,
             "inventory/partials/_ingredient_purchase_create_success.html",
