@@ -14,8 +14,6 @@ class Ingredient(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="ingredients",
-        null=True,
-        blank=True,
     )
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(
@@ -77,9 +75,7 @@ class IngredientPurchase(models.Model):
         max_digits=10,
         decimal_places=2,
         validators=[
-            MinValueValidator(
-                Decimal(0.01), message=("Quantity cannot be less than zero.")
-            ),
+            MinValueValidator(Decimal("0.01"), message=("Must be at least 0.01.")),
         ],
     )
     qty_remaining = models.DecimalField(
@@ -90,6 +86,9 @@ class IngredientPurchase(models.Model):
     total_cost = models.DecimalField(
         max_digits=6,
         decimal_places=2,
+        validators=[
+            MinValueValidator(Decimal("0.01"), message=("Must be at least 0.01."))
+        ],
     )
 
     def save(self, *args, **kwargs):

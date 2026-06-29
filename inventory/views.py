@@ -66,6 +66,9 @@ class IngredientUpdateView(LoginRequiredMixin, UpdateView):
     form_class = IngredientForm
     success_url = reverse_lazy("inventory:ingredient_list")
 
+    def get_queryset(self):
+        return Ingredient.objects.filter(user=self.request.user)
+
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -76,11 +79,17 @@ class IngredientDeleteView(LoginRequiredMixin, DeleteView):
     template_name = "inventory/ingredient/delete.html"
     success_url = reverse_lazy("inventory:ingredient_list")
 
+    def get_queryset(self):
+        return Ingredient.objects.filter(user=self.request.user)
+
 
 class IngredientDetailView(LoginRequiredMixin, DetailView):
     model = Ingredient
     template_name = "inventory/ingredient/detail.html"
     context_object_name = "ingredient"
+
+    def get_queryset(self):
+        return Ingredient.objects.filter(user=self.request.user)
 
 
 class IngredientPurchaseListView(LoginRequiredMixin, View):
@@ -101,24 +110,33 @@ class IngredientPurchaseListView(LoginRequiredMixin, View):
 class IngredientPurchaseCreateView(LoginRequiredMixin, View):
 
     template_name = "inventory/ingredient/partials/_purchase_form.html"
+    success_template_name = (
+        "inventory/ingredient/partials/_purchase_create_success.html"
+    )
 
     def post(self, request, pk):
 
-        ingredient = get_object_or_404(Ingredient, pk=pk)
+        ingredient = get_object_or_404(Ingredient, pk=pk, user=request.user)
 
         form = IngredientPurchaseForm(request.POST)
 
-        purchases = ingredient.purchases.all().order_by("purchased_at")
+        if not form.is_valid():
+            return render(
+                request,
+                self.template_name,
+                {"form": form, "ingredient": ingredient},
+                status=400,
+            )
 
-        if form.is_valid():
-            purchase = form.save(commit=False)
-            purchase.ingredient = ingredient
-            purchase.qty_remaining = purchase.qty_purchased
-            purchase.save()
+        purchase = form.save(commit=False)
+        purchase.ingredient = ingredient
+        purchase.save()
+
+        purchases = ingredient.purchases.all().order_by("purchased_at")
 
         return render(
             request,
-            "inventory/ingredient/partials/_purchase_create_success.html",
+            self.success_template_name,
             {
                 "form": IngredientPurchaseForm(),
                 "ingredient": ingredient,
