@@ -13,7 +13,7 @@ class IngredientCreateViewTests(TestCase):
             username="mike", password="testpass123"
         )
         self.client.force_login(self.user)
-        self.url = reverse("inventory:ingredient_add")
+        self.url = reverse("inventory:ingredient_create")
 
     def test_create_view_returns_200(self):
         response = self.client.get(self.url)
@@ -21,16 +21,15 @@ class IngredientCreateViewTests(TestCase):
 
     def test_create_view_uses_correct_template(self):
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, "inventory/ingredient_form.html")
+        self.assertTemplateUsed(response, "inventory/ingredient/form.html")
 
     def test_create_view_valid_post_creates_ingredient(self):
         self.client.post(
             self.url,
             {
                 "name": "Butter",
-                "stock_qty": 20,
                 "unit": "g",
-                "price": 15,
+                "low_stock_threshold": "0",
             },
         )
         self.assertEqual(Ingredient.objects.count(), 1)
@@ -40,9 +39,8 @@ class IngredientCreateViewTests(TestCase):
             self.url,
             {
                 "name": "",
-                "stock_qty": 20,
                 "unit": "g",
-                "price": 15,
+                "low_stock_threshold": "0",
             },
         )
         self.assertEqual(response.status_code, 200)
@@ -53,9 +51,8 @@ class IngredientCreateViewTests(TestCase):
             self.url,
             {
                 "name": "Butter",
-                "stock_qty": 20,
                 "unit": "g",
-                "price": 12,
+                "low_stock_threshold": "0",
             },
         )
 

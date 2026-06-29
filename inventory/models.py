@@ -94,7 +94,7 @@ class IngredientPurchase(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            self.quantity_remaining = self.qty_purchased
+            self.qty_remaining = self.qty_purchased
 
         super().save(*args, **kwargs)
 
