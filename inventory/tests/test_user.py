@@ -12,9 +12,8 @@ class IngredientListViewTests(TestCase):
         )
         self.client.force_login(self.user)
         self.ingredient = Ingredient.objects.create(
-            user=self.user, name="Egg", stock_qty=10, price=20
+            user=self.user, unit="g", low_stock_threshold="0"
         )
-        self.ingredient = Ingredient.objects.create(name="Egg", stock_qty=10, price=20)
         self.url = reverse("inventory:ingredient_list")
 
     def test_user_redirects_to_login_page_when_logged_out(self):
