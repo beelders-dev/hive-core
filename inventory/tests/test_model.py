@@ -2,46 +2,26 @@ from django.core.exceptions import ValidationError
 from decimal import Decimal
 from django.test import TestCase
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 
 from ..models import Ingredient
 
 
 class IngredientModelTests(TestCase):
 
-    @classmethod
-    def setUpTestData(cls):
-        cls.ingredient = Ingredient.objects.create(
-            name="egg", stock_qty=12.00, price=25.00
+    def setUp(self):
+        self.user = get_user_model().objects.create(
+            username="mike", password="testpass123"
+        )
+        self.ingredient = Ingredient.objects.create(
+            user=self.user, name="Egg", unit="g", low_stock_threshold="0"
         )
 
     def test_ingredient_content(self):
-        self.assertEqual(self.ingredient.name, "egg")
-        self.assertEqual(self.ingredient.stock_qty, Decimal(12.00))
-        self.assertEqual(self.ingredient.price, Decimal(25.00))
-
-    def test_ingredient_str(self):
-        expected = "egg  (12.00g)"
-        self.assertEqual(str(self.ingredient), expected)
+        self.assertEqual(self.ingredient.name, "Egg")
 
     def test_get_absolute_url_returns_correct_url(self):
         self.assertEqual(
             self.ingredient.get_absolute_url(),
             reverse("inventory:ingredient", kwargs={"pk": self.ingredient.pk}),
         )
-
-    def test_get_total_amount_calculates_correctly(self):
-        self.assertEqual(self.ingredient.get_total_amount(), Decimal(300.00))
-
-    def test_stock_cannot_be_negative(self):
-        invalid_ingredient = Ingredient.objects.create(
-            name="apple", stock_qty=-20.00, price=25.00
-        )
-        with self.assertRaises(ValidationError):
-            invalid_ingredient.full_clean()
-
-    def test_price_cannot_be_negative(self):
-        invalid_ingredient = Ingredient.objects.create(
-            name="apple", stock_qty=20.00, price=-25.00
-        )
-        with self.assertRaises(ValidationError):
-            invalid_ingredient.full_clean()
