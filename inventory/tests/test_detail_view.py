@@ -13,7 +13,7 @@ class IngredientDetailViewTests(TestCase):
         )
         self.client.force_login(self.user)
         self.ingredient = Ingredient.objects.create(
-            user=self.user, name="Egg", stock_qty=10, price=20
+            user=self.user, name="Egg", unit="g", low_stock_threshold="0"
         )
         self.url = reverse(
             "inventory:ingredient",
@@ -27,7 +27,7 @@ class IngredientDetailViewTests(TestCase):
         self.assertEqual(self.response.status_code, 200)
 
     def test_detail_view_uses_correct_template(self):
-        self.assertTemplateUsed(self.response, "inventory/ingredient_detail.html")
+        self.assertTemplateUsed(self.response, "inventory/ingredient/detail.html")
 
     def test_detail_view_displays_correctly(self):
         self.assertEqual(self.response.context["ingredient"], self.ingredient)
