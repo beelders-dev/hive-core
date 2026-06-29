@@ -1,17 +1,37 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="max-w-4xl mx-auto my-8 px-4 font-sans">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-xl font-bold text-slate-800">Ingredient Inventory</h2>
+    <div class="mx-auto my-10 max-w-5xl px-4 font-sans">
+        <!-- Page Header -->
+        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+                <p class="text-sm font-medium text-blue-600">Inventory</p>
+                <h1 class="mt-1 text-3xl font-bold text-slate-900">Ingredient Inventory</h1>
+                <p class="mt-2 max-w-2xl text-sm text-slate-600">
+                    Manage your ingredients, monitor available stock, and keep your recipe costs accurate.
+                </p>
+            </div>
             <a href="{% url 'inventory:ingredient_create' %}"
-               class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors duration-200">
+               class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
                 Add Ingredient
             </a>
         </div>
-        {% include "production/recipe/partials/_search_bar.html" with target_id="ingredients_search_results" %}
-        <div class="flex flex-col border border-slate-300 rounded-xl overflow-hidden shadow-sm"
-             id="ingredients_search_results">
-            {% include "inventory/ingredient/partials/_ingredient_results.html" %}
+        <!-- Search Section -->
+        <div class="mb-4 rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div class="mb-3">
+                <h2 class="text-sm font-semibold text-slate-800">Find ingredients</h2>
+                <p class="mt-1 text-sm text-slate-500">
+                    Search by ingredient name to quickly update stock, review purchases, or check availability.
+                </p>
+            </div>
+            {% include "production/recipe/partials/_search_bar.html" with target_id="ingredients_search_results" %}
+        </div>
+        <!-- Results Section -->
+        <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+            <div class="border-b border-slate-200 bg-slate-50 px-5 py-4">
+                <h2 class="text-sm font-semibold text-slate-800">Ingredients</h2>
+                <p class="mt-1 text-sm text-slate-500">Current list of ingredients available in your inventory.</p>
+            </div>
+            <div id="ingredients_search_results">{% include "inventory/ingredient/partials/_ingredient_results.html" %}</div>
         </div>
     </div>
 {% endblock content %}
