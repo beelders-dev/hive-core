@@ -1,44 +1,56 @@
-<div class="h-[400px] overflow-y-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-    <div class="sticky top-0 z-10 grid grid-cols-12 border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
-        <div class="col-span-3 px-5 py-3">Ingredient</div>
-        <div class="col-span-3 px-5 py-3 text-center">Stock</div>
-        <div class="col-span-3 px-5 py-3 text-center">Latest Cost</div>
-        <div class="col-span-3 px-5 py-3 text-center">Actions</div>
-    </div>
-    <div class="divide-y divide-slate-100">
-        {% for ingredient in ingredient_list %}
-            <div class="grid grid-cols-12 items-center bg-white transition-colors hover:bg-slate-50">
-                <div class="col-span-3 px-5 py-4">
-                    <p class="truncate font-medium text-slate-900">{{ ingredient.name }}</p>
-                </div>
-                <div class="col-span-3 px-5 py-4 text-center font-mono text-sm text-slate-600 whitespace-nowrap">
-                    {{ ingredient.current_stock }} {{ ingredient.unit }}
-                </div>
-                <div class="col-span-3 px-5 py-4 text-center font-mono text-sm text-slate-600 whitespace-nowrap">
-                    {% with latest_purchase=ingredient.purchases.first %}
-                        {% if latest_purchase %}
-                            ₱{{ latest_purchase.total_cost }}
-                        {% else %}
-                            —
-                        {% endif %}
-                    {% endwith %}
-                </div>
-                <div class="col-span-3 px-5 py-4">
-                    <div class="flex items-center justify-center gap-2 whitespace-nowrap">
-                        <a href="{{ ingredient.get_absolute_url }}"
-                           class="text-sm font-medium text-blue-600 transition hover:text-blue-700 hover:underline">
-                            View
-                        </a>
-                        {% if show_add_button %}
-                            {% include "production/recipe/partials/recipe_form/_add_ingredient_button.html" %}
-                        {% endif %}
+<div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+    <div class="max-h-[420px] overflow-y-auto">
+        <div class="sticky top-0 z-10 grid grid-cols-12 border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <div class="col-span-4 px-5 py-3">Ingredient</div>
+            <div class="col-span-2 px-5 py-3 text-right">Stock</div>
+            <div class="col-span-3 px-5 py-3 text-center">Status</div>
+            <div class="col-span-3 px-5 py-3 text-center">Actions</div>
+        </div>
+        <div class="divide-y divide-slate-100">
+            {% for ingredient in ingredient_list %}
+                <div class="grid grid-cols-12 items-center bg-white transition hover:bg-slate-50">
+                    <div class="col-span-4 px-5 py-4">
+                        <p class="truncate font-medium text-slate-900">{{ ingredient.name }}</p>
+                        <p class="mt-1 text-xs text-slate-500">Unit: {{ ingredient.get_unit_display }}</p>
+                    </div>
+                    <div class="col-span-2 px-5 py-4 text-right">
+                        <p class="font-mono text-sm font-semibold text-slate-900">{{ ingredient.current_stock }}</p>
+                    </div>
+                    <div class="col-span-3 px-5 py-4">
+                        <div class="flex justify-center">
+                            {% if ingredient.current_stock == 0 %}
+                                <span class="inline-flex rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-700">
+                                    Out of Stock
+                                </span>
+                            {% elif ingredient.current_stock <= ingredient.low_stock_threshold %}
+                                <span class="inline-flex rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700">
+                                    Low Stock
+                                </span>
+                            {% else %}
+                                <span class="inline-flex rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-medium text-green-700">
+                                    In Stock
+                                </span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-span-3 px-5 py-4">
+                        <div class="flex items-center justify-center gap-2">
+                            <a href="{{ ingredient.get_absolute_url }}"
+                               class="rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
+                                View
+                            </a>
+                            {% if show_add_button %}
+                                {% include "production/recipe/partials/recipe_form/_add_ingredient_button.html" %}
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% empty %}
-            <div class="flex min-h-[260px] items-center justify-center bg-white px-6 py-12 text-center text-sm text-slate-400">
-                No ingredients found in your inventory.
-            </div>
-        {% endfor %}
+            {% empty %}
+                <div class="flex min-h-[260px] flex-col items-center justify-center px-6 py-12 text-center">
+                    <p class="text-sm font-medium text-slate-700">No ingredients found</p>
+                    <p class="mt-1 text-sm text-slate-400">Add ingredients first so they can be used in recipes and inventory tracking.</p>
+                </div>
+            {% endfor %}
+        </div>
     </div>
 </div>
