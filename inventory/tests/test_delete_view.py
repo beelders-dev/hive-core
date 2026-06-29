@@ -13,7 +13,7 @@ class IngredientDeleteViewTests(TestCase):
         )
         self.client.force_login(self.user)
         self.ingredient = Ingredient.objects.create(
-            user=self.user, name="Egg", stock_qty=10, price=20
+            user=self.user, name="Egg", unit="g", low_stock_threshold="0"
         )
         self.url = reverse(
             "inventory:ingredient_delete", kwargs={"pk": self.ingredient.pk}
@@ -25,7 +25,7 @@ class IngredientDeleteViewTests(TestCase):
 
     def test_delete_view_uses_correct_template(self):
         response = self.client.get(self.url)
-        self.assertTemplateUsed(response, "inventory/ingredient_delete.html")
+        self.assertTemplateUsed(response, "inventory/ingredient/delete.html")
 
     def test_delete_view_deletes_ingredient(self):
         self.client.post(self.url)
