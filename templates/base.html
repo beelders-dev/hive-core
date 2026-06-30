@@ -36,28 +36,9 @@
                                 Hive<span class="text-blue-400">Core</span>
                             </span>
                         </a>
-                        <nav class="flex items-center gap-6">
-                            <a href="{% url 'home' %}"
-                               class="text-sm font-medium text-slate-300 transition hover:text-white">Dashboard</a>
-                            <a href="{% url 'inventory:ingredient_list' %}"
-                               class="text-sm font-medium text-slate-300 transition hover:text-white">Inventory</a>
-                            <a href="{% url 'production:recipe_list' %}"
-                               class="text-sm font-medium text-slate-300 transition hover:text-white">Recipes</a>
-                            {% if user.is_authenticated %}
-                                <div class="ml-4 flex items-center gap-3 border-l border-slate-700 pl-4">
-                                    <div class="flex h-8 w-8 items-center justify-center rounded-full bg-slate-700 text-xs font-bold text-slate-200">
-                                        {{ user.get_initials }}
-                                    </div>
-                                    <form action="{% url 'logout' %}" method="post">
-                                        {% csrf_token %}
-                                        <button type="submit"
-                                                class="text-sm font-medium text-slate-300 transition hover:text-white">
-                                            Logout
-                                        </button>
-                                    </form>
-                                </div>
-                            {% endif %}
-                        </nav>
+                        {% if user.is_authenticated %}
+                            {% include "components/_nav_links.html" %}
+                        {% endif %}
                     </div>
                 </div>
             </header>
