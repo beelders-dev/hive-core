@@ -69,6 +69,7 @@ class IngredientPurchase(models.Model):
     ingredient = models.ForeignKey(
         Ingredient, on_delete=models.CASCADE, related_name="purchases"
     )
+    created_at = models.DateTimeField(auto_now_add=True)
     purchased_at = models.DateField()
     exp_date = models.DateField(blank=True, null=True)
     qty_purchased = models.DecimalField(
