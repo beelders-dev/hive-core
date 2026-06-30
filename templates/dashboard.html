@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% block title %}
+    Home
+{% endblock title %}
+{% block content %}
+    <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <!-- Page Header -->
+        <div class="mb-8">
+            <p class="text-sm font-semibold text-blue-600">Hive Core</p>
+            <h1 class="mt-1 text-3xl font-bold tracking-tight text-slate-900">Dashboard</h1>
+            <p class="mt-2 max-w-2xl text-sm text-slate-600">
+                Monitor your ingredients, recipes, and production readiness in one place.
+            </p>
+        </div>
+        <!-- Stats Cards -->
+        <div class="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {% include "components/_stat_card.html" with label="Ingredients" value=total_ingredients helper="Inventory items tracked" badge="Inventory" badge_class="bg-blue-100 text-blue-700" %}
+            {% include "components/_stat_card.html" with label="Recipes" value=total_recipes helper="Production formulas saved" badge="Production" badge_class="bg-violet-100 text-violet-700" %}
+            {% include "components/_stat_card.html" with label="Low Stock" value=low_stock_count helper="Below stock threshold" badge="Warning" border_class="border-amber-200" value_class="text-amber-600" badge_class="bg-amber-100 text-amber-700" %}
+            {% include "components/_stat_card.html" with label="Out of Stock" value=out_of_stock_count helper="Needs immediate restocking" badge="Critical" border_class="border-red-200" value_class="text-red-600" badge_class="bg-red-100 text-red-700" %}
+        </div>
+        <!-- Main Layout -->
+        <div class="grid gap-8 lg:grid-cols-3">
+            <!-- Left Column -->
+            <div class="space-y-8 lg:col-span-2">
+                <!-- Quick Actions -->
+                <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <h2 class="text-lg font-semibold text-slate-900">Quick Actions</h2>
+                    <p class="mt-1 text-sm text-slate-500">Common actions for managing your bakery workflow.</p>
+                    <div class="mt-5 grid gap-3 sm:grid-cols-2">
+                        <a href="{% url 'inventory:ingredient_create' %}"
+                           class="rounded-lg bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700">
+                            Add Ingredient
+                        </a>
+                        <a href="{% url 'production:recipe_create' %}"
+                           class="rounded-lg bg-slate-900 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-slate-800">
+                            Create Recipe
+                        </a>
+                        <a href="{% url 'inventory:ingredient_list' %}"
+                           class="rounded-lg border border-slate-300 px-4 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                            View Inventory
+                        </a>
+                        <a href="{% url 'production:recipe_list' %}"
+                           class="rounded-lg border border-slate-300 px-4 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
+                            View Recipes
+                        </a>
+                    </div>
+                </div>
+                <!-- Low Stock Ingredients -->
+                <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                    <div class="border-b border-slate-200 px-6 py-4">
+                        <h2 class="text-lg font-semibold text-slate-900">Low Stock Ingredients</h2>
+                        <p class="mt-1 text-sm text-slate-500">Ingredients that may need restocking soon.</p>
+                    </div>
+                    {% if low_stock_ingredients %}
+                        <div class="divide-y divide-slate-200">
+                            {% for ingredient in low_stock_ingredients %}
+                                <div class="grid grid-cols-3 items-center gap-4 px-6 py-4 text-sm">
+                                    <p class="truncate font-medium text-slate-900">{{ ingredient.name }}</p>
+                                    <p class="text-slate-600">{{ ingredient.current_stock }} {{ ingredient.unit }}</p>
+                                    <p class="text-right font-medium text-amber-600">Low Stock</p>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="px-6 py-10 text-center">
+                            <p class="text-sm font-medium text-slate-700">No low stock ingredients</p>
+                            <p class="mt-1 text-sm text-slate-500">Everything looks stocked for now.</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- Right Column -->
+            <div class="space-y-8">
+                <!-- Recently Added Recipes -->
+                <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+                    <div class="border-b border-slate-200 px-6 py-4">
+                        <h2 class="text-lg font-semibold text-slate-900">Recently Added Recipes</h2>
+                        <p class="mt-1 text-sm text-slate-500">Latest recipes added to Hive Core.</p>
+                    </div>
+                    {% if recent_recipes %}
+                        <div class="divide-y divide-slate-200">
+                            {% for recipe in recent_recipes %}
+                                <a href="{% url 'production:recipe' recipe.pk %}"
+                                   class="block px-6 py-4 transition hover:bg-slate-50">
+                                    <p class="font-medium text-slate-900">{{ recipe.name }}</p>
+                                    <p class="mt-1 text-sm text-slate-500">View recipe details</p>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="px-6 py-10 text-center">
+                            <p class="text-sm font-medium text-slate-700">No recipes yet</p>
+                            <p class="mt-1 text-sm text-slate-500">Create your first recipe to start tracking production.</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <!-- System Overview -->
+                <div class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+                    <h2 class="text-lg font-semibold text-slate-900">System Overview</h2>
+                    <p class="mt-1 text-sm text-slate-500">Current Hive Core modules.</p>
+                    <div class="mt-5 space-y-3 text-sm">
+                        <div class="rounded-lg bg-green-50 px-4 py-3 font-medium text-green-700">Ingredient Management</div>
+                        <div class="rounded-lg bg-green-50 px-4 py-3 font-medium text-green-700">Recipe Management</div>
+                        <div class="rounded-lg bg-green-50 px-4 py-3 font-medium text-green-700">User Authentication</div>
+                        <div class="rounded-lg bg-slate-50 px-4 py-3 text-slate-600">Production Tracking</div>
+                        <div class="rounded-lg bg-slate-50 px-4 py-3 text-slate-600">Recipe Costing</div>
+                        <div class="rounded-lg bg-slate-50 px-4 py-3 text-slate-600">Reports</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
