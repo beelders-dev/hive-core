@@ -19,29 +19,7 @@
     <body class="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
         <div class="flex min-h-screen flex-col">
-            <header class="sticky top-0 z-50 border-b border-slate-700 bg-slate-900 shadow-sm">
-                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div class="flex h-16 items-center justify-between">
-                        <a href="{% url 'home' %}" class="flex items-center gap-2">
-                            <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600">
-                                <svg class="h-5 w-5 text-white"
-                                     fill="none"
-                                     stroke="currentColor"
-                                     stroke-width="2"
-                                     viewBox="0 0 24 24">
-                                    <path d="M12 2l9 5.14v10.28L12 22l-9-5.57V7.14L12 2z"></path>
-                                </svg>
-                            </div>
-                            <span class="text-xl font-bold tracking-tight text-white">
-                                Hive<span class="text-blue-400">Core</span>
-                            </span>
-                        </a>
-                        {% if user.is_authenticated %}
-                            {% include "components/_nav_links.html" %}
-                        {% endif %}
-                    </div>
-                </div>
-            </header>
+            {% include "components/_header.html" %}
             <main class="flex-1 py-10">
                 {% block content %}
                 {% endblock content %}
