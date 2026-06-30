@@ -1,4 +1,6 @@
 import uuid
+from datetime import timedelta
+from django.utils import timezone
 from decimal import Decimal
 from django.conf import settings
 from django.urls import reverse
@@ -20,6 +22,7 @@ class Recipe(models.Model):
         default=uuid.uuid4,
         editable=False,
     )
+    created_at = models.DateTimeField(auto_now_add=True)
     name = models.CharField(
         max_length=100,
         blank=False,
@@ -50,6 +53,10 @@ class Recipe(models.Model):
         for ingredient in self.get_all_ingredients():
             total_cost += ingredient.ingredient_cost
         return total_cost
+
+    @property
+    def is_recently_added(self):
+        return self.created_at >= timezone.now() - timedelta(days=15)
 
 
 class RecipeIngredient(models.Model):
