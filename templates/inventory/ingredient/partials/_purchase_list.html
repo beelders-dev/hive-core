@@ -7,6 +7,7 @@
                     <tr>
                         <th class="px-4 py-3 text-left font-medium text-slate-500">Purchased</th>
                         <th class="px-4 py-3 text-left font-medium text-slate-500">Expiration</th>
+                        <th class="px-4 py-3 text-left font-medium text-slate-500">Added</th>
                         <th class="px-4 py-3 text-right font-medium text-slate-500">Purchased Qty</th>
                         <th class="px-4 py-3 text-right font-medium text-slate-500">Remaining Qty</th>
                         <th class="px-4 py-3 text-right font-medium text-slate-500">Total Cost</th>
@@ -18,11 +19,12 @@
                             <td class="px-4 py-3 text-slate-900">{{ purchase.purchased_at|date:"M d, Y" }}</td>
                             <td class="px-4 py-3 text-slate-600">
                                 {% if purchase.exp_date %}
-                                    {{ purchase.exp_date|date:"M d, Y" }}
+                                    {{ purchase.exp_date|date:"M, Y" }}
                                 {% else %}
                                     —
                                 {% endif %}
                             </td>
+                            <td class="px-4 py-3 text-slate-900">{{ purchase.created_at|date:"M d, Y" }}</td>
                             <td class="px-4 py-3 text-right font-medium text-slate-900">{{ purchase.qty_purchased }}</td>
                             <td class="px-4 py-3 text-right">
                                 {% if purchase.qty_remaining > 0 %}
