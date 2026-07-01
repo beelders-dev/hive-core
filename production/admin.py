@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Recipe, RecipeIngredient
+from .models import Recipe, RecipeIngredient, BatchIngredient, ProductionBatch
 
 
 # Register your models here.
@@ -16,6 +16,17 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
         "recipe",
         "ingredient",
         "quantity_needed",
+    ]
+
+
+@admin.register(ProductionBatch)
+class ProductionBatchAdmin(admin.ModelAdmin):
+    list_display = [
+        "recipe",
+        "batches",
+        "notes",
+        "recipe_name",
+        "est_cost",
     ]
 
 

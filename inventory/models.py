@@ -85,7 +85,7 @@ class IngredientPurchase(models.Model):
     )
 
     total_cost = models.DecimalField(
-        max_digits=6,
+        max_digits=10,
         decimal_places=2,
         validators=[
             MinValueValidator(Decimal("0.01"), message=("Must be at least 0.01."))

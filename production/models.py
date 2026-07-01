@@ -14,8 +14,6 @@ class Recipe(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="recipe",
-        null=True,
-        blank=True,
     )
     id = models.UUIDField(
         primary_key=True,
@@ -84,3 +82,48 @@ class RecipeIngredient(models.Model):
     @property
     def ingredient_cost(self):
         return self.ingredient.average_unit_cost * self.quantity_needed
+
+
+class ProductionBatch(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="production_batches",
+    )
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+    recipe = models.ForeignKey(Recipe, on_delete=models.PROTECT, related_name="batches")
+    produced_at = models.DateField(auto_now_add=True)
+    batches = models.DecimalField(max_digits=10, decimal_places=2)
+    notes = models.TextField(blank=True, null=True)
+
+    recipe_name = models.CharField(max_length=100)
+    est_cost = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+    )
+
+
+class BatchIngredient(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
+    production_batch = models.ForeignKey(
+        ProductionBatch, on_delete=models.CASCADE, related_name="batch_ingredients"
+    )
+
+    ingredient = models.ForeignKey(
+        "inventory.Ingredient", on_delete=models.CASCADE, blank=True, null=True
+    )
+
+    ingredient_name_snapshot = models.CharField(max_length=100)
+    unit_snapshot = models.CharField(max_length=20)
+
+    quantity_used = models.DecimalField(max_digits=10, decimal_places=2)
+    unit_cost_snapshot = models.DecimalField(max_digits=10, decimal_places=2)
+    total_cost = models.DecimalField(max_digits=10, decimal_places=2)

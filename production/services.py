@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.core.exceptions import ValidationError
 
 from inventory.models import Ingredient
-from .models import Recipe, RecipeIngredient
+from .models import Recipe, RecipeIngredient, ProductionBatch, BatchIngredient
 
 
 class RecipeService:
@@ -77,7 +77,7 @@ class RecipeService:
 class ProductionService:
 
     @transaction.atomic
-    def produce_recipe(self, recipe, batches=1):
+    def deduct_ingredients(self, recipe, batches=1):
 
         for requirement in recipe.get_all_ingredients():
             qty_to_deduct = requirement.quantity_needed * batches
@@ -104,3 +104,28 @@ class ProductionService:
                     qty_to_deduct -= purchase.qty_remaining
                     purchase.qty_remaining = 0
                     purchase.save()
+
+    @transaction.atomic
+    def produce_recipe(self, recipe, batches=1):
+
+        self.deduct_ingredients(recipe)
+
+        production_batch = ProductionBatch.objects.create(
+            user=recipe.user,
+            recipe=recipe,
+            recipe_name=recipe.name,
+            batches=batches,
+            notes=recipe.description,
+            est_cost=recipe.total_cost,
+        )
+
+        for recipe_ingredient in recipe.get_all_ingredients():
+            BatchIngredient.objects.create(
+                production_batch=production_batch,
+                ingredient=recipe_ingredient.ingredient,
+                ingredient_name_snapshot=recipe_ingredient.ingredient.name,
+                unit_snapshot=recipe_ingredient.ingredient.unit,
+                quantity_used=recipe_ingredient.quantity_needed,
+                unit_cost_snapshot=recipe_ingredient.ingredient.average_unit_cost,
+                total_cost=recipe_ingredient.ingredient_cost,
+            )
