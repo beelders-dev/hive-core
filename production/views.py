@@ -15,21 +15,12 @@ from django.views.generic import (
     DetailView,
     DeleteView,
     UpdateView,
+    TemplateView,
 )
-from .models import Recipe
+from .models import Recipe, ProductionBatch
 from .services import RecipeService, ProductionService
 
 SELECTED_INGREDIENT_TABLE_TEMPLATE = "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table.html"
-
-
-# Create your views here.
-class RecipeListView(LoginRequiredMixin, ListView):
-    model = Recipe
-    template_name = "production/recipe/recipe_list.html"
-    context_object_name = "recipe_list"
-
-    def get_queryset(self):
-        return Recipe.objects.filter(user=self.request.user)
 
 
 class RecipeDetailView(LoginRequiredMixin, DetailView):
@@ -215,3 +206,21 @@ class RecipeProduceView(LoginRequiredMixin, View):
                 "type": "success",
             },
         )
+
+
+class ProductionBatchesView(LoginRequiredMixin, TemplateView):
+
+    template_name = "production/dashboard.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["batches"] = ProductionBatch.objects.filter(
+            user=self.request.user
+        ).order_by("-produced_at")
+
+        context["recipes"] = Recipe.objects.filter(user=self.request.user).order_by(
+            "-created_at"
+        )
+
+        return context

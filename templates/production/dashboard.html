@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block content %}
+    <div class="min-h-screen bg-slate-50">
+        <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+            <!-- Header -->
+            <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                <div>
+                    <p class="text-sm font-semibold uppercase tracking-widest text-blue-600">Hive Core</p>
+                    <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">Production</h1>
+                    <p class="mt-2 text-sm text-slate-600">Manage recipes and review your latest production batches.</p>
+                </div>
+                <a href="{% url 'production:recipe_create' %}"
+                   class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700">
+                    <svg class="mr-2 h-4 w-4"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                    </svg>
+                    New Recipe
+                </a>
+            </div>
+            <!-- Stats -->
+            <div class="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                <div class="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                    {% include "components/_stat_card.html" with label="Recipes" value=recipe_count helper="Saved recipes" badge="Library" badge_class="bg-blue-100 text-blue-700" %}
+                    {% include "components/_stat_card.html" with label="Production Batches" value=batch_count helper="Total batches produced" badge="History" badge_class="bg-emerald-100 text-emerald-700" %}
+                    {% include "components/_stat_card.html" with label="Produced Today" value=produced_today helper="Batches completed today" badge="Today" badge_class="bg-violet-100 text-violet-700" %}
+                    {% include "components/_stat_card.html" with label="Last Production" value=last_production helper="Most recent batch" badge="Latest" badge_class="bg-amber-100 text-amber-700" %}
+                </div>
+            </div>
+            <div class="grid gap-8 xl:grid-cols-3">
+                <!-- Production History -->
+                <section class="xl:col-span-2 rounded-xl border border-slate-200 bg-white shadow-sm">
+                    <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
+                        <div>
+                            <h2 class="text-lg font-semibold text-slate-900">Production</h2>
+                            <p class="text-sm text-slate-500">Production batches.</p>
+                        </div>
+                    </div>
+                    <div class="divide-y divide-slate-100">
+                        {% for batch in batches %}
+                            <div class="flex items-center justify-between px-6 py-4 hover:bg-slate-50">
+                                <div>
+                                    <p class="font-medium text-slate-900">{{ batch.recipe.name }}</p>
+                                    <p class="text-sm text-slate-500">{{ batch.produced_at|date:"M d, Y" }}</p>
+                                </div>
+                            </div>
+                        {% empty %}
+                            <div class="px-6 py-10 text-center text-sm text-slate-500">No production history yet.</div>
+                        {% endfor %}
+                    </div>
+                </section>
+                <!-- Recipe Library -->
+                <section class="rounded-xl border border-slate-200 bg-white shadow-sm">
+                    <div class="border-b border-slate-200 px-6 py-4">
+                        <h2 class="text-lg font-semibold text-slate-900">Recipe Library</h2>
+                        <p class="text-sm text-slate-500">Available recipes.</p>
+                    </div>
+                    <div class="divide-y divide-slate-100">
+                        {% for recipe in recipes %}
+                            <a href="{{ recipe.get_absolute_url }}"
+                               class="block px-6 py-4 transition hover:bg-slate-50">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <p class="font-medium text-slate-900">{{ recipe.name }}</p>
+                                        <p class="text-sm text-slate-500">{{ recipe.get_all_ingredients.count }} ingredients</p>
+                                    </div>
+                                    <svg class="h-5 w-5 text-slate-400"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="2"
+                                         viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </div>
+                            </a>
+                        {% empty %}
+                            <div class="px-6 py-10 text-center text-sm text-slate-500">No recipes available.</div>
+                        {% endfor %}
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock %}
