@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 {% block content %}
     <div class="mx-auto my-12 max-w-6xl px-4 font-sans">
         <!-- Header -->
@@ -32,9 +33,9 @@
             {% else %}
                 {% include "components/_stat_card.html" with label="Status" badge="In Stock" badge_class="border-green-200 bg-green-50 text-green-700" %}
             {% endif %}
-            {% include "components/_stat_card.html" with label="Total Inventory Value" value=ingredient.total_inventory_value prefix="₱" value_filter="money" %}
-            {% include "components/_stat_card.html" with label="Current Stock" value=ingredient.current_stock suffix=ingredient.get_unit_display helper_label="Reorder at" helper_value=ingredient.low_stock_threshold helper_suffix=ingredient.get_unit_display %}
-            {% include "components/_stat_card.html" with label="Average Cost / "|add:ingredient.get_unit_display value=ingredient.average_unit_cost prefix="₱" value_filter="money" %}
+            {% include "components/_stat_card.html" with label="Total Inventory Value" value=ingredient.total_inventory_value|floatformat:2|intcomma prefix="₱" value_filter="money" %}
+            {% include "components/_stat_card.html" with label="Current Stock" value=ingredient.current_stock|floatformat:2|intcomma suffix=ingredient.get_unit_display helper_label="Reorder at" helper_value=ingredient.low_stock_threshold helper_suffix=ingredient.get_unit_display %}
+            {% include "components/_stat_card.html" with label="Average Cost / "|add:ingredient.unit value=ingredient.average_unit_cost|floatformat:2 prefix="₱" value_filter="money" %}
         </div>
         <!-- Main Layout -->
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
