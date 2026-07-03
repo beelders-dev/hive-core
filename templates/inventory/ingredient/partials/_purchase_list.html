@@ -5,6 +5,7 @@
             <table class="min-w-full divide-y divide-slate-200 text-sm">
                 <thead class="sticky top-0 bg-slate-50 z-10">
                     <tr>
+                        <th class="px-4 py-3 text-left font-medium text-slate-500">ID</th>
                         <th class="px-4 py-3 text-left font-medium text-slate-500">Purchased</th>
                         <th class="px-4 py-3 text-left font-medium text-slate-500">Expiration</th>
                         <th class="px-4 py-3 text-left font-medium text-slate-500">Added</th>
@@ -16,6 +17,10 @@
                 <tbody class="divide-y divide-slate-100 bg-white">
                     {% for purchase in purchases %}
                         <tr class="hover:bg-slate-50 transition-colors">
+                            <td class="px-4 py-3 text-slate-900 ">
+                                <a href="{% url 'inventory:purchase' purchase.id %}"
+                                   class="hover:text-blue-500">{{ purchase.short_id }}</a>
+                            </td>
                             <td class="px-4 py-3 text-slate-900">{{ purchase.purchased_at|date:"M d, Y" }}</td>
                             <td class="px-4 py-3 text-slate-600">
                                 {% if purchase.exp_date %}

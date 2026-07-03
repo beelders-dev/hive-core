@@ -99,6 +99,17 @@ class IngredientPurchase(models.Model):
         ],
     )
 
+    @property
+    def short_id(self):
+        return str(self.id)[:8].upper()
+
+    @property
+    def unit_cost(self):
+        if self.qty_purchased == 0:
+            return Decimal("0")
+
+        return self.total_cost / self.qty_purchased
+
     def save(self, *args, **kwargs):
         """
         Initialize qty_remaining to the purchased quantity when creating a new
@@ -113,10 +124,3 @@ class IngredientPurchase(models.Model):
             self.qty_remaining = self.qty_purchased
 
         super().save(*args, **kwargs)
-
-    @property
-    def unit_cost(self):
-        if self.qty_purchased == 0:
-            return Decimal("0")
-
-        return self.total_cost / self.qty_purchased

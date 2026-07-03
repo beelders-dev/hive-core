@@ -12,7 +12,7 @@ from django.views.generic import (
 )
 from django.urls import reverse_lazy
 
-from .models import Ingredient
+from .models import Ingredient, IngredientPurchase
 from .forms import IngredientForm, IngredientPurchaseForm
 
 # Create your views here.
@@ -152,3 +152,12 @@ class IngredientPurchaseCreateView(LoginRequiredMixin, View):
         return render(
             request, self.template_name, {"form": form, "ingredient": ingredient}
         )
+
+
+class IngredientPurchaseDetailView(DetailView):
+    model = IngredientPurchase
+    context_object_name = "ingredient_purchase"
+
+    template_name = (
+        "inventory/ingredient/ingredient_purchase/ingredient_purchase_detail.html"
+    )
