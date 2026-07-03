@@ -1,5 +1,6 @@
 import uuid
 from decimal import Decimal
+from django.utils import timezone
 from django.db.models import Sum
 from django.conf import settings
 from django.core.validators import MinValueValidator
@@ -26,7 +27,7 @@ class Ingredient(models.Model):
     low_stock_threshold = models.DecimalField(
         max_digits=10,
         decimal_places=2,
-        default=0,
+        default=Decimal("0"),
     )
 
     def __str__(self):
@@ -66,9 +67,15 @@ class Ingredient(models.Model):
 
 
 class IngredientPurchase(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        default=uuid.uuid4,
+        editable=False,
+    )
     ingredient = models.ForeignKey(
         Ingredient, on_delete=models.CASCADE, related_name="purchases"
     )
+    modified_at = models.DateTimeField(auto_now=True)
     created_at = models.DateTimeField(auto_now_add=True)
     purchased_at = models.DateField()
     exp_date = models.DateField(blank=True, null=True)
@@ -93,7 +100,16 @@ class IngredientPurchase(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        if not self.pk:
+        """
+        Initialize qty_remaining to the purchased quantity when creating a new
+        purchase record.
+
+        This ensures that newly created purchases start with all purchased stock
+        available. On subsequent saves, qty_remaining is left unchanged to
+        preserve any deductions made through inventory consumption.
+        """
+
+        if self._state.adding:
             self.qty_remaining = self.qty_purchased
 
         super().save(*args, **kwargs)
