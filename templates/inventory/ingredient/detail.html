@@ -25,7 +25,16 @@
         <!-- Summary -->
         <div id="ingredient-stats"
              class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {% include "inventory/ingredient/partials/_stat_cards.html" %}
+            {% if ingredient.current_stock == 0 %}
+                {% include "components/_stat_card.html" with label="Status" badge="Out of Stock" badge_class="border-red-200 bg-red-50 text-red-700" %}
+            {% elif ingredient.current_stock <= ingredient.low_stock_threshold %}
+                {% include "components/_stat_card.html" with label="Status" badge="Low Stock" badge_class="border-amber-200 bg-amber-50 text-amber-700" %}
+            {% else %}
+                {% include "components/_stat_card.html" with label="Status" badge="In Stock" badge_class="border-green-200 bg-green-50 text-green-700" %}
+            {% endif %}
+            {% include "components/_stat_card.html" with label="Total Inventory Value" value=ingredient.total_inventory_value prefix="₱" value_filter="money" %}
+            {% include "components/_stat_card.html" with label="Current Stock" value=ingredient.current_stock suffix=ingredient.get_unit_display helper_label="Reorder at" helper_value=ingredient.low_stock_threshold helper_suffix=ingredient.get_unit_display %}
+            {% include "components/_stat_card.html" with label="Average Cost / "|add:ingredient.get_unit_display value=ingredient.average_unit_cost prefix="₱" value_filter="money" %}
         </div>
         <!-- Main Layout -->
         <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
