@@ -1,20 +1,26 @@
+{% load humanize %}
 <div class="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
     <div class="max-h-[420px] overflow-y-auto">
         <div class="sticky top-0 z-10 grid grid-cols-12 border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
-            <div class="col-span-4 px-5 py-3">Ingredient</div>
+            <div class="col-span-2 px-5 py-3">Id</div>
+            <div class="col-span-3 px-5 py-3">Ingredient</div>
             <div class="col-span-2 px-5 py-3 text-right">Stock</div>
             <div class="col-span-3 px-5 py-3 text-center">Status</div>
-            <div class="col-span-3 px-5 py-3 text-center">Actions</div>
+            {% if show_add_button %}<div class="col-span-2 px-5 py-3 text-center">Actions</div>{% endif %}
         </div>
         <div class="divide-y divide-slate-100">
             {% for ingredient in ingredient_list %}
                 <div class="grid grid-cols-12 items-center bg-white transition hover:bg-slate-50">
-                    <div class="col-span-4 px-5 py-4">
+                    <div class="col-span-2 px-5 py-4">
+                        <a href="{{ ingredient.get_absolute_url }}"
+                           class=" text-sm text-slate-900 hover:text-blue-500">{{ ingredient.id|stringformat:"s"|slice:":8"|upper }}</a>
+                    </div>
+                    <div class="col-span-3 px-5 py-4">
                         <p class="truncate font-medium text-slate-900">{{ ingredient.name }}</p>
                         <p class="mt-1 text-xs text-slate-500">Unit: {{ ingredient.get_unit_display }}</p>
                     </div>
                     <div class="col-span-2 px-5 py-4 text-right">
-                        <p class="font-mono text-sm font-semibold text-slate-900">{{ ingredient.current_stock }}</p>
+                        <p class="font-mono text-sm font-semibold text-slate-900">{{ ingredient.current_stock|floatformat:2|intcomma }}</p>
                     </div>
                     <div class="col-span-3 px-5 py-4">
                         <div class="flex justify-center">
@@ -33,16 +39,12 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="col-span-3 px-5 py-4">
-                        <div class="flex items-center justify-center gap-2">
-                            <a href="{{ ingredient.get_absolute_url }}"
-                               class="rounded-lg border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50">
-                                View
-                            </a>
-                            {% if show_add_button %}
+                    <div class="col-span-2 px-5 py-4">
+                        {% if show_add_button %}
+                            <div class="flex items-center justify-center gap-2">
                                 {% include "production/recipe/partials/recipe_form/_add_ingredient_button.html" %}
-                            {% endif %}
-                        </div>
+                            </div>
+                        {% endif %}
                     </div>
                 </div>
             {% empty %}
