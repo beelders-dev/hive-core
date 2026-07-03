@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
     <div class="min-h-screen bg-slate-50">
-        <div class="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
+        <div class="mx-auto w-1/2 px-4 py-10 sm:px-6 lg:px-8">
             <!-- Header -->
             <div class="mb-6 flex items-start justify-between gap-4">
                 <div>
@@ -81,8 +81,12 @@
                         </table>
                     </div>
                 </div>
-                <!-- Actions -->
-                <div class="flex justify-end gap-3 border-t border-slate-200 bg-slate-50 px-6 py-5"></div>
+                <div class="flex justify-end gap-3 border-t border-slate-200 bg-slate-50 px-6 py-5">
+                    <!-- Actions -->
+                    <button hx-get="{% url 'inventory:purchase_edit' ingredient_purchase.pk %}"
+                            hx-target="#modal-root"
+                            hx-swap="innerHTML">Edit</button>
+                </div>
             </div>
         </div>
     </div>

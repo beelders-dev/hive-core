@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
 
 from django.views.generic import View
 from django.views.generic import (
@@ -138,7 +139,7 @@ class IngredientPurchaseCreateView(LoginRequiredMixin, View):
             request,
             self.success_template_name,
             {
-                "form": IngredientPurchaseForm(),
+                "form": form,
                 "ingredient": ingredient,
                 "purchases": purchases,
             },
@@ -150,7 +151,16 @@ class IngredientPurchaseCreateView(LoginRequiredMixin, View):
         form = IngredientPurchaseForm()
 
         return render(
-            request, self.template_name, {"form": form, "ingredient": ingredient}
+            request,
+            self.template_name,
+            {
+                "form": form,
+                "ingredient": ingredient,
+                "action_url": reverse(
+                    "inventory:purchase_create",
+                    kwargs={"pk": pk},
+                ),
+            },
         )
 
 
@@ -158,6 +168,23 @@ class IngredientPurchaseDetailView(DetailView):
     model = IngredientPurchase
     context_object_name = "ingredient_purchase"
 
-    template_name = (
-        "inventory/ingredient/ingredient_purchase/ingredient_purchase_detail.html"
-    )
+    template_name = "inventory/ingredient/purchase/purchase_detail.html"
+
+
+class IngredientPurchaseUpdateView(UpdateView):
+    model = IngredientPurchase
+    form_class = IngredientPurchaseForm
+
+    template_name = "inventory/ingredient/partials/_form_modal.html"
+
+    def get_context_data(self, **kwargs):
+        purchase = self.get_object()
+
+        context = super().get_context_data(**kwargs)
+
+        context["action_url"] = reverse(
+            "inventory:purchase_edit",
+            kwargs={"pk": purchase.pk},
+        )
+
+        return context

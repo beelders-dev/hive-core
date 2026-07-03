@@ -41,7 +41,7 @@
                     </div>
                     <div id="ingredient-purchase-list"
                          class="p-5"
-                         hx-get="{% url 'inventory:ingredient_purchase_list' ingredient.pk %}"
+                         hx-get="{% url 'inventory:purchase_list' ingredient.pk %}"
                          hx-trigger="load"></div>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                     </div>
                     <div id="ingredient-purchase-form"
                          class="p-5"
-                         hx-get="{% url 'inventory:ingredient_purchase_create' ingredient.pk %}"
+                         hx-get="{% url 'inventory:purchase_create' ingredient.pk %}"
                          hx-trigger="load"></div>
                 </div>
             </aside>

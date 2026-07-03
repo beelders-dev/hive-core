@@ -1,6 +1,4 @@
-<form method="post"
-      class="space-y-4"
-      hx-post="{% url 'inventory:ingredient_purchase_create' ingredient.id %}">
+<form method="post" class="space-y-4" hx-post="{{ action_url }}">
     {% csrf_token %}
     <div>
         <label for="{{ form.purchased_at.id_for_label }}"
