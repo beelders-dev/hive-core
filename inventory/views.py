@@ -1,6 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
 from django.urls import reverse
 
 from django.views.generic import View
@@ -177,6 +178,12 @@ class IngredientPurchaseUpdateView(UpdateView):
 
     template_name = "inventory/ingredient/partials/_form_modal.html"
 
+    def get_success_url(self):
+        return reverse(
+            "inventory:purchase",
+            kwargs={"pk": self.object.pk},
+        )
+
     def get_context_data(self, **kwargs):
         purchase = self.get_object()
 
@@ -188,3 +195,15 @@ class IngredientPurchaseUpdateView(UpdateView):
         )
 
         return context
+
+    def form_valid(self, form):
+        self.object = form.save()
+
+        if self.request.headers.get("HX-Request"):
+            response = HttpResponse(
+                '<div id="modal-root" hx-swap-oob="innerHTML"></div>'
+            )
+            response["HX-Refresh"] = "true"
+            return response
+
+        return super().form_valid(form)
