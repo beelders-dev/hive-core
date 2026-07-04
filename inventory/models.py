@@ -65,6 +65,15 @@ class Ingredient(models.Model):
     def is_low_stock(self):
         return self.current_stock > 0 and self.current_stock <= self.low_stock_threshold
 
+    @property
+    def stock_status(self):
+        if self.is_out_of_stock:
+            return "out"
+        elif self.is_low_stock:
+            return "low"
+        else:
+            return "in"
+
 
 class IngredientPurchase(models.Model):
     id = models.UUIDField(

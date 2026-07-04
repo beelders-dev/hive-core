@@ -1,0 +1,13 @@
+{% if ingredient.stock_status == "out" %}
+    <span class="inline-flex rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-700">
+        Out of Stock
+    </span>
+{% elif ingredient.stock_status == "low" %}
+    <span class="inline-flex rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700">
+        Low Stock
+    </span>
+{% else %}
+    <span class="inline-flex rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-medium text-green-700">
+        In Stock
+    </span>
+{% endif %}

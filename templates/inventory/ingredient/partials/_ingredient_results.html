@@ -23,21 +23,7 @@
                         <p class="font-mono text-sm font-semibold text-slate-900">{{ ingredient.current_stock|floatformat:2|intcomma }}</p>
                     </div>
                     <div class="col-span-3 px-5 py-4">
-                        <div class="flex justify-center">
-                            {% if ingredient.current_stock == 0 %}
-                                <span class="inline-flex rounded-full border border-red-200 bg-red-50 px-3 py-1 text-xs font-medium text-red-700">
-                                    Out of Stock
-                                </span>
-                            {% elif ingredient.current_stock <= ingredient.low_stock_threshold %}
-                                <span class="inline-flex rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700">
-                                    Low Stock
-                                </span>
-                            {% else %}
-                                <span class="inline-flex rounded-full border border-green-200 bg-green-50 px-3 py-1 text-xs font-medium text-green-700">
-                                    In Stock
-                                </span>
-                            {% endif %}
-                        </div>
+                        <div class="flex justify-center">{% include "components/_stock_badge.html" with ingredient=ingredient %}</div>
                     </div>
                     <div class="col-span-2 px-5 py-4">
                         {% if show_add_button %}

@@ -17,8 +17,6 @@ from django.urls import reverse_lazy
 from .models import Ingredient, IngredientPurchase
 from .forms import IngredientForm, IngredientPurchaseForm
 
-# Create your views here.
-
 
 class IngredientListView(LoginRequiredMixin, ListView):
     model = Ingredient
@@ -26,8 +24,7 @@ class IngredientListView(LoginRequiredMixin, ListView):
     context_object_name = "ingredient_list"
 
     def get_queryset(self):
-        user = self.request.user
-        qs = Ingredient.objects.filter(user=user)
+        qs = Ingredient.objects.filter(user=self.request.user)
         q = self.request.GET.get("q", "").strip()
 
         if q:
