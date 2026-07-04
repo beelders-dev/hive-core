@@ -208,7 +208,7 @@ class RecipeProduceView(LoginRequiredMixin, View):
         )
 
 
-class ProductionBatchesView(LoginRequiredMixin, TemplateView):
+class ProductionDashboardView(LoginRequiredMixin, TemplateView):
 
     template_name = "production/dashboard.html"
 

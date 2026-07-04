@@ -8,7 +8,7 @@ from .views import (
     RecipeCreateView,
     RecipeDeleteView,
     RecipeProduceView,
-    ProductionBatchesView,
+    ProductionDashboardView,
 )
 
 app_name = "production"
@@ -35,7 +35,7 @@ urlpatterns = [
     ),
     path(
         "recipes/",
-        ProductionBatchesView.as_view(),
+        ProductionDashboardView.as_view(),
         name="production_dashboard",
     ),
 ]
