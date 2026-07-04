@@ -41,12 +41,12 @@ urlpatterns = [
         name="ingredient_update",
     ),
     path(
-        "<uuid:pk>/purchase-list/",
+        "purchase/<uuid:pk>/purchase-list/",
         PurchaseListView.as_view(),
         name="purchase_list",
     ),
     path(
-        "<uuid:pk>/purchase-create/",
+        "purchase/<uuid:pk>/purchase-create/",
         PurchaseCreateView.as_view(),
         name="purchase_create",
     ),
