@@ -13,7 +13,7 @@
                     <div class="mt-1 flex flex-wrap items-center gap-3 text-sm text-slate-500">
                         <span>Batch #{{ batch.pk|stringformat:"s"|slice:":8"|upper }}</span>
                         <span>•</span>
-                        <span>{{ batch.produced_at|date:"M d, Y" }}</span>
+                        <span>{{ batch.produced_at|date:"M d, Y · h:i A" }}</span>
                     </div>
                 </div>
                 <div>{% include "components/svgs/_chevron_right.svg" %}</div>

@@ -96,7 +96,7 @@ class ProductionBatch(models.Model):
         editable=False,
     )
     recipe = models.ForeignKey(Recipe, on_delete=models.PROTECT, related_name="batches")
-    produced_at = models.DateField(auto_now_add=True)
+    produced_at = models.DateTimeField(auto_now_add=True)
     batches = models.DecimalField(max_digits=10, decimal_places=2)
     notes = models.TextField(blank=True, null=True)
 
