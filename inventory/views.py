@@ -165,14 +165,14 @@ class IngredientPurchaseCreateView(LoginRequiredMixin, View):
         )
 
 
-class IngredientPurchaseDetailView(DetailView):
+class IngredientPurchaseDetailView(LoginRequiredMixin, DetailView):
     model = IngredientPurchase
     context_object_name = "ingredient_purchase"
 
     template_name = "inventory/ingredient/purchase/purchase_detail.html"
 
 
-class IngredientPurchaseUpdateView(UpdateView):
+class IngredientPurchaseUpdateView(LoginRequiredMixin, UpdateView):
     model = IngredientPurchase
     form_class = IngredientPurchaseForm
 
