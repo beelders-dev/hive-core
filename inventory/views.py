@@ -91,8 +91,8 @@ class IngredientDetailView(LoginRequiredMixin, DetailView):
         return Ingredient.objects.filter(user=self.request.user)
 
 
-class IngredientPurchaseListView(LoginRequiredMixin, View):
-    template_name = "inventory/ingredient/partials/_purchase_list.html"
+class PurchaseListView(LoginRequiredMixin, View):
+    template_name = "inventory/purchase/partials/_purchase_list.html"
 
     def get(self, request, pk):
         ingredient = get_object_or_404(
@@ -106,12 +106,10 @@ class IngredientPurchaseListView(LoginRequiredMixin, View):
         return render(request, self.template_name, {"purchases": purchases})
 
 
-class IngredientPurchaseCreateView(LoginRequiredMixin, View):
+class PurchaseCreateView(LoginRequiredMixin, View):
 
-    template_name = "inventory/ingredient/partials/_purchase_form.html"
-    success_template_name = (
-        "inventory/ingredient/partials/_purchase_create_success.html"
-    )
+    template_name = "inventory/purchase/partials/_purchase_form.html"
+    success_template_name = "inventory/purchase/partials/_purchase_create_success.html"
 
     def post(self, request, pk):
 
@@ -162,18 +160,18 @@ class IngredientPurchaseCreateView(LoginRequiredMixin, View):
         )
 
 
-class IngredientPurchaseDetailView(LoginRequiredMixin, DetailView):
+class PurchaseDetailView(LoginRequiredMixin, DetailView):
     model = IngredientPurchase
     context_object_name = "ingredient_purchase"
 
-    template_name = "inventory/ingredient/purchase/purchase_detail.html"
+    template_name = "inventory/purchase/purchase_detail.html"
 
 
-class IngredientPurchaseUpdateView(LoginRequiredMixin, UpdateView):
+class PurchaseUpdateView(LoginRequiredMixin, UpdateView):
     model = IngredientPurchase
     form_class = IngredientPurchaseForm
 
-    template_name = "inventory/ingredient/partials/_form_modal.html"
+    template_name = "inventory/purchase/partials/_form_modal.html"
 
     def get_success_url(self):
         return reverse(

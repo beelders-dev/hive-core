@@ -6,10 +6,10 @@ from .views import (
     IngredientDetailView,
     IngredientDeleteView,
     IngredientUpdateView,
-    IngredientPurchaseListView,
-    IngredientPurchaseCreateView,
-    IngredientPurchaseDetailView,
-    IngredientPurchaseUpdateView,
+    PurchaseListView,
+    PurchaseCreateView,
+    PurchaseDetailView,
+    PurchaseUpdateView,
 )
 
 app_name = "inventory"
@@ -42,22 +42,22 @@ urlpatterns = [
     ),
     path(
         "<uuid:pk>/purchase-list/",
-        IngredientPurchaseListView.as_view(),
+        PurchaseListView.as_view(),
         name="purchase_list",
     ),
     path(
         "<uuid:pk>/purchase-create/",
-        IngredientPurchaseCreateView.as_view(),
+        PurchaseCreateView.as_view(),
         name="purchase_create",
     ),
     path(
         "purchase/<uuid:pk>/",
-        IngredientPurchaseDetailView.as_view(),
+        PurchaseDetailView.as_view(),
         name="purchase",
     ),
     path(
         "purchase/<uuid:pk>/edit",
-        IngredientPurchaseUpdateView.as_view(),
+        PurchaseUpdateView.as_view(),
         name="purchase_edit",
     ),
 ]
