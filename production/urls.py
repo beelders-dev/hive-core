@@ -9,6 +9,7 @@ from .views import (
     RecipeDeleteView,
     RecipeProduceView,
     ProductionDashboardView,
+    BatchDetailView,
 )
 
 app_name = "production"
@@ -37,5 +38,10 @@ urlpatterns = [
         "recipes/",
         ProductionDashboardView.as_view(),
         name="production_dashboard",
+    ),
+    path(
+        "batches/<uuid:pk>/",
+        BatchDetailView.as_view(),
+        name="batch",
     ),
 ]

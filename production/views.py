@@ -224,3 +224,9 @@ class ProductionDashboardView(LoginRequiredMixin, TemplateView):
         )
 
         return context
+
+
+class BatchDetailView(DetailView):
+    model = ProductionBatch
+    context_object_name = "batch"
+    template_name = "production/batch/batch_detail.html"

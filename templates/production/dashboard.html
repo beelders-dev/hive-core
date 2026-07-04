@@ -31,24 +31,7 @@
             <div class="grid gap-8 xl:grid-cols-3">
                 <!-- Production History -->
                 <section class="xl:col-span-2 rounded-xl border border-slate-200 bg-white shadow-sm">
-                    <div class="flex items-center justify-between border-b border-slate-200 px-6 py-4">
-                        <div>
-                            <h2 class="text-lg font-semibold text-slate-900">Production</h2>
-                            <p class="text-sm text-slate-500">Production batches.</p>
-                        </div>
-                    </div>
-                    <div class="divide-y divide-slate-100">
-                        {% for batch in batches %}
-                            <div class="flex items-center justify-between px-6 py-4 hover:bg-slate-50">
-                                <div>
-                                    <p class="font-medium text-slate-900">{{ batch.recipe.name }}</p>
-                                    <p class="text-sm text-slate-500">{{ batch.produced_at|date:"M d, Y" }}</p>
-                                </div>
-                            </div>
-                        {% empty %}
-                            <div class="px-6 py-10 text-center text-sm text-slate-500">No production history yet.</div>
-                        {% endfor %}
-                    </div>
+                    {% include "production/batch/partials/_batch_history_list.html" %}
                 </section>
                 <!-- Recipe Library -->
                 <section class="rounded-xl border border-slate-200 bg-white shadow-sm">
@@ -65,13 +48,7 @@
                                         <p class="font-medium text-slate-900">{{ recipe.name }}</p>
                                         <p class="text-sm text-slate-500">{{ recipe.get_all_ingredients.count }} ingredients</p>
                                     </div>
-                                    <svg class="h-5 w-5 text-slate-400"
-                                         fill="none"
-                                         stroke="currentColor"
-                                         stroke-width="2"
-                                         viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-                                    </svg>
+                                    {% include "components/svgs/_chevron_right.svg" %}
                                 </div>
                             </a>
                         {% empty %}
