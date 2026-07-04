@@ -25,7 +25,11 @@ urlpatterns = [
         IngredientDeleteView.as_view(),
         name="ingredient_delete",
     ),
-    # path("<uuid:pk>/edit/", IngredientUpdateView.as_view(), name="ingredient_update"),
+    path(
+        "ingredients/<uuid:pk>/edit/",
+        IngredientUpdateView.as_view(),
+        name="ingredient_update",
+    ),
     path(
         "<uuid:pk>/purchase-list/",
         IngredientPurchaseListView.as_view(),

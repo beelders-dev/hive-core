@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 
 from django.views.generic import View
@@ -198,7 +198,6 @@ class IngredientPurchaseUpdateView(UpdateView):
 
     def form_valid(self, form):
         self.object = form.save()
-
         if self.request.headers.get("HX-Request"):
             response = HttpResponse(
                 '<div id="modal-root" hx-swap-oob="innerHTML"></div>'
@@ -206,4 +205,4 @@ class IngredientPurchaseUpdateView(UpdateView):
             response["HX-Refresh"] = "true"
             return response
 
-        return super().form_valid(form)
+        return HttpResponseRedirect(self.get_success_url())
