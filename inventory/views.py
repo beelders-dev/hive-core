@@ -192,7 +192,12 @@ class PurchaseUpdateView(LoginRequiredMixin, UpdateView):
         return context
 
     def form_valid(self, form):
-        self.object = form.save()
+        self.object = form.save(commit=False)
+
+        # Additional logic maybe put here in the future :-)
+
+        self.object.save()
+
         if self.request.headers.get("HX-Request"):
             response = HttpResponse(
                 '<div id="modal-root" hx-swap-oob="innerHTML"></div>'
