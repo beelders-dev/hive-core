@@ -41,7 +41,7 @@
                         <div>
                             <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Produced At</dt>
                             <dd class="mt-1 text-sm text-slate-900">
-                                {{ batch.produced_at|date:"M d, Y" }}
+                                {{ batch.produced_at|date:"M d, Y · h:i A" }}
                             </dd>
                         </div>
                         <div>
@@ -92,4 +92,4 @@
             </div>
         </div>
     </div>
-{% endblock %}
+{% endblock content %}
