@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes toast {
+    0%, 85% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(1rem);
+    }
+}
+
+.toast {
+    animation: toast 2s forwards;
+}

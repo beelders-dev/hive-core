@@ -85,7 +85,7 @@ class RecipeUpdateView(LoginRequiredMixin, View):
 
         return render(
             request,
-            "production/recipe/partials/_recipe_create_success.html",
+            "components/toast/_toast_oob.html",
             {
                 "message": "Recipe updated successfully.",
                 "type": "success",
