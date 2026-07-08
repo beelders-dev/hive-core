@@ -38,7 +38,9 @@ class HomePageView(LoginRequiredMixin, TemplateView):
 
         recent_recipes = [
             recipe
-            for recipe in Recipe.objects.filter(user=self.request.user)
+            for recipe in Recipe.objects.filter(user=self.request.user).order_by(
+                "-created_at"
+            )[:5]
             if recipe.is_recently_added
         ]
 
