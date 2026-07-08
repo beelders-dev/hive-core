@@ -95,7 +95,13 @@ class ProductionBatch(models.Model):
         default=uuid.uuid4,
         editable=False,
     )
-    recipe = models.ForeignKey(Recipe, on_delete=models.PROTECT, related_name="batches")
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.SET_NULL,
+        related_name="batches",
+        null=True,
+        blank=True,
+    )
     produced_at = models.DateTimeField(auto_now_add=True)
     batches = models.DecimalField(max_digits=10, decimal_places=2)
     notes = models.TextField(blank=True, null=True)
@@ -109,6 +115,7 @@ class ProductionBatch(models.Model):
         ("p", "Pending"),
         ("c", "Complete"),
         ("d", "Disabled"),
+        ("i", "In Progress"),
     ]
 
     status = models.CharField(

@@ -222,7 +222,12 @@ class ProductionDashboardView(LoginRequiredMixin, TemplateView):
         ).order_by("-produced_at")
 
         context["recipes"] = Recipe.objects.filter(user=self.request.user).order_by(
-            "-created_at"
+            "name"
+        )
+        context["produced_today"] = (
+            ProductionBatch.objects.filter(user=self.request.user)
+            .filter(completed_at__date=timezone.localdate())
+            .count()
         )
 
         return context
