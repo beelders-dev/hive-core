@@ -23,7 +23,7 @@
                 <!-- Recipe Information + Selected Ingredients -->
                 <div class="grid gap-8 lg:grid-cols-12">
                     <!-- Recipe Details -->
-                    <section class="lg:col-span-5 rounded-xl border border-slate-200 bg-white shadow-sm">
+                    <section class="lg:col-span-5 card">
                         {% include "components/card/_header.html" with title="Recipe Details" subtitle="Provide the basic information for this recipe." %}
                         <div class="space-y-6 p-6">
                             {% include "production/recipe/partials/recipe_form/_recipe_name_input.html" %}
@@ -31,7 +31,7 @@
                         </div>
                     </section>
                     <!-- Selected Ingredients -->
-                    <section class="lg:col-span-7 flex h-[420px] flex-col rounded-xl border border-slate-200 bg-white shadow-sm">
+                    <section class="lg:col-span-7 flex h-[420px] flex-col card">
                         {% include "components/card/_header.html" with title="Selected Ingredients" subtitle="Review ingredients and adjust their required quantities." %}
                         <div class="flex-1 overflow-y-auto">
                             {% include "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table.html" %}
