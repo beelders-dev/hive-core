@@ -147,7 +147,10 @@ class RecipeCreateView(LoginRequiredMixin, View):
 
     def get(self, request):
 
-        return render(request, "production/recipe/recipe_form.html")
+        return render(
+            request,
+            "production/recipe/recipe_form.html",
+        )
 
 
 class RemoveIngredientView(LoginRequiredMixin, View):

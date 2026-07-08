@@ -4,19 +4,7 @@
         <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
             <div id="form-messages" class="mx-auto mb-6 max-w-3xl"></div>
             <!-- Page Header -->
-            <header class="mb-8">
-                <p class="text-sm font-semibold uppercase tracking-widest text-blue-600">Hive Core</p>
-                <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
-                    {% if recipe %}
-                        Edit Recipe
-                    {% else %}
-                        Create Recipe
-                    {% endif %}
-                </h1>
-                <p class="mt-2 text-sm text-slate-600">
-                    Build a recipe by selecting ingredients and defining the required quantities.
-                </p>
-            </header>
+            {% include "components/_page_header.html" with section_title="Hive Core" page_title=recipe|yesno:"Edit Recipe,Create Recipe"  page_description="Build a recipe by selecting ingredients and defining the required quantities." %}
             <form id="recipe-form"
                   method="post"
                   class="space-y-8"

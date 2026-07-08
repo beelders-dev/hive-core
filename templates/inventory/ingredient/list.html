@@ -3,13 +3,7 @@
     <div class="mx-auto my-10 max-w-5xl px-4 font-sans">
         <!-- Page Header -->
         <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-                <p class="text-sm font-medium text-blue-600">Inventory</p>
-                <h1 class="mt-1 text-3xl font-bold text-slate-900">Ingredient Inventory</h1>
-                <p class="mt-2 max-w-2xl text-sm text-slate-600">
-                    Manage your ingredients, monitor available stock, and keep your recipe costs accurate.
-                </p>
-            </div>
+            {% include "components/_page_header.html" with page_title="Ingredients" page_description="Manage your ingredients, monitor available stock, and keep your recipe costs accurate." %}
             <a href="{% url 'inventory:ingredient_create' %}"
                class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
                 Add Ingredient

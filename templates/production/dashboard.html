@@ -4,11 +4,7 @@
         <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
             <!-- Header -->
             <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-                <div>
-                    <p class="text-sm font-semibold uppercase tracking-widest text-blue-600">Hive Core</p>
-                    <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">Production</h1>
-                    <p class="mt-2 text-sm text-slate-600">Manage recipes and review your latest production batches.</p>
-                </div>
+                {% include "components/_page_header.html" with page_title="Production" page_description="Manage recipes and review your latest production batches." %}
                 <a href="{% url 'production:recipe_create' %}"
                    class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700">
                     <svg class="mr-2 h-4 w-4"
