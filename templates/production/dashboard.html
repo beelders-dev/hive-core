@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="min-h-screen bg-slate-50">
+    <div class=" bg-slate-50">
         <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
             <!-- Header -->
             <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
@@ -28,16 +28,16 @@
                 {% include "components/_stat_card.html" with label="Produced Today" value=produced_today helper="Completed today" badge="Today" badge_class="bg-violet-100 text-violet-700" %}
                 {% include "components/_stat_card.html" with label="Last Production" value=last_production helper="Most recent batch" badge="Latest" badge_class="bg-amber-100 text-amber-700" %}
             </div>
-            <div class="grid gap-8 xl:grid-cols-3">
+            <div class="grid grid-cols-2 gap-2">
                 <!-- Production History -->
-                <section class="flex h-[700px] flex-col rounded-xl border border-slate-200 bg-white shadow-sm">
+                <section class="flex h-[500px] flex-col rounded-xl border border-slate-200 bg-white shadow-sm">
                     {% include "components/card/_header.html" with title="Recipe Batch List" subtitle="Track recent production activity." %}
                     <div class="flex-1 overflow-y-auto">{% include "production/batch/partials/_batch_history_list.html" %}</div>
                 </section>
                 <!-- Recipe Library -->
-                <section class="rounded-xl border border-slate-200 bg-white shadow-sm">
+                <section class="flex h-[500px] flex-col rounded-xl border border-slate-200 bg-white shadow-sm">
                     {% include "components/card/_header.html" with title="Recipe Library" subtitle="Available recipes." %}
-                    {% include "production/recipe/partials/_recipe_list.html" %}
+                    <div class="flex-1 overflow-y-auto">{% include "production/recipe/partials/_recipe_list.html" %}</div>
                 </section>
             </div>
         </div>
