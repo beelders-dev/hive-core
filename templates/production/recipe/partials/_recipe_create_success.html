@@ -1,5 +1,5 @@
 {% comment %} MESSAGE {% endcomment %}
-{% include "production/recipe/partials/_message.html" with message=message type=type %}
+{% include "components/toast/_toast_oob.html" with message=message type=type %}
 {% comment %} SELECTED INGREDIENTS TABLE ROW {% endcomment %}
 <div id="selected-ingredients-row" hx-swap-oob="innerHTML">
     {% include "production/recipe/partials/_empty_placeholder.html" %}

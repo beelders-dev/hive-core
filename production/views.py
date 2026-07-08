@@ -129,7 +129,7 @@ class RecipeCreateView(LoginRequiredMixin, View):
             message = next(iter(e.message_dict.values()))[0]
             return render(
                 request,
-                "production/recipe/partials/_message.html",
+                "components/toast/_toast_oob.html",
                 {
                     "message": str(message),
                     "type": "error",
