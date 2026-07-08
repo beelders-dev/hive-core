@@ -1,6 +1,4 @@
-<div id="recipe-produce-message" hx-swap-oob="true">
-    {% include "production/recipe/partials/_message.html" with message=message type=type %}
-</div>
+{% include "components/toast/_toast_oob.html" with message=message type=type %}
 {% for item in recipe.get_all_ingredients %}
     <template>
         <td id="current-stock-{{ item.ingredient.id }}"

@@ -188,7 +188,7 @@ class RecipeProduceView(LoginRequiredMixin, View):
 
             return render(
                 request,
-                "production/recipe/partials/_message.html",
+                "components/toast/_toast_oob.html",
                 {
                     "message": "Recipe cannot be produced: " + str(e.message),
                     "type": "error",
