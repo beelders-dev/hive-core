@@ -105,6 +105,25 @@ class ProductionBatch(models.Model):
         max_digits=10,
         decimal_places=2,
     )
+    STATUS_CHOICES = [
+        ("p", "Pending"),
+        ("c", "Complete"),
+        ("d", "Disabled"),
+    ]
+
+    status = models.CharField(
+        max_length=1,
+        choices=STATUS_CHOICES,
+        default="p",
+    )
+    completed_at = models.DateTimeField(null=True)
+    product = models.ForeignKey(
+        "products.Product",
+        on_delete=models.CASCADE,
+        related_name="products",
+        null=True,
+        blank=True,
+    )
 
 
 class BatchIngredient(models.Model):

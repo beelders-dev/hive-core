@@ -1,0 +1,28 @@
+{% comment %} Elements that have to change upon clicking on the `Mark as complete`.
+I'll add functionalities and a dialog box for confirmation and associating products.
+{% endcomment %}
+{% comment %} Status {% endcomment %}
+<dd id="batch-status" class="mt-2" hx-swap-oob="true">
+    <span class="inline-flex rounded-full bg-green-100 px-3 py-1 text-xs font-semibold text-green-700">
+        {{ batch.get_status_display }}
+    </span>
+</dd>
+{% comment %} Date completed {% endcomment %}
+<dd class="mt-1 text-sm text-slate-900"
+    id="completed-date"
+    hx-swap-oob="innerHTML">
+    {{ batch.completed_at|date:"M d, Y · h:i A"|default:"--" }}
+</dd>
+{% comment %} Button {% endcomment %}
+<div class="mt-2  border-slate-200 pt-6">
+    <button id="mark-as-complete-btn"
+            hx-swap-oob="true"
+            class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm transition  {% if batch.status == 'c' %}   bg-slate-400 {% else %} bg-green-600 hover:bg-green-700 active:scale-95 {% endif %}"
+            {% if batch.status == 'c' %}disabled{% endif %}>
+        {% if batch.status == 'c' %}
+            Complete
+        {% else %}
+            ✓ Mark as Complete
+        {% endif %}
+    </button>
+</div>

@@ -10,6 +10,8 @@ from .views import (
     RecipeProduceView,
     ProductionDashboardView,
     BatchDetailView,
+    LinkProductsView,
+    MarkAsCompleteView,
 )
 
 app_name = "production"
@@ -43,5 +45,15 @@ urlpatterns = [
         "batches/<uuid:pk>/",
         BatchDetailView.as_view(),
         name="batch",
+    ),
+    path(
+        "batches/<uuid:pk>/link-products",
+        LinkProductsView.as_view(),
+        name="link_products",
+    ),
+    path(
+        "batches/<uuid:pk>/mark-as-complete",
+        MarkAsCompleteView.as_view(),
+        name="mark_as_complete",
     ),
 ]

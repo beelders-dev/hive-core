@@ -1,7 +1,6 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-
-
 from django.db.models.query import QuerySet
+from django.utils import timezone
 from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
@@ -226,7 +225,27 @@ class ProductionDashboardView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class BatchDetailView(DetailView):
+class BatchDetailView(LoginRequiredMixin, DetailView):
     model = ProductionBatch
     context_object_name = "batch"
     template_name = "production/batch/batch_detail.html"
+
+
+class LinkProductsView(LoginRequiredMixin, View):
+    pass
+
+
+class MarkAsCompleteView(LoginRequiredMixin, View):
+    template_name = "production/batch/partials/_mark_as_complete_success.html"
+
+    def post(self, request, pk):
+        prod_batch = ProductionBatch.objects.get(user=request.user, pk=pk)
+
+        if not prod_batch:
+            raise ValueError("Object Not found.")
+
+        prod_batch.status = "c"
+        prod_batch.completed_at = timezone.now()
+        prod_batch.save()
+
+        return render(request, self.template_name, {"batch": prod_batch})

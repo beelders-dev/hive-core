@@ -171,7 +171,7 @@ class PurchaseUpdateView(LoginRequiredMixin, UpdateView):
     model = IngredientPurchase
     form_class = IngredientPurchaseForm
 
-    template_name = "inventory/purchase/partials/_form_modal.html"
+    template_name = "inventory/purchase/partials/_edit_purchase_modal.html"
 
     def get_success_url(self):
         return reverse(
