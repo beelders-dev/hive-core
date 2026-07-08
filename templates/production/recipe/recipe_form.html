@@ -4,7 +4,7 @@
         <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
             <div id="form-messages" class="mx-auto mb-6 max-w-3xl"></div>
             <!-- Page Header -->
-            <div class="mb-8">
+            <header class="mb-8">
                 <p class="text-sm font-semibold uppercase tracking-widest text-blue-600">Hive Core</p>
                 <h1 class="mt-2 text-3xl font-bold tracking-tight text-slate-900">
                     {% if recipe %}
@@ -16,7 +16,7 @@
                 <p class="mt-2 text-sm text-slate-600">
                     Build a recipe by selecting ingredients and defining the required quantities.
                 </p>
-            </div>
+            </header>
             <form id="recipe-form"
                   method="post"
                   class="space-y-8"
@@ -24,32 +24,32 @@
                   hx-target="#form-messages"
                   hx-swap="innerHTML">
                 {% csrf_token %}
-                <!-- Recipe Details -->
-                <section class="rounded-xl border border-slate-200 bg-white shadow-sm">
-                    {% include "components/card/_header.html" with title="Recipe Details" subtitle="Enter the basic information for this recipe." %}
-                    <div class="grid gap-6 md:grid-cols-2 p-6">
-                        <div class="col-span-1">{% include "production/recipe/partials/recipe_form/_recipe_name_input.html" %}</div>
-                        <div class="col-span-1">{% include "production/recipe/partials/recipe_form/_recipe_description_input.html" %}</div>
+                <!-- Ingredient Library -->
+                <section class="flex  flex-col rounded-xl border border-slate-200 bg-white shadow-sm">
+                    {% include "components/card/_header.html" with title="Ingredient Library" subtitle="Search and add ingredients to this recipe." %}
+                    <div class="border-b border-slate-200 p-6">
+                        {% include "production/recipe/partials/_search_bar.html" with target_id="search-results" use_case="recipe_add_form" %}
                     </div>
+                    <div id="search-results"></div>
                 </section>
-                <!-- Ingredients -->
-                <section class="grid gap-8 lg:grid-cols-12">
-                    <!-- Search Ingredients -->
-                    <section class="lg:col-span-8 flex h-[600px] flex-col rounded-xl border border-slate-200 bg-white shadow-sm">
-                        {% include "components/card/_header.html" with title="Search Ingredients" subtitle="Find ingredients from your inventory." %}
-                        <div class="border-b border-slate-200 p-6">
-                            {% include "production/recipe/partials/_search_bar.html" with target_id="search-results" use_case="recipe_add_form" %}
+                <!-- Recipe Information + Selected Ingredients -->
+                <div class="grid gap-8 lg:grid-cols-12">
+                    <!-- Recipe Details -->
+                    <section class="lg:col-span-5 rounded-xl border border-slate-200 bg-white shadow-sm">
+                        {% include "components/card/_header.html" with title="Recipe Details" subtitle="Provide the basic information for this recipe." %}
+                        <div class="space-y-6 p-6">
+                            {% include "production/recipe/partials/recipe_form/_recipe_name_input.html" %}
+                            {% include "production/recipe/partials/recipe_form/_recipe_description_input.html" %}
                         </div>
-                        <div id="search-results" class="flex-1 overflow-y-auto"></div>
                     </section>
                     <!-- Selected Ingredients -->
-                    <section class="lg:col-span-4 flex h-[600px] flex-col rounded-xl border border-slate-200 bg-white shadow-sm">
-                        {% include "components/card/_header.html" with title="Selected Ingredients" subtitle="Review and adjust the required quantities." %}
+                    <section class="lg:col-span-7 flex h-[420px] flex-col rounded-xl border border-slate-200 bg-white shadow-sm">
+                        {% include "components/card/_header.html" with title="Selected Ingredients" subtitle="Review ingredients and adjust their required quantities." %}
                         <div class="flex-1 overflow-y-auto">
                             {% include "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table.html" %}
                         </div>
                     </section>
-                </section>
+                </div>
                 <div class="flex justify-end">{% include "production/recipe/partials/recipe_form/_save_recipe_button.html" %}</div>
             </form>
         </div>
