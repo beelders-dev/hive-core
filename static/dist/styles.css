@@ -655,6 +655,10 @@ video {
   margin: 1.25rem;
 }
 
+.m-auto {
+  margin: auto;
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -838,6 +842,10 @@ video {
 
 .max-h-\[450px\] {
   max-height: 450px;
+}
+
+.max-h-screen {
+  max-height: 100vh;
 }
 
 .min-h-\[220px\] {

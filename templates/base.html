@@ -20,12 +20,12 @@
     <body class="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased"
           hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
         <div class="flex min-h-screen flex-col">
-            {% include "components/_header.html" %}
-            <main class="flex-1 py-10">
+            {% include "page_partials/_header.html" %}
+            <main class="flex-1 ">
                 {% block content %}
                 {% endblock content %}
             </main>
-            {% include "components/_footer.html" %}
+            {% include "page_partials/_footer.html" %}
         </div>
         <div id="modal-root"></div>
         {% include "components/toast/_container.html" %}
