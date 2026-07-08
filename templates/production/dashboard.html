@@ -26,12 +26,12 @@
             </div>
             <div class="grid grid-cols-2 gap-2">
                 <!-- Production History -->
-                <section class="flex h-[500px] flex-col rounded-xl border border-slate-200 bg-white shadow-sm">
+                <section class="flex h-[500px] flex-col card">
                     {% include "components/card/_header.html" with title="Recipe Batch List" subtitle="Track recent production activity." %}
                     <div class="flex-1 overflow-y-auto">{% include "production/batch/partials/_batch_history_list.html" %}</div>
                 </section>
                 <!-- Recipe Library -->
-                <section class="flex h-[500px] flex-col rounded-xl border border-slate-200 bg-white shadow-sm">
+                <section class="flex h-[500px] flex-col card">
                     {% include "components/card/_header.html" with title="Recipe Library" subtitle="Available recipes." %}
                     <div class="flex-1 overflow-y-auto">{% include "production/recipe/partials/_recipe_list.html" %}</div>
                 </section>
