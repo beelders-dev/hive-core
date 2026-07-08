@@ -1,0 +1,31 @@
+<form method="post" class="space-y-4" hx-post="{{ action_url }}">
+    {% csrf_token %}
+    <div>
+        <label for="{{ form.purchased_at.id_for_label }}"
+               class="mb-1 block text-sm font-medium text-slate-700">Purchase Date</label>
+        {{ form.purchased_at }}
+        <p class="mt-1 text-xs text-red-600">{{ form.purchased_at.errors }}</p>
+    </div>
+    <div>
+        <label for="{{ form.exp_date.id_for_label }}"
+               class="mb-1 block text-sm font-medium text-slate-700">Expiration Date</label>
+        {{ form.exp_date }}
+        <p class="mt-1 text-xs text-red-600">{{ form.exp_date.errors }}</p>
+    </div>
+    <div>
+        <label for="{{ form.qty_purchased.id_for_label }}"
+               class="mb-1 block text-sm font-medium text-slate-700">Quantity Purchased</label>
+        {{ form.qty_purchased }}
+        <p class="mt-1 text-xs text-red-600">{{ form.qty_purchased.errors }}</p>
+    </div>
+    <div>
+        <label for="{{ form.total_cost.id_for_label }}"
+               class="mb-1 block text-sm font-medium text-slate-700">Total Cost</label>
+        {{ form.total_cost }}
+        <p class="mt-1 text-xs text-red-600">{{ form.total_cost.errors }}</p>
+    </div>
+    <button type="submit"
+            class="w-full rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700">
+        Add Stock
+    </button>
+</form>
