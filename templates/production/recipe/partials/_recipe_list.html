@@ -1,0 +1,16 @@
+<div class="divide-y divide-slate-100">
+    {% for recipe in recipes %}
+        <a href="{{ recipe.get_absolute_url }}"
+           class="block px-6 py-4 transition hover:bg-slate-50">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="font-medium text-slate-900">{{ recipe.name }}</p>
+                    <p class="text-sm text-slate-500">{{ recipe.get_all_ingredients.count }} ingredients</p>
+                </div>
+                {% include "components/svgs/_chevron_right.svg" %}
+            </div>
+        </a>
+    {% empty %}
+        <div class="px-6 py-10 text-center text-sm text-slate-500">No recipes available.</div>
+    {% endfor %}
+</div>
