@@ -18,6 +18,11 @@
     animation: toast 2s forwards;
 }
 
+
+.card {
+    @apply rounded-xl border border-slate-200 bg-white shadow-sm
+}
+
 .htmx-indicator {
     opacity: 0;
     transition: opacity 150ms ease-in;

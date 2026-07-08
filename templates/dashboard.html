@@ -18,8 +18,7 @@
                 <!-- Left Column -->
                 <div class="space-y-8 lg:col-span-2">
                     <!-- Quick Actions -->
-                    <section class="rounded-xl border border-slate-200 bg-white shadow-sm">
-                        {% include "components/card/_header.html" with title="Quick Actions" subtitle="Common actions for managing your bakery workflow." %}
+                    <section>
                         <div class="grid gap-3 p-6 sm:grid-cols-2">
                             <a href="{% url 'inventory:ingredient_create' %}"
                                class="rounded-lg bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700">
@@ -52,7 +51,7 @@
                         </div>
                     </section>
                     <!-- Low Stock -->
-                    <section class="rounded-xl border border-slate-200 bg-white shadow-sm">
+                    <section class="card">
                         {% include "components/card/_header.html" with title="Low Stock Ingredients" subtitle="Ingredients that may need restocking soon." %}
                         {% if low_stock_ingredients %}
                             <div class="divide-y divide-slate-200">
@@ -75,7 +74,7 @@
                 <!-- Right Column -->
                 <div class="space-y-8">
                     <!-- Recent Recipes -->
-                    <section class="rounded-xl border border-slate-200 bg-white shadow-sm">
+                    <section class="card">
                         {% include "components/card/_header.html" with title="Recently Added Recipes" subtitle="Latest recipes added to Hive Core." %}
                         {% if recent_recipes %}
                             <div class="max-h-[500px] divide-y divide-slate-200 overflow-y-auto">
