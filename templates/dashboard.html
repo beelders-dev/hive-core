@@ -27,19 +27,82 @@
                         <div class="grid gap-3 p-6 sm:grid-cols-2">
                             <a href="{% url 'inventory:ingredient_create' %}"
                                class="rounded-lg bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700">
-                                Add Ingredient
+                                <div class="justify-items-center space-y-2">
+                                    <p>Add Ingredient</p>
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         width="24"
+                                         height="24"
+                                         viewBox="0 0 24 24"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         class="lucide lucide-carrot-icon lucide-carrot">
+                                        <path d="M15 16a1 1 0 0 0-7-7q-4 4-5.987 12.385a.5.5 0 0 0 .602.602Q11 20 15 16l-3-3" />
+                                        <path d="M15 9q4 4 7 0-3-4-7 0 4-4 0-7-4 3 0 7" />
+                                        <path d="m8 15-2.58-2.58" />
+                                    </svg>
+                                </div>
                             </a>
                             <a href="{% url 'production:recipe_create' %}"
                                class="rounded-lg bg-slate-900 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-slate-800">
-                                Create Recipe
+                                <div class="justify-items-center space-y-2">
+                                    <p>Create Recipe</p>
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         fill="none"
+                                         viewBox="0 0 24 24"
+                                         stroke-width="1.5"
+                                         stroke="currentColor"
+                                         class="size-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
+                                    </svg>
+                                </div>
                             </a>
                             <a href="{% url 'inventory:ingredient_list' %}"
                                class="rounded-lg border border-slate-300 px-4 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-                                View Inventory
+                                <div class="justify-items-center space-y-2">
+                                    <p>View Inventory</p>
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         width="24"
+                                         height="24"
+                                         viewBox="0 0 24 24"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         class="lucide lucide-shelving-unit-icon lucide-shelving-unit">
+                                        <path d="M12 12V9a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v3" />
+                                        <path d="M16 20v-3a1 1 0 0 0-1-1h-2a1 1 0 0 0-1 1v3" />
+                                        <path d="M20 22V2" />
+                                        <path d="M4 12h16" />
+                                        <path d="M4 20h16" />
+                                        <path d="M4 2v20" />
+                                        <path d="M4 4h16" />
+                                    </svg>
+                                </div>
                             </a>
                             <a href="{% url 'production:production_dashboard' %}"
                                class="rounded-lg border border-slate-300 px-4 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-                                View Recipes
+                                <div class="justify-items-center space-y-2">
+                                    <p>View Recipes</p>
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         width="24"
+                                         height="24"
+                                         viewBox="0 0 24 24"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="2"
+                                         stroke-linecap="round"
+                                         stroke-linejoin="round"
+                                         class="lucide lucide-cooking-pot-icon lucide-cooking-pot">
+                                        <path d="M2 12h20" />
+                                        <path d="M20 12v8a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-8" />
+                                        <path d="m4 8 16-4" />
+                                        <path d="m8.86 6.78-.45-1.81a2 2 0 0 1 1.45-2.43l1.94-.48a2 2 0 0 1 2.43 1.46l.45 1.8" />
+                                    </svg>
+                                </div>
                             </a>
                         </div>
                     </section>
