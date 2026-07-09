@@ -25,7 +25,7 @@
                     <!-- Recipe Details -->
                     <section class="lg:col-span-5 card">
                         {% include "components/card/_header.html" with title="Recipe Details" subtitle="Provide the basic information for this recipe." %}
-                        <div class="space-y-6 p-6">
+                        <div class="space-y-6 p-6 max-w-3xl" id="recipe-basic-fields">
                             {% include "production/recipe/partials/recipe_form/_recipe_name_input.html" %}
                             {% include "production/recipe/partials/recipe_form/_recipe_description_input.html" %}
                         </div>
