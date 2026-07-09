@@ -178,7 +178,7 @@ class AddIngredientView(LoginRequiredMixin, View):
         )
 
 
-class RecipeProduceView(LoginRequiredMixin, View):
+class CreateBatchView(LoginRequiredMixin, View):
     def post(self, request, pk):
 
         recipe = Recipe.objects.get(user=request.user, pk=pk)
@@ -252,8 +252,32 @@ class MarkAsCompleteView(LoginRequiredMixin, View):
         if not prod_batch:
             raise ValueError("Object Not found.")
 
-        prod_batch.status = "c"
+        prod_batch.status = ProductionBatch.Status.COMPLETE
         prod_batch.completed_at = timezone.now()
         prod_batch.save()
 
-        return render(request, self.template_name, {"batch": prod_batch})
+        return render(
+            request,
+            self.template_name,
+            {"batch": prod_batch},
+        )
+
+
+class MarkAsInProgressView(LoginRequiredMixin, View):
+    template_name = "production/batch/partials/_mark_as_in_progress_success.html"
+
+    def post(self, request, pk):
+        prod_batch = ProductionBatch.objects.get(user=request.user, pk=pk)
+
+        if not prod_batch:
+            raise ValueError("Object Not found.")
+
+        prod_batch.status = ProductionBatch.Status.IN_PROGRESS
+
+        prod_batch.save()
+
+        return render(
+            request,
+            self.template_name,
+            {"batch": prod_batch},
+        )

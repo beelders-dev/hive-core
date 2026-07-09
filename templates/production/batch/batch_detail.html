@@ -29,15 +29,15 @@
                             </dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Produced Quantity</dt>
+                            <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Batch Quantity</dt>
                             <dd class="mt-1 text-sm text-slate-900">
-                                {{ batch.batches|floatformat:0 }}
+                                {{ batch.batch_qty|floatformat:0 }}
                             </dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Produced At</dt>
+                            <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Batch Created At</dt>
                             <dd class="mt-1 text-sm text-slate-900">
-                                {{ batch.produced_at|date:"M d, Y · h:i A" }}
+                                {{ batch.created_at|date:"M d, Y · h:i A" }}
                             </dd>
                         </div>
                         <div>
@@ -49,7 +49,7 @@
                         <div>
                             <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Status</dt>
                             <dd id="batch-status" class="mt-2">
-                                <span class="inline-flex rounded-full px-3 py-1 text-xs font-semibold {% if batch.status == 'c' %} bg-green-100 text-green-700 {% elif batch.status == 'p' %} bg-yellow-100 text-yellow-700 {% else %} bg-slate-100 text-slate-700 {% endif %}">
+                                <span class="status-badge {% if batch.status == batch.Status.PENDING %} status-badge-pending {% elif batch.status == batch.Status.IN_PROGRESS %} status-badge-in-progress {% elif batch.status == batch.Status.COMPLETE %} status-badge-complete {% elif batch.status == batch.Status.CANCELLED %} status-badge-cancelled {% endif %}">
                                     {{ batch.get_status_display }}
                                 </span>
                             </dd>
@@ -105,13 +105,12 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-2  border-slate-200 pt-6">
+            <div class="mt-2 border-slate-200 pt-6">
                 <button id="mark-as-complete-btn"
-                        class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm transition  {% if batch.status == 'c' %}   bg-slate-400 {% else %} bg-green-600 hover:bg-green-700 active:scale-95 {% endif %}"
-                        {% if batch.status == 'c' %}disabled{% endif %}
-                        hx-post="{% url 'production:mark_as_complete' batch.pk %}"
-                        hx-target="#batch-status">
-                    {% if batch.status == 'c' %}
+                        hx-swap-oob="true"
+                        class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm transition {% if batch.status == batch.Status.COMPLETE %} bg-slate-400 {% else %} bg-green-600 hover:bg-green-700 active:scale-95 {% endif %}"
+                        {% if batch.status == batch.Status.COMPLETE %}disabled{% endif %}>
+                    {% if batch.status == batch.Status.COMPLETE %}
                         Complete
                     {% else %}
                         ✓ Mark as Complete

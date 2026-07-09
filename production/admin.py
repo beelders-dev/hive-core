@@ -23,7 +23,7 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
 class ProductionBatchAdmin(admin.ModelAdmin):
     list_display = [
         "recipe",
-        "batches",
+        "batch_qty",
         "notes",
         "recipe_name",
         "est_cost",

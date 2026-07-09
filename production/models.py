@@ -102,8 +102,8 @@ class ProductionBatch(models.Model):
         null=True,
         blank=True,
     )
-    produced_at = models.DateTimeField(auto_now_add=True)
-    batches = models.DecimalField(max_digits=10, decimal_places=2)
+    created_at = models.DateTimeField(auto_now_add=True)
+    batch_qty = models.DecimalField(max_digits=10, decimal_places=2)
     notes = models.TextField(blank=True, null=True)
 
     recipe_name = models.CharField(max_length=100)
@@ -111,17 +111,17 @@ class ProductionBatch(models.Model):
         max_digits=10,
         decimal_places=2,
     )
-    STATUS_CHOICES = [
-        ("p", "Pending"),
-        ("c", "Complete"),
-        ("d", "Disabled"),
-        ("i", "In Progress"),
-    ]
+
+    class Status(models.TextChoices):
+        PENDING = "P", "Pending"
+        IN_PROGRESS = "I", "In Progress"
+        COMPLETE = "C", "Complete"
+        CANCELLED = "X", "Cancelled"
 
     status = models.CharField(
         max_length=1,
-        choices=STATUS_CHOICES,
-        default="p",
+        choices=Status.choices,
+        default=Status.PENDING,
     )
     completed_at = models.DateTimeField(null=True)
     product = models.ForeignKey(
@@ -131,6 +131,9 @@ class ProductionBatch(models.Model):
         null=True,
         blank=True,
     )
+
+    def get_absolute_url(self):
+        return reverse("batch_detail", kwargs={"pk": self.pk})
 
 
 class BatchIngredient(models.Model):
