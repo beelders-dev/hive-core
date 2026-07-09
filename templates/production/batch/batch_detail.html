@@ -107,6 +107,7 @@
             </div>
             <div class="mt-2 border-slate-200 pt-6">
                 <button id="mark-as-complete-btn"
+                        hx-post="{% url 'production:mark_as_complete' batch.pk %}"
                         hx-swap-oob="true"
                         class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm transition {% if batch.status == batch.Status.COMPLETE %} bg-slate-400 {% else %} bg-green-600 hover:bg-green-700 active:scale-95 {% endif %}"
                         {% if batch.status == batch.Status.COMPLETE %}disabled{% endif %}>

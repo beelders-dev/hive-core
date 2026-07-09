@@ -1,0 +1,5 @@
+<dd id="batch-status" class="mt-2" hx-swap-oob="true">
+    <span class="status-badge {% if batch.status == batch.Status.PENDING %} status-badge-pending {% elif batch.status == batch.Status.IN_PROGRESS %} status-badge-in-progress {% elif batch.status == batch.Status.COMPLETE %} status-badge-complete {% elif batch.status == batch.Status.CANCELLED %} status-badge-cancelled {% endif %}">
+        {{ batch.get_status_display }}
+    </span>
+</dd>

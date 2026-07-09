@@ -244,7 +244,7 @@ class LinkProductsView(LoginRequiredMixin, View):
 
 
 class MarkAsCompleteView(LoginRequiredMixin, View):
-    template_name = "production/batch/partials/_mark_as_complete_success.html"
+    template_name = "production/batch/partials/_mark_as_complete_oob.html"
 
     def post(self, request, pk):
         prod_batch = ProductionBatch.objects.get(user=request.user, pk=pk)
@@ -264,7 +264,7 @@ class MarkAsCompleteView(LoginRequiredMixin, View):
 
 
 class MarkAsInProgressView(LoginRequiredMixin, View):
-    template_name = "production/batch/partials/_mark_as_in_progress_success.html"
+    template_name = "production/batch/partials/_mark_as_in_progress_oob.html"
 
     def post(self, request, pk):
         prod_batch = ProductionBatch.objects.get(user=request.user, pk=pk)
