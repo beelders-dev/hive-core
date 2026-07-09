@@ -19,6 +19,11 @@ app_name = "production"
 
 urlpatterns = [
     path(
+        "",
+        ProductionDashboardView.as_view(),
+        name="production_dashboard",
+    ),
+    path(
         "recipes/create/", RecipeCreateView.as_view(), name="recipe_create"
     ),  # endpoint name will need to change
     path("recipes/<uuid:pk>/", RecipeDetailView.as_view(), name="recipe"),
@@ -34,11 +39,8 @@ urlpatterns = [
         AddIngredientView.as_view(),
         name="add_ingredient",
     ),
-    path("recipes/<uuid:pk>/produce", CreateBatchView.as_view(), name="create_batch"),
     path(
-        "recipes/",
-        ProductionDashboardView.as_view(),
-        name="production_dashboard",
+        "recipes/<uuid:pk>/create-batch", CreateBatchView.as_view(), name="create_batch"
     ),
     path(
         "batches/<uuid:pk>/",

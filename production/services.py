@@ -106,7 +106,7 @@ class ProductionService:
                     purchase.save()
 
     @transaction.atomic
-    def produce_recipe(self, recipe, batches=1):
+    def produce_recipe(self, recipe, batch_qty=1):
 
         self.deduct_ingredients(recipe)
 
@@ -114,7 +114,7 @@ class ProductionService:
             user=recipe.user,
             recipe=recipe,
             recipe_name=recipe.name,
-            batches=batches,
+            batch_qty=batch_qty,
             notes=recipe.description,
             est_cost=recipe.total_cost,
         )

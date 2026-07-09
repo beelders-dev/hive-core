@@ -193,7 +193,7 @@ class CreateBatchView(LoginRequiredMixin, View):
                 request,
                 "components/toast/_toast_oob.html",
                 {
-                    "message": "Recipe cannot be produced: " + str(e.message),
+                    "message": "Batch cannot be created:" + str(e.message),
                     "type": "error",
                 },
             )
@@ -204,7 +204,7 @@ class CreateBatchView(LoginRequiredMixin, View):
             "production/recipe/partials/_recipe_produce_message.html",
             {
                 "recipe": recipe,
-                "message": "Recipe produced successfully.",
+                "message": "Batch created.",
                 "type": "success",
             },
         )
@@ -219,7 +219,7 @@ class ProductionDashboardView(LoginRequiredMixin, TemplateView):
 
         context["batches"] = ProductionBatch.objects.filter(
             user=self.request.user
-        ).order_by("-produced_at")
+        ).order_by("-created_at")
 
         context["recipes"] = Recipe.objects.filter(user=self.request.user).order_by(
             "name"
