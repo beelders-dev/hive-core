@@ -2,12 +2,7 @@
 Elements that have to change upon clicking "Mark as Complete".
 {% endcomment %}
 {# Status #}
-{% comment %} <dd id="batch-status" class="mt-2" hx-swap-oob="true">
-    <span class="status-badge {% if batch.status == batch.Status.PENDING %} status-badge-pending {% elif batch.status == batch.Status.IN_PROGRESS %} status-badge-in-progress {% elif batch.status == batch.Status.COMPLETE %} status-badge-complete {% elif batch.status == batch.Status.CANCELLED %} status-badge-cancelled {% endif %}">
-        {{ batch.get_status_display }}
-    </span>
-</dd> {% endcomment %}
-{% include "production/batch/partials/_batch_status_oob.html" with batch=batch %}
+{% include "production/batch/partials/_batch_status_oob.html" %}
 {# Date completed #}
 <dd id="completed-date"
     class="mt-1 text-sm text-slate-900"
@@ -15,15 +10,7 @@ Elements that have to change upon clicking "Mark as Complete".
     {{ batch.completed_at|date:"M d, Y · h:i A"|default:"--" }}
 </dd>
 {# Button #}
-<div class="mt-2 border-slate-200 pt-6">
-    <button id="mark-as-complete-btn"
-            hx-swap-oob="true"
-            class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm transition {% if batch.status == batch.Status.COMPLETE %} bg-slate-400 {% else %} bg-green-600 hover:bg-green-700 active:scale-95 {% endif %}"
-            {% if batch.status == batch.Status.COMPLETE %}disabled{% endif %}>
-        {% if batch.status == batch.Status.COMPLETE %}
-            Complete
-        {% else %}
-            ✓ Mark as Complete
-        {% endif %}
-    </button>
-</div>
+<button id="mark-as-complete-btn"
+        hx-swap-oob="true"
+        class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm transition bg-slate-400"
+        disabled>✓ Mark as Complete</button>

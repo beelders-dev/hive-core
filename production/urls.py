@@ -12,7 +12,7 @@ from .views import (
     BatchDetailView,
     LinkProductsView,
     MarkAsCompleteView,
-    MarkAsInProgressView,
+    StartProductionView,
 )
 
 app_name = "production"
@@ -58,8 +58,8 @@ urlpatterns = [
         name="mark_as_complete",
     ),
     path(
-        "batches/<uuid:pk>/mark-as-in-progress",
-        MarkAsInProgressView.as_view(),
-        name="mark_as_in_progress",
+        "batches/<uuid:pk>/start-production",
+        StartProductionView.as_view(),
+        name="start_production",
     ),
 ]

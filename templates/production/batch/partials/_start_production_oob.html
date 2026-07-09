@@ -1,0 +1,12 @@
+{% include "production/batch/partials/_batch_status_oob.html" %}
+{# Button #}
+<button id="start-production"
+        hx-swap-oob="true"
+        class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm transition bg-slate-400 "
+        disabled>Start Production</button>
+<button id="mark-as-complete-btn"
+        hx-post="{% url 'production:mark_as_complete' batch.pk %}"
+        hx-swap-oob="true"
+        class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm transition  bg-green-600 hover:bg-green-700 active:scale-95">
+    ✓ Mark as Complete
+</button>
