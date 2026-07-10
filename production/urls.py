@@ -11,7 +11,7 @@ from .views import (
     ProductionDashboardView,
     BatchDetailView,
     LinkProductsView,
-    MarkAsCompleteView,
+    CompleteProductionView,
     StartProductionView,
 )
 
@@ -54,7 +54,7 @@ urlpatterns = [
     ),
     path(
         "batches/<uuid:pk>/complete",
-        MarkAsCompleteView.as_view(),
+        CompleteProductionView.as_view(),
         name="complete",
     ),
     path(
