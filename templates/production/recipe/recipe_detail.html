@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load humanize %}
 {% block content %}
     <div class="text-center" id="recipe-produce-message"></div>
     <div class="mx-auto my-12 max-w-6xl px-4 font-sans">
@@ -79,7 +80,7 @@
                                     </td>
                                     <td id="current-stock-{{ item.ingredient.id }}"
                                         class="whitespace-nowrap px-5 py-4 text-right font-mono text-slate-700">
-                                        {{ item.ingredient.current_stock }}
+                                        {{ item.ingredient.current_stock | floatformat:2 | intcomma }}
                                         <span class="text-xs text-slate-400">{{ item.ingredient.unit }}</span>
                                     </td>
                                     <td class="whitespace-nowrap px-5 py-4 text-right font-mono font-semibold text-slate-900">
@@ -87,10 +88,10 @@
                                         <span class="text-xs text-slate-400">{{ item.ingredient.unit }}</span>
                                     </td>
                                     <td class="whitespace-nowrap px-5 py-4 text-right font-mono text-slate-700">
-                                        ₱{{ item.ingredient.average_unit_cost | floatformat:2 }}
+                                        ₱{{ item.ingredient.average_unit_cost | floatformat:2 | intcomma }}
                                     </td>
                                     <td class="whitespace-nowrap px-5 py-4 text-right font-mono font-semibold text-slate-900">
-                                        ₱{{ item.ingredient_cost | floatformat:2 }}
+                                        ₱{{ item.ingredient_cost | floatformat:2 | intcomma }}
                                     </td>
                                     <td class="whitespace-nowrap px-5 py-4 text-center">
                                         {% if item.ingredient.current_stock == 0 %}
