@@ -106,15 +106,15 @@
                 </div>
             </div>
             <div class="mt-2 border-slate-200 pt-6">
-                <button id="mark-as-complete-btn"
-                        hx-post="{% url 'production:mark_as_complete' batch.pk %}"
+                <button id="complete-btn"
+                        hx-post="{% url 'production:complete' batch.pk %}"
                         hx-swap-oob="true"
                         class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm transition {% if batch.status != batch.Status.IN_PROGRESS or batch.status == batch.Status.COMPLETE %}bg-slate-400 {% else %}  bg-green-600 hover:bg-green-700 active:scale-95 {% endif %}"
                         {% if batch.status != batch.Status.IN_PROGRESS or batch.status == batch.Status.COMPLETE %}disabled{% endif %}>
                     ✓ Mark as Complete
                 </button>
-                <button id="start-production"
-                        hx-post="{% url 'production:start_production' batch.pk %}"
+                <button id="produce-btn"
+                        hx-post="{% url 'production:produce' batch.pk %}"
                         hx-swap-oob="true"
                         class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm transition {% if batch.status != batch.Status.PENDING or batch.status == batch.Status.IN_PROGRESS %}bg-slate-400 {% else %}  bg-blue-600 hover:bg-blue-700 active:scale-95 {% endif %}"
                         {% if batch.status != batch.Status.PENDING or batch.status == batch.Status.IN_PROGRESS %}disabled{% endif %}>

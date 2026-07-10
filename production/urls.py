@@ -53,13 +53,13 @@ urlpatterns = [
         name="link_products",
     ),
     path(
-        "batches/<uuid:pk>/mark-as-complete",
+        "batches/<uuid:pk>/complete",
         MarkAsCompleteView.as_view(),
-        name="mark_as_complete",
+        name="complete",
     ),
     path(
-        "batches/<uuid:pk>/start-production",
+        "batches/<uuid:pk>/produce",
         StartProductionView.as_view(),
-        name="start_production",
+        name="produce",
     ),
 ]
