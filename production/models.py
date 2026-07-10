@@ -68,7 +68,7 @@ class RecipeIngredient(models.Model):
         "inventory.Ingredient",
         on_delete=models.CASCADE,
     )
-    quantity_needed = models.DecimalField(
+    qty_needed = models.DecimalField(
         max_digits=10,
         decimal_places=2,
         validators=[
@@ -81,7 +81,7 @@ class RecipeIngredient(models.Model):
 
     @property
     def ingredient_cost(self):
-        return self.ingredient.average_unit_cost * self.quantity_needed
+        return self.ingredient.average_unit_cost * self.qty_needed
 
 
 class ProductionBatch(models.Model):
@@ -103,7 +103,7 @@ class ProductionBatch(models.Model):
         blank=True,
     )
     created_at = models.DateTimeField(auto_now_add=True)
-    batch_qty = models.DecimalField(max_digits=10, decimal_places=2)
+    batch_qty = models.IntegerField()
     notes = models.TextField(blank=True, null=True)
 
     recipe_name = models.CharField(max_length=100)
@@ -153,6 +153,6 @@ class BatchIngredient(models.Model):
     ingredient_name_snapshot = models.CharField(max_length=100)
     unit_snapshot = models.CharField(max_length=20)
 
-    quantity_used = models.DecimalField(max_digits=10, decimal_places=2)
+    qty_used = models.DecimalField(max_digits=10, decimal_places=2)
     unit_cost_snapshot = models.DecimalField(max_digits=10, decimal_places=2)
     total_cost = models.DecimalField(max_digits=10, decimal_places=2)

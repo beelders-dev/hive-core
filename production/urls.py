@@ -13,6 +13,7 @@ from .views import (
     LinkProductsView,
     CompleteProductionView,
     StartProductionView,
+    CancelProductionView,
 )
 
 app_name = "production"
@@ -61,5 +62,10 @@ urlpatterns = [
         "batches/<uuid:pk>/produce",
         StartProductionView.as_view(),
         name="produce",
+    ),
+    path(
+        "batches/<uuid:pk>/cancel",
+        CancelProductionView.as_view(),
+        name="cancel",
     ),
 ]

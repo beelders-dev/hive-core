@@ -15,7 +15,7 @@ class RecipeIngredientAdmin(admin.ModelAdmin):
     list_display = [
         "recipe",
         "ingredient",
-        "quantity_needed",
+        "qty_needed",
     ]
 
 

@@ -1,10 +1,11 @@
+{% load humanize %}
 {% include "components/toast/_toast_oob.html" with message=message type=type %}
 {% for item in recipe.get_all_ingredients %}
     <template>
         <td id="current-stock-{{ item.ingredient.id }}"
             class="whitespace-nowrap px-5 py-4 text-right font-mono text-slate-700"
             hx-swap-oob="outerHTML">
-            {{ item.ingredient.current_stock }}
+            {{ item.ingredient.current_stock|floatformat:2|intcomma }}
             <span class="text-xs text-slate-400">{{ item.ingredient.unit }}</span>
         </td>
     </template>

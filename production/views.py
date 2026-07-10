@@ -243,8 +243,8 @@ class LinkProductsView(LoginRequiredMixin, View):
     pass
 
 
-class MarkAsCompleteView(LoginRequiredMixin, View):
-    template_name = "production/batch/partials/_mark_as_complete_oob.html"
+class CompleteProductionView(LoginRequiredMixin, View):
+    template_name = "production/batch/partials/_complete_production_oob.html"
 
     def post(self, request, pk):
         prod_batch = ProductionBatch.objects.get(user=request.user, pk=pk)
@@ -274,6 +274,34 @@ class StartProductionView(LoginRequiredMixin, View):
 
         prod_batch.status = ProductionBatch.Status.IN_PROGRESS
 
+        prod_batch.save()
+
+        return render(
+            request,
+            self.template_name,
+            {"batch": prod_batch},
+        )
+
+
+class CancelProductionView(LoginRequiredMixin, View):
+    template_name = "production/batch/partials/_cancel_production_oob.html"
+
+    def post(self, request, pk):
+        prod_batch = ProductionBatch.objects.get(user=request.user, pk=pk)
+
+        if not prod_batch:
+            raise ValueError("Object Not found.")
+
+        prod_service = ProductionService()
+
+        if prod_batch.status != ProductionBatch.Status.IN_PROGRESS:
+            for batch_ingredient in prod_batch.batch_ingredients.all():
+                try:
+                    prod_service.reinstate(batch_ingredient, prod_batch.batch_qty)
+                except ValidationError as e:
+                    print("Error: ", e.message)
+
+        prod_batch.status = ProductionBatch.Status.CANCELLED
         prod_batch.save()
 
         return render(

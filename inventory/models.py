@@ -119,6 +119,10 @@ class IngredientPurchase(models.Model):
 
         return self.total_cost / self.qty_purchased
 
+    @property
+    def get_stock_difference(self):
+        return self.qty_purchased - self.qty_remaining
+
     def save(self, *args, **kwargs):
         """
         Initialize qty_remaining to the purchased quantity when creating a new

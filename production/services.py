@@ -29,7 +29,7 @@ class RecipeService:
             recipe_ingredient = RecipeIngredient(
                 recipe=recipe,
                 ingredient_id=ingredient_id,
-                quantity_needed=quantity,
+                qty_needed=quantity,
             )
 
             recipe_ingredient.full_clean()
@@ -65,7 +65,7 @@ class RecipeService:
             recipe_ingredient = RecipeIngredient(
                 recipe=recipe,
                 ingredient_id=ingredient_id,
-                quantity_needed=quantity,
+                qty_needed=quantity,
             )
 
             recipe_ingredient.full_clean()
@@ -77,10 +77,10 @@ class RecipeService:
 class ProductionService:
 
     @transaction.atomic
-    def deduct_ingredients(self, recipe, batches=1):
+    def deduct_ingredients(self, recipe, batch_qty=1):
 
         for requirement in recipe.get_all_ingredients():
-            qty_to_deduct = requirement.quantity_needed * batches
+            qty_to_deduct = requirement.qty_needed * batch_qty
 
             ingredient = requirement.ingredient
 
@@ -125,7 +125,26 @@ class ProductionService:
                 ingredient=recipe_ingredient.ingredient,
                 ingredient_name_snapshot=recipe_ingredient.ingredient.name,
                 unit_snapshot=recipe_ingredient.ingredient.unit,
-                quantity_used=recipe_ingredient.quantity_needed,
+                qty_used=recipe_ingredient.qty_needed,
                 unit_cost_snapshot=recipe_ingredient.ingredient.average_unit_cost,
                 total_cost=recipe_ingredient.ingredient_cost,
             )
+
+    @transaction.atomic
+    def reinstate(self, batch_ingredient, batch_qty=1):
+
+        qty_to_reinstate = batch_ingredient.qty_used * batch_qty
+
+        # If all purchases are full, then, create a new purchase instead of raising an error.
+
+        for purchase in batch_ingredient.ingredient.purchases.order_by("purchased_at"):
+
+            if purchase.get_stock_difference <= qty_to_reinstate:
+                purchase.qty_remaining += qty_to_reinstate
+                qty_to_reinstate = 0
+                purchase.save()
+
+            else:
+                purchase.qty_remaining = purchase.qty_purchased
+                qty_to_reinstate = purchase.get_stock_difference
+                purchase.save()

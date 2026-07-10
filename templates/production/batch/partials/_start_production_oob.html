@@ -2,11 +2,19 @@
 {# Button #}
 <button id="produce-btn"
         hx-swap-oob="true"
-        class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm transition bg-slate-400 "
+        class="batch-process-btn disabled-btn-color"
         disabled>Start Production</button>
 <button id="complete-btn"
-        hx-post="{% url 'production:mark_as_complete' batch.pk %}"
+        hx-post="{% url 'production:complete' batch.pk %}"
         hx-swap-oob="true"
-        class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm transition  bg-green-600 hover:bg-green-700 active:scale-95">
-        ✓ Mark as Complete
+        class="batch-process-btn complete-btn">✓ Mark as Complete</button>
+<button id="cancel-btn"
+        hx-swap-oob="true"
+        hx-post="{% url 'production:cancel' batch.pk %}"
+        class="batch-process-btn cancel-btn">
+        {% if batch.status == batch.Status.IN_PROGRESS %}
+                Abort Process
+        {% else %}
+                Cancel Production
+        {% endif %}
 </button>

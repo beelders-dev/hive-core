@@ -12,5 +12,15 @@ Elements that have to change upon clicking "Mark as Complete".
 {# Button #}
 <button id="complete-btn"
         hx-swap-oob="true"
-        class="inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium text-white shadow-sm transition bg-slate-400"
+        class="batch-process-btn disabled-btn-color"
         disabled>✓ Mark as Complete</button>
+<button id="cancel-btn"
+        hx-swap-oob="true"
+        class="batch-process-btn disabled-btn-color"
+        disabled>
+    {% if batch.status == batch.Status.IN_PROGRESS %}
+        Abort Process
+    {% else %}
+        Cancel Production
+    {% endif %}
+</button>
