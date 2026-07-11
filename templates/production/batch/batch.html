@@ -12,16 +12,23 @@
             </div>
             <div class="grid gap-8 lg:grid-cols-3">
                 <!-- Batch Information -->
-                <div id="batch-details" hx-swap-oob="true">{% include "production/batch/partials/_batch_details.html" %}</div>
+                <div id="batch-details" hx-swap-oob="true" class="card">
+                    {% include "production/batch/partials/_batch_details.html" %}
+                </div>
                 <!-- Ingredient Snapshot -->
                 <div id="batch-ingredients" class="lg:col-span-2 card">
                     {% include "production/batch/partials/_batch_ingredients.html" %}
                 </div>
             </div>
-            <div id="production-action-btn-grp"
-                 hx-swap-oob="true"
-                 class="mt-2 border-slate-200 pt-3 gap-2 flex flex-col w-[100px] items-center">
-                {% include "production/batch/partials/_action_btn_grp.html" %}
+            <div class="flex gap-5">
+                <div id="production-timeline" hx-swap-oob="true" class="card">
+                    {% include "production/batch/partials/_progress_timeline.html" %}
+                </div>
+                <div id="production-action-btn-grp"
+                     hx-swap-oob="true"
+                     class="mt-2 border-slate-200 pt-3 gap-2 flex flex-col w-[100px] items-center">
+                    {% include "production/batch/partials/_action_btn_grp.html" %}
+                </div>
             </div>
         </div>
     </div>

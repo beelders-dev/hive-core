@@ -102,7 +102,7 @@ class ProductionBatch(models.Model):
         null=True,
         blank=True,
     )
-    created_at = models.DateTimeField(auto_now_add=True)
+
     batch_qty = models.IntegerField()
     notes = models.TextField(blank=True, null=True)
 
@@ -123,7 +123,11 @@ class ProductionBatch(models.Model):
         choices=Status.choices,
         default=Status.PENDING,
     )
+    created_at = models.DateTimeField(auto_now_add=True)
+    started_at = models.DateTimeField(null=True)
+    cancelled_at = models.DateTimeField(null=True)
     completed_at = models.DateTimeField(null=True)
+
     product = models.ForeignKey(
         "products.Product",
         on_delete=models.CASCADE,
@@ -131,7 +135,7 @@ class ProductionBatch(models.Model):
         null=True,
         blank=True,
     )
-    cancelled_at = models.DateTimeField(null=True)
+
     cancellation_note = models.TextField(blank=True, null=True)
 
     def get_absolute_url(self):

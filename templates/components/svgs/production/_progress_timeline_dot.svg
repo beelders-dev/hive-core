@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        class="h-3 w-3 {% if batch.status == batch.Status.COMPLETE %} text-green-500 {% elif batch.status == batch.Status.IN_PROGRESS %}text-blue-500{% elif batch.status == batch.Status.PENDING %}text-yellow-700 {% else %} text-red-500 {% endif %}">
+    <circle cx="12" cy="12" r="12" />
+</svg>

@@ -248,10 +248,11 @@ class CompleteProductionView(LoginRequiredMixin, View):
     template_name = "production/batch/partials/_action_btn_reload_oob.html"
 
     def post(self, request, pk):
-        prod_batch = ProductionBatch.objects.get(user=request.user, pk=pk)
-
-        if not prod_batch:
-            raise ValueError("Object Not found.")
+        prod_batch = get_object_or_404(
+            ProductionBatch,
+            user=request.user,
+            pk=pk,
+        )
 
         prod_batch.status = ProductionBatch.Status.COMPLETE
         prod_batch.completed_at = timezone.now()
@@ -268,13 +269,14 @@ class StartProductionView(LoginRequiredMixin, View):
     template_name = "production/batch/partials/_action_btn_reload_oob.html"
 
     def post(self, request, pk):
-        prod_batch = ProductionBatch.objects.get(user=request.user, pk=pk)
-
-        if not prod_batch:
-            raise ValueError("Object Not found.")
+        prod_batch = get_object_or_404(
+            ProductionBatch,
+            user=request.user,
+            pk=pk,
+        )
 
         prod_batch.status = ProductionBatch.Status.IN_PROGRESS
-
+        prod_batch.started_at = timezone.now()
         prod_batch.save()
 
         return render(
@@ -288,12 +290,16 @@ class CancelProductionView(LoginRequiredMixin, View):
     template_name = "production/batch/partials/_cancel_modal.html"
 
     def get(self, request, pk):
-        prod_batch = ProductionBatch.objects.get(user=request.user, pk=pk)
+        prod_batch = get_object_or_404(
+            ProductionBatch,
+            user=request.user,
+            pk=pk,
+        )
         form = BatchCancellationForm()
 
         return render(
             request,
-            "production/batch/partials/_cancel_modal.html",
+            "production/batch/partials/_cancel_modal_form.html",
             {"form": form, "batch": prod_batch},
         )
 
@@ -313,14 +319,16 @@ class CancelProductionView(LoginRequiredMixin, View):
                 except ValidationError as e:
                     print("Error: ", e.message)
 
-        prod_batch.status = ProductionBatch.Status.CANCELLED
-        prod_batch.cancelled_at = timezone.now()
-        prod_batch.save()
+        form = BatchCancellationForm(request.POST, instance=prod_batch)
 
-        print(self.request.headers)
+        if form.is_valid():
+            prod_batch = form.save(commit=False)
+            prod_batch.status = ProductionBatch.Status.CANCELLED
+            prod_batch.cancelled_at = timezone.now()
+            prod_batch.save()
 
         return render(
             request,
             "production/batch/partials/_action_btn_reload_oob.html",
-            {"batch": prod_batch},
+            {"batch": prod_batch, "form": form},
         )

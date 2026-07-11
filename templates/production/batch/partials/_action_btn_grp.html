@@ -3,7 +3,7 @@
         hx-swap-oob="true"
         class=" batch-process-btn {% if batch.status != batch.Status.IN_PROGRESS or batch.status == batch.Status.COMPLETE %}disabled-btn-color {% else %} complete-btn{% endif %}"
         {% if batch.status != batch.Status.IN_PROGRESS or batch.status == batch.Status.COMPLETE or batch.status == batch.Status.CANCELLED %}disabled{% endif %}>
-    ✓ Mark as Complete
+    Complete
 </button>
 <button id="produce-btn"
         hx-post="{% url 'production:produce' batch.pk %}"
