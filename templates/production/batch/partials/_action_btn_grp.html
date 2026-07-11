@@ -1,0 +1,26 @@
+<button id="complete-btn"
+        hx-post="{% url 'production:complete' batch.pk %}"
+        hx-swap-oob="true"
+        class=" batch-process-btn {% if batch.status != batch.Status.IN_PROGRESS or batch.status == batch.Status.COMPLETE %}disabled-btn-color {% else %} complete-btn{% endif %}"
+        {% if batch.status != batch.Status.IN_PROGRESS or batch.status == batch.Status.COMPLETE or batch.status == batch.Status.CANCELLED %}disabled{% endif %}>
+    ✓ Mark as Complete
+</button>
+<button id="produce-btn"
+        hx-post="{% url 'production:produce' batch.pk %}"
+        hx-swap-oob="true"
+        class="batch-process-btn {% if batch.status != batch.Status.PENDING or batch.status == batch.Status.IN_PROGRESS %}disabled-btn-color {% else %}  in-progress-btn{% endif %}"
+        {% if batch.status != batch.Status.PENDING or batch.status == batch.Status.IN_PROGRESS %}disabled{% endif %}>
+    Start Production
+</button>
+<button id="cancel-btn"
+        hx-swap-oob="true"
+        hx-target="#modal-root"
+        hx-get="{% url 'production:cancel' batch.pk %}"
+        class="batch-process-btn {% if batch.status == batch.Status.CANCELLED or batch.status == batch.Status.COMPLETE %}disabled-btn-color {% else %} cancel-btn {% endif %}"
+        {% if batch.status == batch.Status.CANCELLED or batch.status == batch.Status.COMPLETE %}disabled{% endif %}>
+    {% if batch.status == batch.Status.IN_PROGRESS or batch.status == batch.Status.COMPLETE %}
+        Abort Process
+    {% else %}
+        Cancel Production
+    {% endif %}
+</button>

@@ -1,0 +1,60 @@
+<div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <h2 class="mb-6 text-lg font-semibold text-slate-900">Batch Information</h2>
+    <dl class="space-y-6">
+        <div>
+            <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Batch ID</dt>
+            <dd class="mt-1 font-mono text-sm text-slate-800">
+                #{{ batch.id|stringformat:"s"|slice:":8"|upper }}
+            </dd>
+        </div>
+        <div>
+            <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Recipe</dt>
+            <dd class="mt-1 text-sm font-medium text-slate-900">
+                {{ batch.recipe_name }}
+            </dd>
+        </div>
+        <div>
+            <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Batch Quantity</dt>
+            <dd class="mt-1 text-sm text-slate-900">
+                {{ batch.batch_qty|floatformat:0 }}
+            </dd>
+        </div>
+        <div>
+            <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Batch Created At</dt>
+            <dd class="mt-1 text-sm text-slate-900">
+                {{ batch.created_at|date:"M d, Y · h:i A" }}
+            </dd>
+        </div>
+        <div>
+            <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Created By</dt>
+            <dd class="mt-1 text-sm text-slate-900">
+                {{ batch.user }}
+            </dd>
+        </div>
+        <div>
+            <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Status</dt>
+            <dd id="batch-status" class="mt-2">
+                <span class="status-badge {% if batch.status == batch.Status.PENDING %} status-badge-pending {% elif batch.status == batch.Status.IN_PROGRESS %} status-badge-in-progress {% elif batch.status == batch.Status.COMPLETE %} status-badge-complete {% elif batch.status == batch.Status.CANCELLED %} status-badge-cancelled {% endif %}">
+                    {{ batch.get_status_display }}
+                </span>
+            </dd>
+        </div>
+        <div>
+            <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                {% if batch.status == batch.Status.CANCELLED %}
+                    Cancelled
+                {% else %}
+                    Completed
+                {% endif %}
+                AT
+            </dt>
+            <dd class="mt-1 text-sm text-slate-900" id="completed-date">
+                {% if batch.status == batch.Status.CANCELLED %}
+                    {{ batch.cancelled_at|date:"M d, Y · h:i A"|default:"--" }}
+                {% else %}
+                    {{ batch.completed_at|date:"M d, Y · h:i A"|default:"--" }}
+                {% endif %}
+            </dd>
+        </div>
+    </dl>
+</div>

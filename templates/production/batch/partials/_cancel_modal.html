@@ -4,7 +4,9 @@
     Cancel Production Batch
 {% endblock modal_title %}
 {% block modal_content %}
-    <form method="post" action="{% url 'production:cancel' batch.pk %}">
+    <form hx-post="{% url 'production:cancel' batch.pk %}"
+          hx-target="#modal-root"
+          hx-swap="innerHTML">
         {% csrf_token %}
         <div class="space-y-6">
             <div class="rounded-lg border border-amber-200 bg-amber-50 p-4">

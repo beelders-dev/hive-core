@@ -1,0 +1,40 @@
+{% load humanize %}
+<div class="border-b border-slate-200 px-6 py-4">
+    <div class="flex items-center justify-between">
+        <div>
+            <h2 class="text-lg font-semibold text-slate-900">Ingredient Snapshot</h2>
+            <p class="mt-1 text-sm text-slate-500">Ingredient quantities and costs captured at the time of production.</p>
+        </div>
+    </div>
+</div>
+<div class="overflow-x-auto">
+    <table class="min-w-full divide-y divide-slate-200">
+        <thead class="bg-slate-50">
+            <tr>
+                <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-500">Ingredient</th>
+                <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">Used</th>
+                <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">Unit Cost</th>
+                <th class="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-slate-500">Total Cost</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100 bg-white">
+            {% for ingredient in batch.batch_ingredients.all %}
+                <tr class="hover:bg-slate-50">
+                    <td class="px-6 py-4">
+                        <div class="font-medium text-slate-900">{{ ingredient.ingredient_name_snapshot }}</div>
+                    </td>
+                    <td class="px-6 py-4 text-right">
+                        {{ ingredient.qty_used }}
+                        <span class="text-sm text-slate-500">{{ ingredient.unit_snapshot }}</span>
+                    </td>
+                    <td class="px-6 py-4 text-right">₱{{ ingredient.unit_cost_snapshot|floatformat:2|intcomma }}</td>
+                    <td class="px-6 py-4 text-right font-semibold text-slate-900">₱{{ ingredient.total_cost|floatformat:2|intcomma }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="4" class="px-6 py-12 text-center text-slate-500">No ingredient snapshot available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>

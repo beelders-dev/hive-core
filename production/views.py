@@ -237,7 +237,7 @@ class ProductionDashboardView(LoginRequiredMixin, TemplateView):
 class BatchDetailView(LoginRequiredMixin, DetailView):
     model = ProductionBatch
     context_object_name = "batch"
-    template_name = "production/batch/batch_detail.html"
+    template_name = "production/batch/batch.html"
 
 
 class LinkProductsView(LoginRequiredMixin, View):
@@ -245,7 +245,7 @@ class LinkProductsView(LoginRequiredMixin, View):
 
 
 class CompleteProductionView(LoginRequiredMixin, View):
-    template_name = "production/batch/partials/_complete_production_oob.html"
+    template_name = "production/batch/partials/_action_btn_reload_oob.html"
 
     def post(self, request, pk):
         prod_batch = ProductionBatch.objects.get(user=request.user, pk=pk)
@@ -265,7 +265,7 @@ class CompleteProductionView(LoginRequiredMixin, View):
 
 
 class StartProductionView(LoginRequiredMixin, View):
-    template_name = "production/batch/partials/_start_production_oob.html"
+    template_name = "production/batch/partials/_action_btn_reload_oob.html"
 
     def post(self, request, pk):
         prod_batch = ProductionBatch.objects.get(user=request.user, pk=pk)
@@ -285,7 +285,7 @@ class StartProductionView(LoginRequiredMixin, View):
 
 
 class CancelProductionView(LoginRequiredMixin, View):
-    template_name = "production/batch/partials/_cancel_production_oob.html"
+    template_name = "production/batch/partials/_cancel_modal.html"
 
     def get(self, request, pk):
         prod_batch = ProductionBatch.objects.get(user=request.user, pk=pk)
@@ -298,10 +298,11 @@ class CancelProductionView(LoginRequiredMixin, View):
         )
 
     def post(self, request, pk):
-        prod_batch = ProductionBatch.objects.get(user=request.user, pk=pk)
-
-        if not prod_batch:
-            raise ValueError("Object Not found.")
+        prod_batch = get_object_or_404(
+            ProductionBatch,
+            user=request.user,
+            pk=pk,
+        )
 
         prod_service = ProductionService()
 
@@ -316,6 +317,10 @@ class CancelProductionView(LoginRequiredMixin, View):
         prod_batch.cancelled_at = timezone.now()
         prod_batch.save()
 
-        return HttpResponseRedirect(
-            reverse_lazy("production:batch", kwargs={"pk": prod_batch.pk})
+        print(self.request.headers)
+
+        return render(
+            request,
+            "production/batch/partials/_action_btn_reload_oob.html",
+            {"batch": prod_batch},
         )
