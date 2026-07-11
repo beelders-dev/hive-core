@@ -1,0 +1,40 @@
+{# production/batch/partials/_batch_cancel_form.html #}
+{% extends "components/modal.html" %}
+{% block modal_title %}
+    Cancel Production Batch
+{% endblock modal_title %}
+{% block modal_content %}
+    <form method="post" action="{% url 'production:cancel' batch.pk %}">
+        {% csrf_token %}
+        <div class="space-y-6">
+            <div class="rounded-lg border border-amber-200 bg-amber-50 p-4">
+                <p class="text-sm text-amber-800">
+                    Cancelling this production batch will stop further processing and mark it as cancelled.
+                    This action should only be used if the batch was created in error or can no longer be completed.
+                </p>
+            </div>
+            <div>
+                <label for="{{ form.cancellation_note.id_for_label }}"
+                       class="mb-2 block text-sm font-medium text-slate-700">Cancellation Reason</label>
+                {{ form.cancellation_note }}
+                {% if form.cancellation_note.help_text %}
+                    <p class="mt-1 text-sm text-slate-500">{{ form.cancellation_note.help_text }}</p>
+                {% endif %}
+                {% if form.cancellation_note.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ form.cancellation_note.errors.0 }}</p>
+                {% endif %}
+            </div>
+            <div class="flex justify-end gap-3 border-t border-slate-200 pt-4">
+                <button type="button"
+                        onclick="document.getElementById('modal-root').innerHTML = ''"
+                        class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+                    Keep Batch
+                </button>
+                <button type="submit"
+                        class="rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-red-700">
+                    Cancel Batch
+                </button>
+            </div>
+        </div>
+    </form>
+{% endblock modal_content %}

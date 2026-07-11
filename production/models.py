@@ -131,6 +131,8 @@ class ProductionBatch(models.Model):
         null=True,
         blank=True,
     )
+    cancelled_at = models.DateTimeField(null=True)
+    cancellation_note = models.TextField(blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse("batch_detail", kwargs={"pk": self.pk})

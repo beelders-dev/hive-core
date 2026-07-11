@@ -10,7 +10,8 @@
         class="batch-process-btn complete-btn">✓ Mark as Complete</button>
 <button id="cancel-btn"
         hx-swap-oob="true"
-        hx-post="{% url 'production:cancel' batch.pk %}"
+        hx-get="{% url 'production:cancel' batch.pk %}"
+        hx-target="#modal-root"
         class="batch-process-btn cancel-btn">
         {% if batch.status == batch.Status.IN_PROGRESS %}
                 Abort Process

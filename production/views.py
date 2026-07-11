@@ -3,8 +3,8 @@ from django.db.models.query import QuerySet
 from django.utils import timezone
 from django.views import View
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy
-from django.http import HttpResponse
+from django.urls import reverse_lazy, reverse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.core.exceptions import ValidationError
 
 from inventory.models import Ingredient
@@ -16,6 +16,7 @@ from django.views.generic import (
     UpdateView,
     TemplateView,
 )
+from .forms import BatchCancellationForm
 from .models import Recipe, ProductionBatch
 from .services import RecipeService, ProductionService
 
@@ -286,6 +287,16 @@ class StartProductionView(LoginRequiredMixin, View):
 class CancelProductionView(LoginRequiredMixin, View):
     template_name = "production/batch/partials/_cancel_production_oob.html"
 
+    def get(self, request, pk):
+        prod_batch = ProductionBatch.objects.get(user=request.user, pk=pk)
+        form = BatchCancellationForm()
+
+        return render(
+            request,
+            "production/batch/partials/_cancel_modal.html",
+            {"form": form, "batch": prod_batch},
+        )
+
     def post(self, request, pk):
         prod_batch = ProductionBatch.objects.get(user=request.user, pk=pk)
 
@@ -302,10 +313,9 @@ class CancelProductionView(LoginRequiredMixin, View):
                     print("Error: ", e.message)
 
         prod_batch.status = ProductionBatch.Status.CANCELLED
+        prod_batch.cancelled_at = timezone.now()
         prod_batch.save()
 
-        return render(
-            request,
-            self.template_name,
-            {"batch": prod_batch},
+        return HttpResponseRedirect(
+            reverse_lazy("production:batch", kwargs={"pk": prod_batch.pk})
         )

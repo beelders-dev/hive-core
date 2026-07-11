@@ -55,9 +55,20 @@
                             </dd>
                         </div>
                         <div>
-                            <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">Completed At</dt>
+                            <dt class="text-xs font-semibold uppercase tracking-wide text-slate-500">
+                                {% if batch.status == batch.Status.CANCELLED %}
+                                    Cancelled
+                                {% else %}
+                                    Completed
+                                {% endif %}
+                                AT
+                            </dt>
                             <dd class="mt-1 text-sm text-slate-900" id="completed-date">
-                                {{ batch.completed_at|date:"M d, Y · h:i A"|default:"--" }}
+                                {% if batch.status == batch.Status.CANCELLED %}
+                                    {{ batch.cancelled_at|date:"M d, Y · h:i A"|default:"--" }}
+                                {% else %}
+                                    {{ batch.completed_at|date:"M d, Y · h:i A"|default:"--" }}
+                                {% endif %}
                             </dd>
                         </div>
                     </dl>
@@ -105,7 +116,7 @@
                     </div>
                 </div>
             </div>
-            <div class="mt-2 border-slate-200 pt-3 gap-2 flex flex-col w-[200px] items-center">
+            <div class="mt-2 border-slate-200 pt-3 gap-2 flex flex-col w-[100px] items-center">
                 <button id="complete-btn"
                         hx-post="{% url 'production:complete' batch.pk %}"
                         hx-swap-oob="true"
@@ -122,7 +133,8 @@
                 </button>
                 <button id="cancel-btn"
                         hx-swap-oob="true"
-                        hx-post="{% url 'production:cancel' batch.pk %}"
+                        hx-target="#modal-root"
+                        hx-get="{% url 'production:cancel' batch.pk %}"
                         class="batch-process-btn {% if batch.status == batch.Status.CANCELLED or batch.status == batch.Status.COMPLETE %}disabled-btn-color {% else %} cancel-btn {% endif %}"
                         {% if batch.status == batch.Status.CANCELLED or batch.status == batch.Status.COMPLETE %}disabled{% endif %}>
                     {% if batch.status == batch.Status.IN_PROGRESS or batch.status == batch.Status.COMPLETE %}
