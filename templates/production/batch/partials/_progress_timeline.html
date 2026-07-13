@@ -2,13 +2,13 @@
 <div class="p-4 flex flex-col gap-2">
     <h1>{{ batch.get_status_display }}</h1>
     <div class="flex gap-2 items-center">
-        {% include "components/svgs/production/_progress_timeline_dot.svg" %}
+        {% include "components/svgs/production/_progress_timeline_dot.html" %}
         <div class="text-xs">Created {{ batch.created_at|date:"M d, Y • g:i A" }}</div>
     </div>
     {% if batch.started_at %}
         <div class="flex gap-2 items-center">
             <div class="relative">
-                {% include "components/svgs/production/_progress_timeline_dot.svg" %}
+                {% include "components/svgs/production/_progress_timeline_dot.html" %}
                 <div class="absolute left-1/2 bottom-2 h-5 w-[1.5px] {% if batch.status == batch.Status.COMPLETE %} bg-green-500 {% elif batch.status == batch.Status.IN_PROGRESS %}bg-blue-500{% elif batch.status == batch.Status.PENDING %}bg-yellow-700 {% else %} bg-red-500 {% endif %}">
                 </div>
             </div>
@@ -18,7 +18,7 @@
     {% if batch.completed_at %}
         <div class="flex gap-2 items-center">
             <div class="relative">
-                {% include "components/svgs/production/_progress_timeline_dot.svg" %}
+                {% include "components/svgs/production/_progress_timeline_dot.html" %}
                 <div class="absolute left-1/2 bottom-2 h-5 w-[1.5px] {% if batch.status == batch.Status.COMPLETE %} bg-green-500 {% elif batch.status == batch.Status.IN_PROGRESS %}bg-blue-500{% elif batch.status == batch.Status.PENDING %}bg-yellow-700 {% else %} bg-red-500 {% endif %}">
                 </div>
             </div>
@@ -28,7 +28,7 @@
     {% if batch.cancelled_at %}
         <div class="flex gap-2 items-center">
             <div class="relative">
-                {% include "components/svgs/production/_progress_timeline_dot.svg" %}
+                {% include "components/svgs/production/_progress_timeline_dot.html" %}
                 <div class="absolute left-1/2 bottom-2 h-5 w-[1.5px] {% if batch.status == batch.Status.COMPLETE %} bg-green-500 {% elif batch.status == batch.Status.IN_PROGRESS %}bg-blue-500{% elif batch.status == batch.Status.PENDING %}bg-yellow-700 {% else %} bg-red-500 {% endif %}">
                 </div>
             </div>
