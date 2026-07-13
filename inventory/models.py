@@ -123,6 +123,16 @@ class IngredientPurchase(models.Model):
     def get_stock_difference(self):
         return self.qty_purchased - self.qty_remaining
 
+    @property
+    def total_adjustments(self):
+        return self.adjustments.aggregate(total=Sum("qty_remaining"))[
+            "total"
+        ] or Decimal("0")
+
+    @property
+    def get_total_stocks(self):
+        return self.qty_remaining + self.total_adjustments
+
     def save(self, *args, **kwargs):
         """
         Initialize qty_remaining to the purchased quantity when creating a new
@@ -137,3 +147,10 @@ class IngredientPurchase(models.Model):
             self.qty_remaining = self.qty_purchased
 
         super().save(*args, **kwargs)
+
+
+class PurchaseAdjustment(models.Model):
+    purchase = models.ForeignKey(
+        IngredientPurchase, on_delete=models.CASCADE, related_name="adjustments"
+    )
+    qty_adjustment = models.DecimalField(max_digits=10, decimal_places=2)
