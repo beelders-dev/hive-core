@@ -124,14 +124,22 @@ class IngredientPurchase(models.Model):
         return self.qty_purchased - self.qty_remaining
 
     @property
-    def total_adjustments(self):
-        return self.adjustments.aggregate(total=Sum("qty_remaining"))[
+    def total_stock_adjustments(self):
+        return self.adjustments.aggregate(total=Sum("qty_adjustment"))[
             "total"
         ] or Decimal("0")
 
     @property
-    def get_total_stocks(self):
-        return self.qty_remaining + self.total_adjustments
+    def total_adjustment_value(self):
+        return self.total_stock_adjustments * self.unit_cost
+
+    @property
+    def current_inventory_value(self):
+        return self.total_cost + self.total_adjustment_value
+
+    @property
+    def get_total_stocks_plus_adjustments(self):
+        return self.qty_remaining + self.total_stock_adjustments
 
     def save(self, *args, **kwargs):
         """
@@ -153,4 +161,15 @@ class PurchaseAdjustment(models.Model):
     purchase = models.ForeignKey(
         IngredientPurchase, on_delete=models.CASCADE, related_name="adjustments"
     )
-    qty_adjustment = models.DecimalField(max_digits=10, decimal_places=2)
+    qty_adjustment = models.DecimalField(
+        max_digits=10,
+        decimal_places=2,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    note = models.CharField(
+        max_length=500,
+    )
+
+    @property
+    def adjustment_value(self):
+        return self.qty_adjustment * self.purchase.unit_cost

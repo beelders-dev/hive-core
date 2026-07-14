@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
+from django.core.exceptions import ValidationError
 
 from django.views.generic import View
 from django.views.generic import (
@@ -14,8 +15,8 @@ from django.views.generic import (
 )
 from django.urls import reverse_lazy
 
-from .models import Ingredient, IngredientPurchase
-from .forms import IngredientForm, IngredientPurchaseForm
+from .models import Ingredient, IngredientPurchase, PurchaseAdjustment
+from .forms import IngredientForm, IngredientPurchaseForm, PurchaseAdjustmentForm
 
 
 class IngredientListView(LoginRequiredMixin, ListView):
@@ -206,3 +207,59 @@ class PurchaseUpdateView(LoginRequiredMixin, UpdateView):
             return response
 
         return HttpResponseRedirect(self.get_success_url())
+
+
+class PurchaseAdjustmentListView(LoginRequiredMixin, View):
+
+    template_name = "inventory/purchase/partials/_adjustment_list.html"
+
+    def get(self, request, pk):
+
+        purchase = get_object_or_404(IngredientPurchase, pk=pk)
+
+        adjustments = purchase.adjustments.all()
+
+        return render(
+            request,
+            self.template_name,
+            {"adjustment_list": adjustments},
+        )
+
+
+class PurchaseAdjustmentCreateView(LoginRequiredMixin, CreateView):
+    model = PurchaseAdjustment
+    template_name = "inventory/purchase/partials/_adjustment_create_modal.html"
+    form_class = PurchaseAdjustmentForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["purchase"] = get_object_or_404(
+            IngredientPurchase, pk=self.kwargs["pk"]
+        )
+
+        return context
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        purchase = get_object_or_404(
+            IngredientPurchase,
+            pk=self.kwargs["pk"],
+        )
+
+        new_qty = self.object.qty_adjustment + purchase.total_stock_adjustments
+
+        if new_qty < 0:
+            form.add_error("qty_adjustment", "Stock quantity cannot be negative.")
+            return self.form_invalid(form)
+
+        self.object.purchase = purchase
+        self.object.save()
+
+        return render(
+            self.request,
+            "inventory/purchase/partials/_adjustment_create_oob.html",
+            {
+                "adjustment_list": self.object.purchase.adjustments.all(),
+            },
+        )

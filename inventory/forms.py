@@ -1,5 +1,5 @@
 from django import forms
-from .models import Ingredient, IngredientPurchase
+from .models import Ingredient, IngredientPurchase, PurchaseAdjustment
 
 
 class IngredientForm(forms.ModelForm):
@@ -103,4 +103,33 @@ class IngredientPurchaseForm(forms.ModelForm):
 
         help_texts = {
             "exp_date": "Optional",
+        }
+
+
+class PurchaseAdjustmentForm(forms.ModelForm):
+    class Meta:
+        model = PurchaseAdjustment
+        fields = ["qty_adjustment", "note"]
+        widgets = {
+            "qty_adjustment": forms.NumberInput(
+                attrs={
+                    "class": "w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500",
+                    "placeholder": "e.g. 5 or -2",
+                    "step": "0.1",
+                }
+            ),
+            "note": forms.Textarea(
+                attrs={
+                    "class": "w-full rounded-lg border border-slate-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500",
+                    "rows": 3,
+                    "placeholder": "Reason for this adjustment...",
+                }
+            ),
+        }
+        labels = {
+            "qty_adjustment": "Quantity Adjustment",
+            "note": "Reason",
+        }
+        help_texts = {
+            "qty_adjustment": "Use a positive number to add stock and a negative number to remove stock.",
         }

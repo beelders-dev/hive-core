@@ -10,6 +10,8 @@ from .views import (
     PurchaseCreateView,
     PurchaseDetailView,
     PurchaseUpdateView,
+    PurchaseAdjustmentListView,
+    PurchaseAdjustmentCreateView,
 )
 
 app_name = "inventory"
@@ -56,8 +58,18 @@ urlpatterns = [
         name="purchase",
     ),
     path(
-        "purchase/<uuid:pk>/edit",
+        "purchase/<uuid:pk>/edit/",
         PurchaseUpdateView.as_view(),
         name="purchase_edit",
+    ),
+    path(
+        "purchase/<uuid:pk>/adjustments/",
+        PurchaseAdjustmentListView.as_view(),
+        name="adjustment_list",
+    ),
+    path(
+        "purchase/<uuid:pk>/adjustments-create/",
+        PurchaseAdjustmentCreateView.as_view(),
+        name="adjustment_create",
     ),
 ]
