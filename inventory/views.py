@@ -66,6 +66,7 @@ class IngredientCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         context["action_url"] = reverse("inventory:ingredient_create")
 
         return context
@@ -89,6 +90,7 @@ class IngredientUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         context["action_url"] = reverse(
             "inventory:ingredient_update", kwargs={"pk": self.kwargs["pk"]}
         )
@@ -144,7 +146,10 @@ class PurchaseCreateView(LoginRequiredMixin, View):
             return render(
                 request,
                 self.template_name,
-                {"form": form, "ingredient": ingredient},
+                {
+                    "form": form,
+                    "ingredient": ingredient,
+                },
                 status=400,
             )
 
@@ -179,6 +184,7 @@ class PurchaseCreateView(LoginRequiredMixin, View):
                     "inventory:purchase_create",
                     kwargs={"pk": pk},
                 ),
+                "action_type": "create",
             },
         )
 

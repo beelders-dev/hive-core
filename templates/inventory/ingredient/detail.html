@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
-    <div class="mx-auto my-12 max-w-6xl px-4 font-sans">
+    <div class="mx-auto my-12 max-w-7xl px-4 font-sans">
         <!-- Header -->
         <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
@@ -11,53 +11,43 @@
                 {% include "components/_page_header.html" with page_title=ingredient.name %}
             </div>
             <div class="flex items-center gap-3">
+                <button hx-get="{% url 'inventory:purchase_create' ingredient.pk %}"
+                        hx-target="#modal-root"
+                        class="inline-flex items-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700">
+                    + Add Stock
+                </button>
                 <button hx-get="{% url 'inventory:ingredient_update' ingredient.pk %}"
                         hx-target="#modal-root"
-                        class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700">
+                        class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
                     Edit Ingredient
                 </button>
                 <a href="{% url 'inventory:ingredient_delete' ingredient.pk %}"
-                   class="rounded-lg border border-rose-200 bg-white px-4 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-50">
+                   class="rounded-lg border border-rose-200 bg-white px-4 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-50">
                     Delete
                 </a>
             </div>
         </div>
-        <!-- Summary -->
+        <!-- Summary Cards -->
         <div id="ingredient-stats"
              class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
             {% include "inventory/ingredient/partials/_stat_cards.html" %}
         </div>
-        <!-- Main Layout -->
-        <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-            <!-- LEFT COLUMN -->
-            <div class="space-y-6 lg:col-span-2">
-                <!-- Ingredient Summary -->
-                <div id="ingredient-summary" hx-swap-"true">{% include "inventory/ingredient/partials/_summary.html" %}</div>
-                <!-- Stock History -->
-                <div class="card">
-                    <div class="border-b border-slate-200 p-5">
-                        <h2 class="text-base font-semibold text-slate-900">Stock History</h2>
-                        <p class="mt-1 text-sm text-slate-500">All stock entries recorded for this ingredient.</p>
-                    </div>
-                    <div id="ingredient-purchase-list"
-                         class="p-5"
-                         hx-get="{% url 'inventory:purchase_list' ingredient.pk %}"
-                         hx-trigger="load"></div>
+        <!-- Main Content -->
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-5">
+            <!-- Ingredient Summary -->
+            <div id="ingredient-summary" class="lg:col-span-2">{% include "inventory/ingredient/partials/_summary.html" %}</div>
+            <!-- Stock History -->
+            <div class="card lg:col-span-3">
+                <div class="border-b border-slate-200 p-5">
+                    <h2 class="text-base font-semibold text-slate-900">Stock History</h2>
+                    <p class="mt-1 text-sm text-slate-500">All stock entries recorded for this ingredient.</p>
                 </div>
+                <div id="ingredient-purchase-list"
+                     class="p-5"
+                     hx-get="{% url 'inventory:purchase_list' ingredient.pk %}"
+                     hx-trigger="load"
+                     hx-swap="innerHTML"></div>
             </div>
-            <!-- RIGHT COLUMN -->
-            <aside class="lg:col-span-1">
-                <div class="card sticky top-6">
-                    <div class="border-b border-slate-200 p-5">
-                        <h2 class="text-base font-semibold text-slate-900">Add Stock</h2>
-                        <p class="mt-1 text-sm text-slate-500">Record a new purchase for this ingredient.</p>
-                    </div>
-                    <div id="ingredient-purchase-form"
-                         class="p-5"
-                         hx-get="{% url 'inventory:purchase_create' ingredient.pk %}"
-                         hx-trigger="load"></div>
-                </div>
-            </aside>
         </div>
     </div>
 {% endblock content %}
