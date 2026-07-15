@@ -1,59 +1,60 @@
-{% extends "base.html" %}
-{% block content %}
-    <div class="mx-auto my-12 max-w-md px-4 font-sans">
-        <div class="overflow-hidden rounded-xl border border-slate-300 bg-white p-6 shadow-sm sm:p-8">
-            <div class="mb-6">
-                <h2 class="text-xl font-bold text-slate-800">
-                    {% if object %}
-                        Edit {{ object.name }}
-                    {% else %}
-                        Add New Ingredient
-                    {% endif %}
-                </h2>
-                <p class="mt-1 text-sm text-slate-500">
-                    {% if object %}
-                        Update this ingredient's basic details.
-                    {% else %}
-                        Create the ingredient first. You can add stock later by recording a purchase.
-                    {% endif %}
-                </p>
-            </div>
-            <form action="" method="post" class="space-y-5">
-                {% csrf_token %}
-                <div>
-                    <label for="{{ form.name.id_for_label }}"
-                           class="mb-1 block text-sm font-medium text-slate-700">Name</label>
-                    {{ form.name }}
-                    <span class="text-sm text-red-500">{{ form.name.errors }}</span>
-                </div>
-                <div>
-                    <label for="{{ form.unit.id_for_label }}"
-                           class="mb-1 block text-sm font-medium text-slate-700">Base Unit</label>
-                    {{ form.unit }}
-                    <span class="text-sm text-red-500">{{ form.unit.errors }}</span>
-                </div>
-                <div>
-                    <label for="{{ form.low_stock_threshold.id_for_label }}"
-                           class="mb-1 block text-sm font-medium text-slate-700">Low Stock Alert</label>
-                    {{ form.low_stock_threshold }}
-                    <p class="mt-1 text-xs text-slate-500">Choose when the system should warn you that this ingredient is running low.</p>
-                    <span class="text-sm text-red-500">{{ form.low_stock_threshold.errors }}</span>
-                </div>
-                <div class="flex items-center justify-end gap-3 border-t border-slate-100 pt-4">
-                    <a href="{% url 'inventory:ingredient_list' %}"
-                       class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 transition-all duration-150 hover:bg-slate-50 hover:text-slate-800">
-                        Cancel
-                    </a>
-                    <button type="submit"
-                            class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white shadow-sm transition-colors duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                        {% if object %}
-                            Save Changes
-                        {% else %}
-                            Add Ingredient
-                        {% endif %}
-                    </button>
-                </div>
-            </form>
+{% extends "components/modal.html" %}
+{% block modal_content %}
+    <div class="overflow-hidden  bg-white p-6 shadow-sm sm:p-8">
+        <div class="mb-6">
+            <h2 class="text-xl font-bold text-slate-800">
+                {% if object %}
+                    Edit {{ object.name }}
+                {% else %}
+                    Add New Ingredient
+                {% endif %}
+            </h2>
+            <p class="mt-1 text-sm text-slate-500">
+                {% if object %}
+                    Update this ingredient's basic details.
+                {% else %}
+                    Create the ingredient first. You can add stock later by recording a purchase.
+                {% endif %}
+            </p>
         </div>
+        <form method="post"
+              class="space-y-5"
+              hx-post="{% url 'inventory:ingredient_create' %}"
+              hx-target="#modal-root">
+            {% csrf_token %}
+            <div>
+                <label for="{{ form.name.id_for_label }}"
+                       class="mb-1 block text-sm font-medium text-slate-700">Name</label>
+                {{ form.name }}
+                <span class="text-sm text-red-500">{{ form.name.errors }}</span>
+            </div>
+            <div>
+                <label for="{{ form.unit.id_for_label }}"
+                       class="mb-1 block text-sm font-medium text-slate-700">Base Unit</label>
+                {{ form.unit }}
+                <span class="text-sm text-red-500">{{ form.unit.errors }}</span>
+            </div>
+            <div>
+                <label for="{{ form.low_stock_threshold.id_for_label }}"
+                       class="mb-1 block text-sm font-medium text-slate-700">Low Stock Alert</label>
+                {{ form.low_stock_threshold }}
+                <p class="mt-1 text-xs text-slate-500">Choose when the system should warn you that this ingredient is running low.</p>
+                <span class="text-sm text-red-500">{{ form.low_stock_threshold.errors }}</span>
+            </div>
+            <div class="flex items-center justify-end gap-3  border-slate-100 pt-4">
+                <a href="{% url 'inventory:ingredient_list' %}"
+                   class="rounded-lg border border-slate-200 px-4 py-2 text-sm font-medium text-slate-600 transition-all duration-150 hover:bg-slate-50 hover:text-slate-800">
+                    Cancel
+                </a>
+                <button type="submit"
+                        class="rounded-lg bg-blue-600 px-5 py-2 text-sm font-medium text-white shadow-sm transition-colors duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                    {% if object %}
+                        Save Changes
+                    {% else %}
+                        Add Ingredient
+                    {% endif %}
+                </button>
+            </div>
+        </form>
     </div>
-{% endblock content %}
+{% endblock modal_content %}

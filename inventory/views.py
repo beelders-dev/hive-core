@@ -57,7 +57,17 @@ class IngredientCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super().form_valid(form)
+        form.save()
+        return render(
+            self.request,
+            "inventory/ingredient/partials/_form_success_oob.html",
+            {"ingredient_list": Ingredient.objects.filter(user=self.request.user)},
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        return context
 
 
 class IngredientUpdateView(LoginRequiredMixin, UpdateView):
