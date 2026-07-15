@@ -11,10 +11,11 @@
                 {% include "components/_page_header.html" with page_title=ingredient.name %}
             </div>
             <div class="flex items-center gap-3">
-                <a href="{% url 'inventory:ingredient_update' ingredient.pk %}"
-                   class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700">
+                <button hx-get="{% url 'inventory:ingredient_update' ingredient.pk %}"
+                        hx-target="#modal-root"
+                        class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-700">
                     Edit Ingredient
-                </a>
+                </button>
                 <a href="{% url 'inventory:ingredient_delete' ingredient.pk %}"
                    class="rounded-lg border border-rose-200 bg-white px-4 py-2 text-sm font-semibold text-rose-600 hover:bg-rose-50">
                     Delete
@@ -31,7 +32,7 @@
             <!-- LEFT COLUMN -->
             <div class="space-y-6 lg:col-span-2">
                 <!-- Ingredient Summary -->
-                {% include "inventory/ingredient/partials/_summary.html" %}
+                <div id="ingredient-summary" hx-swap-"true">{% include "inventory/ingredient/partials/_summary.html" %}</div>
                 <!-- Stock History -->
                 <div class="card">
                     <div class="border-b border-slate-200 p-5">

@@ -19,7 +19,7 @@
         </div>
         <form method="post"
               class="space-y-5"
-              hx-post="{% url 'inventory:ingredient_create' %}"
+              hx-post="{{ action_url }}"
               hx-target="#modal-root">
             {% csrf_token %}
             <div>

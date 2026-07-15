@@ -60,12 +60,13 @@ class IngredientCreateView(LoginRequiredMixin, CreateView):
         form.save()
         return render(
             self.request,
-            "inventory/ingredient/partials/_form_success_oob.html",
+            "inventory/ingredient/partials/_create_success_oob.html",
             {"ingredient_list": Ingredient.objects.filter(user=self.request.user)},
         )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context["action_url"] = reverse("inventory:ingredient_create")
 
         return context
 
@@ -81,7 +82,18 @@ class IngredientUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super().form_valid(form)
+        form.save()
+        return render(
+            self.request, "inventory/ingredient/partials/_edit_success_oob.html"
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["action_url"] = reverse(
+            "inventory:ingredient_update", kwargs={"pk": self.kwargs["pk"]}
+        )
+
+        return context
 
 
 class IngredientDeleteView(LoginRequiredMixin, DeleteView):
