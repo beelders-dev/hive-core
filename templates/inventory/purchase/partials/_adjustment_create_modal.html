@@ -5,7 +5,7 @@
 {% block modal_content %}
     <form method="post"
           hx-post="{% url 'inventory:adjustment_create' purchase.pk %}"
-          hx>
+          hx-target="#modal-root">
         {% csrf_token %}
         <div class="space-y-6">
             <div>

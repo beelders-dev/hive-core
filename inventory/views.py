@@ -269,9 +269,12 @@ class PurchaseAdjustmentCreateView(LoginRequiredMixin, CreateView):
             pk=self.kwargs["pk"],
         )
 
-        new_qty = self.object.qty_adjustment + purchase.total_stock_adjustments
+        new_qty = (
+            self.object.qty_adjustment + purchase.get_total_stocks_plus_adjustments
+        )
 
         if new_qty < 0:
+
             form.add_error("qty_adjustment", "Stock quantity cannot be negative.")
             return self.form_invalid(form)
 
