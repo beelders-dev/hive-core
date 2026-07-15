@@ -35,7 +35,7 @@ urlpatterns = [
     path(
         "ingredients/<uuid:pk>/delete/",
         IngredientDeleteView.as_view(),
-        name="ingredient_delete",
+        name="delete",
     ),
     path(
         "ingredients/<uuid:pk>/edit/",

@@ -20,6 +20,10 @@ class Ingredient(models.Model):
     name = models.CharField(
         max_length=100,
     )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+    modified_at = models.DateTimeField(auto_now=True)
 
     UNIT_CHOICES = {"g": "Grams", "ml": "Mililiters"}
     unit = models.CharField(max_length=2, choices=UNIT_CHOICES, default="g")
@@ -28,6 +32,9 @@ class Ingredient(models.Model):
         max_digits=10,
         decimal_places=2,
         default=Decimal("0"),
+        validators=[
+            MinValueValidator(Decimal("0"), message="Value cannot be negative.")
+        ],
     )
 
     def __str__(self):

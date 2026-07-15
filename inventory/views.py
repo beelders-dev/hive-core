@@ -76,7 +76,6 @@ class IngredientUpdateView(LoginRequiredMixin, UpdateView):
     model = Ingredient
     template_name = "inventory/ingredient/form.html"
     form_class = IngredientForm
-    success_url = reverse_lazy("inventory:ingredient_list")
 
     def get_queryset(self):
         return Ingredient.objects.filter(user=self.request.user)
@@ -105,6 +104,12 @@ class IngredientDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_queryset(self):
         return Ingredient.objects.filter(user=self.request.user)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["ingredient"] = self.get_object()
+
+        return context
 
 
 class IngredientDetailView(LoginRequiredMixin, DetailView):
