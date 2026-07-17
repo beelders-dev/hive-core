@@ -17,6 +17,7 @@ from django.urls import reverse_lazy
 
 from .models import Ingredient, IngredientPurchase, PurchaseAdjustment
 from .forms import IngredientForm, IngredientPurchaseForm, PurchaseAdjustmentForm
+from .services import PurchaseAdjustmentService
 
 
 class IngredientListView(LoginRequiredMixin, ListView):
@@ -224,23 +225,6 @@ class PurchaseUpdateView(LoginRequiredMixin, UpdateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-# class PurchaseAdjustmentListView(LoginRequiredMixin, View):
-
-#     template_name = "inventory/purchase/partials/_adjustment_list.html"
-
-#     def get(self, request, pk):
-
-#         purchase = get_object_or_404(IngredientPurchase, pk=pk)
-
-#         adjustments = purchase.adjustments.all()
-
-#         return render(
-#             request,
-#             self.template_name,
-#             {"adjustment_list": adjustments},
-#         )
-
-
 class PurchaseAdjustmentListView(LoginRequiredMixin, ListView):
     model = PurchaseAdjustment
     template_name = "inventory/purchase/partials/_adjustment_list.html"
@@ -268,23 +252,25 @@ class PurchaseAdjustmentCreateView(LoginRequiredMixin, CreateView):
             pk=self.kwargs["pk"],
         )
 
-        new_qty = (
-            self.object.qty_adjustment + purchase.get_total_stocks_plus_adjustments
-        )
+        qty_adjustment = form.cleaned_data["qty_adjustment"]
+        note = form.cleaned_data["note"]
 
-        if new_qty < 0:
+        try:
+            PurchaseAdjustmentService.create(
+                purchase=purchase,
+                qty_adjustment=qty_adjustment,
+                note=note,
+            )
 
-            form.add_error("qty_adjustment", "Stock quantity cannot be negative.")
+        except ValidationError as e:
+            form.add_error("qty_adjustment", str(e.message))
             return self.form_invalid(form)
-
-        self.object.purchase = purchase
-        self.object.save()
 
         return render(
             self.request,
             "inventory/purchase/partials/_adjustment_create_oob.html",
             {
-                "adjustment_list": self.object.purchase.adjustments.all(),
+                "adjustment_list": purchase.adjustments.all(),
                 "purchase": purchase,
             },
         )

@@ -121,6 +121,9 @@ class IngredientPurchase(models.Model):
         ],
     )
 
+    def __str__(self):
+        return self.short_id
+
     @property
     def short_id(self):
         return str(self.id)[:8].upper()
@@ -151,7 +154,7 @@ class IngredientPurchase(models.Model):
         return self.total_cost + self.total_adjustment_value
 
     @property
-    def get_total_stocks_plus_adjustments(self):
+    def total_stocks_plus_adjustments(self):
         return self.qty_remaining + self.total_stock_adjustments
 
     def save(self, *args, **kwargs):

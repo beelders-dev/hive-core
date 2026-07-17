@@ -3,7 +3,7 @@
     <div>
         <p class="text-sm text-slate-500">Remaining</p>
         <p class="mt-1 text-xl font-semibold text-slate-900">
-            {{ purchase.get_total_stocks_plus_adjustments|floatformat:2|intcomma }}
+            {{ purchase.total_stocks_plus_adjustments|floatformat:2|intcomma }}
             {{ purchase.ingredient.unit }}
         </p>
     </div>

@@ -52,33 +52,19 @@
                                     {{ purchase.exp_date|date:"M d, Y"|default:"—" }}
                                 </dd>
                             </div>
-                            <div class="grid grid-cols-3 py-4">
-                                <dt class="font-medium text-slate-500">Quantity Purchased</dt>
-                                <dd class="col-span-2 text-slate-900">
-                                    {{ purchase.qty_purchased|floatformat:2|intcomma }}
-                                    {{ purchase.ingredient.unit }}
-                                </dd>
-                            </div>
-                            <div class="grid grid-cols-3 py-4">
-                                <dt class="font-medium text-slate-500">Quantity Remaining</dt>
-                                <dd class="col-span-2 text-slate-900">
-                                    {{ purchase.get_total_stocks_plus_adjustments|floatformat:2|intcomma }}
-                                    {{ purchase.ingredient.unit }}
-                                </dd>
-                            </div>
                         </dl>
                         <h3 class="mt-10 mb-6 text-sm font-semibold uppercase tracking-wide text-slate-500">Metadata</h3>
                         <dl class="divide-y divide-slate-100">
                             <div class="grid grid-cols-3 py-4">
                                 <dt class="font-medium text-slate-500">Created At</dt>
                                 <dd class="col-span-2 text-slate-900">
-                                    {{ purchase.created_at }}
+                                    {{ purchase.created_at|date:"F j, Y, g:i A" }}
                                 </dd>
                             </div>
                             <div class="grid grid-cols-3 py-4">
                                 <dt class="font-medium text-slate-500">Last Modified</dt>
                                 <dd class="col-span-2 text-slate-900">
-                                    {{ purchase.modified_at }}
+                                    {{ purchase.modified_at|date:"F j, Y, g:i A" }}
                                 </dd>
                             </div>
                         </dl>
