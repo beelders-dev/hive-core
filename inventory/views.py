@@ -121,19 +121,10 @@ class IngredientDetailView(LoginRequiredMixin, DetailView):
         return Ingredient.objects.filter(user=self.request.user)
 
 
-class PurchaseListView(LoginRequiredMixin, View):
+class PurchaseListView(LoginRequiredMixin, ListView):
+    model = IngredientPurchase
     template_name = "inventory/purchase/partials/_purchase_list.html"
-
-    def get(self, request, pk):
-        ingredient = get_object_or_404(
-            Ingredient,
-            pk=pk,
-            user=request.user,
-        )
-
-        purchases = ingredient.purchases.all()
-
-        return render(request, self.template_name, {"purchases": purchases})
+    context_object_name = "purchases"
 
 
 class PurchaseCreateView(LoginRequiredMixin, View):
