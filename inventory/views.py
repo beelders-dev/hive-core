@@ -143,7 +143,7 @@ class PurchaseCreateView(LoginRequiredMixin, CreateView):
         return context
 
     def form_invalid(self, form):
-        # response = super().form_invalid(form)
+
         return render(
             self.request,
             self.template_name,
@@ -225,21 +225,27 @@ class PurchaseUpdateView(LoginRequiredMixin, UpdateView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class PurchaseAdjustmentListView(LoginRequiredMixin, View):
+# class PurchaseAdjustmentListView(LoginRequiredMixin, View):
 
+#     template_name = "inventory/purchase/partials/_adjustment_list.html"
+
+#     def get(self, request, pk):
+
+#         purchase = get_object_or_404(IngredientPurchase, pk=pk)
+
+#         adjustments = purchase.adjustments.all()
+
+#         return render(
+#             request,
+#             self.template_name,
+#             {"adjustment_list": adjustments},
+#         )
+
+
+class PurchaseAdjustmentListView(LoginRequiredMixin, ListView):
+    model = PurchaseAdjustment
     template_name = "inventory/purchase/partials/_adjustment_list.html"
-
-    def get(self, request, pk):
-
-        purchase = get_object_or_404(IngredientPurchase, pk=pk)
-
-        adjustments = purchase.adjustments.all()
-
-        return render(
-            request,
-            self.template_name,
-            {"adjustment_list": adjustments},
-        )
+    context_object_name = "adjustment_list"
 
 
 class PurchaseAdjustmentCreateView(LoginRequiredMixin, CreateView):
