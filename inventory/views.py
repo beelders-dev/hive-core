@@ -129,7 +129,9 @@ class PurchaseListView(LoginRequiredMixin, ListView):
 class PurchaseCreateView(LoginRequiredMixin, CreateView):
     model = IngredientPurchase
     template_name = "inventory/purchase/partials/_purchase_form.html"
-    success_template_name = "inventory/purchase/partials/_purchase_create_success.html"
+    success_template_name = (
+        "inventory/purchase/partials/_purchase_create_success_oob.html"
+    )
     form_class = IngredientPurchaseForm
 
     def get_context_data(self, **kwargs):
@@ -229,7 +231,7 @@ class PurchaseAdjustmentListView(LoginRequiredMixin, ListView):
 
 class PurchaseAdjustmentCreateView(LoginRequiredMixin, CreateView):
     model = PurchaseAdjustment
-    template_name = "inventory/purchase/partials/_adjustment_create_modal.html"
+    template_name = "inventory/purchase/partials/_adjustment_form.html"
     form_class = PurchaseAdjustmentForm
 
     def get_context_data(self, **kwargs):
@@ -264,7 +266,7 @@ class PurchaseAdjustmentCreateView(LoginRequiredMixin, CreateView):
 
         return render(
             self.request,
-            "inventory/purchase/partials/_adjustment_create_oob.html",
+            "inventory/purchase/partials/_adjustment_create_success_oob.html",
             {
                 "adjustment_list": purchase.adjustments.all(),
                 "purchase": purchase,
