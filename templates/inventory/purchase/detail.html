@@ -10,7 +10,7 @@
                     <button class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
                             hx-get="{% url 'inventory:purchase_edit' purchase.pk %}"
                             hx-target="#modal-root"
-                            hx-swap="innerHTML">Edit Purchase</button>
+                            hx-swap="innerHTML">Edit Purchase Stock</button>
                     <button class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700"
                             hx-get="{% url 'inventory:adjustment_create' purchase.pk %}"
                             hx-target="#modal-root"

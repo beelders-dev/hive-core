@@ -33,7 +33,12 @@
         {% endif %}
         <button type="submit"
                 class="w-full rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700">
-            Add Stock
+            {% if action_type == "create" %}
+                Add
+            {% else %}
+                Edit
+            {% endif %}
+            Purchase Stock
         </button>
     </form>
 {% endblock modal_content %}

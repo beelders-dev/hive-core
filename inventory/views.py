@@ -180,14 +180,14 @@ class PurchaseCreateView(LoginRequiredMixin, CreateView):
 class PurchaseDetailView(LoginRequiredMixin, DetailView):
     model = IngredientPurchase
     context_object_name = "purchase"
-    template_name = "inventory/purchase/purchase_detail.html"
+    template_name = "inventory/purchase/detail.html"
 
 
 class PurchaseUpdateView(LoginRequiredMixin, UpdateView):
     model = IngredientPurchase
     form_class = IngredientPurchaseForm
 
-    template_name = "inventory/purchase/partials/_edit_purchase_modal.html"
+    template_name = "inventory/purchase/partials/_purchase_form.html"
 
     def get_success_url(self):
         return reverse(
