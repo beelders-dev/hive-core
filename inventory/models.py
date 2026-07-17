@@ -33,7 +33,9 @@ class Ingredient(models.Model):
         decimal_places=2,
         default=Decimal("0"),
         validators=[
-            MinValueValidator(Decimal("0"), message="Value cannot be negative.")
+            MinValueValidator(
+                Decimal("0"), message="Stock threshold cannot be negative."
+            )
         ],
     )
 
@@ -99,7 +101,9 @@ class IngredientPurchase(models.Model):
         max_digits=10,
         decimal_places=2,
         validators=[
-            MinValueValidator(Decimal("0.01"), message=("Must be at least 0.01.")),
+            MinValueValidator(
+                Decimal("0.01"), message=("Purchased quantity must be at least 0.01.")
+            ),
         ],
     )
     qty_remaining = models.DecimalField(
@@ -111,7 +115,9 @@ class IngredientPurchase(models.Model):
         max_digits=10,
         decimal_places=2,
         validators=[
-            MinValueValidator(Decimal("0.01"), message=("Must be at least 0.01."))
+            MinValueValidator(
+                Decimal("0.01"), message=("Total cost must be at least 0.01.")
+            )
         ],
     )
 

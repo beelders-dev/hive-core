@@ -52,7 +52,7 @@
     </div>
     <!-- Footer -->
     <form method="post"
-          hx-post="{% url 'inventory:delete' ingredient.pk %}"
+          action="{% url 'inventory:delete' ingredient.pk %}"
           hx-target="#modal-root"
           class="flex justify-end gap-3 border-t border-slate-200 bg-slate-50 p-4">
         {% csrf_token %}
