@@ -1,11 +1,9 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 
-from django.views.generic import View
 from django.views.generic import (
     ListView,
     CreateView,
@@ -52,7 +50,7 @@ class IngredientListView(LoginRequiredMixin, ListView):
 
 class IngredientCreateView(LoginRequiredMixin, CreateView):
     model = Ingredient
-    template_name = "inventory/ingredient/form.html"
+    template_name = "inventory/ingredient/partials/_form.html"
     form_class = IngredientForm
     success_url = reverse_lazy("inventory:ingredient_list")
 
@@ -75,7 +73,7 @@ class IngredientCreateView(LoginRequiredMixin, CreateView):
 
 class IngredientUpdateView(LoginRequiredMixin, UpdateView):
     model = Ingredient
-    template_name = "inventory/ingredient/form.html"
+    template_name = "inventory/ingredient/partials/_form.html"
     form_class = IngredientForm
 
     def get_queryset(self):
@@ -210,8 +208,6 @@ class PurchaseUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-
-        # Additional logic maybe put here in the future :-)
 
         self.object.save()
 

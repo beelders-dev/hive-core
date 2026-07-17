@@ -11,9 +11,6 @@ class PurchaseAdjustmentService:
     @transaction.atomic
     def create(purchase, qty_adjustment, note):
         new_qty = qty_adjustment + purchase.total_stocks_plus_adjustments
-        print(purchase)
-        print(qty_adjustment)
-        print(note)
         if new_qty < 0:
             raise ValidationError("Stock quantity cannot be negative.")
 
@@ -22,5 +19,3 @@ class PurchaseAdjustmentService:
             qty_adjustment=qty_adjustment,
             note=note,
         )
-
-        return purchase
