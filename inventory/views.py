@@ -179,8 +179,7 @@ class PurchaseCreateView(LoginRequiredMixin, CreateView):
 
 class PurchaseDetailView(LoginRequiredMixin, DetailView):
     model = IngredientPurchase
-    context_object_name = "ingredient_purchase"
-
+    context_object_name = "purchase"
     template_name = "inventory/purchase/purchase_detail.html"
 
 
@@ -286,5 +285,6 @@ class PurchaseAdjustmentCreateView(LoginRequiredMixin, CreateView):
             "inventory/purchase/partials/_adjustment_create_oob.html",
             {
                 "adjustment_list": self.object.purchase.adjustments.all(),
+                "purchase": purchase,
             },
         )

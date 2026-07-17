@@ -8,11 +8,11 @@
                 {% include "components/_page_header.html" with page_title="Purchase Detail" page_description="Review this ingredient purchase record." %}
                 <div>
                     <button class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                            hx-get="{% url 'inventory:purchase_edit' ingredient_purchase.pk %}"
+                            hx-get="{% url 'inventory:purchase_edit' purchase.pk %}"
                             hx-target="#modal-root"
                             hx-swap="innerHTML">Edit Purchase</button>
                     <button class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700"
-                            hx-get="{% url 'inventory:adjustment_create' ingredient_purchase.pk %}"
+                            hx-get="{% url 'inventory:adjustment_create' purchase.pk %}"
                             hx-target="#modal-root"
                             hx-swap="innerHTML">Adjust Stock</button>
                 </div>
@@ -24,37 +24,12 @@
                     <div class="border-b border-slate-200 bg-slate-50 px-8 py-6">
                         <div class="flex items-start justify-between">
                             <div>
-                                {% include "components/card/_header.html" with title=ingredient_purchase.ingredient.name subtitle="Purchase ID: "|add:ingredient_purchase.short_id %}
+                                {% include "components/card/_header.html" with title=purchase.ingredient.name subtitle="Purchase ID: "|add:purchase.short_id %}
                             </div>
                         </div>
                     </div>
                     <!-- Summary -->
-                    <div class="grid grid-cols-4 gap-4 border-b border-slate-200 bg-slate-50 p-8">
-                        <div>
-                            <p class="text-sm text-slate-500">Remaining</p>
-                            <p class="mt-1 text-xl font-semibold text-slate-900">
-                                {{ ingredient_purchase.get_total_stocks_plus_adjustments|floatformat:2|intcomma }}
-                                {{ ingredient_purchase.ingredient.unit }}
-                            </p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-slate-500">Purchased</p>
-                            <p class="mt-1 text-xl font-semibold text-slate-900">
-                                {{ ingredient_purchase.qty_purchased|floatformat:2|intcomma }}
-                                {{ ingredient_purchase.ingredient.unit }}
-                            </p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-slate-500">Unit Cost</p>
-                            <p class="mt-1 text-xl font-semibold text-slate-900">₱{{ ingredient_purchase.unit_cost|floatformat:2|intcomma }}</p>
-                        </div>
-                        <div>
-                            <p class="text-sm text-slate-500">Total Cost</p>
-                            <p class="mt-1 text-xl font-semibold text-slate-900">
-                                ₱{{ ingredient_purchase.current_inventory_value|floatformat:2|intcomma }}
-                            </p>
-                        </div>
-                    </div>
+                    <div id="purchase-summary">{% include "inventory/purchase/partials/_purchase_summary.html" %}</div>
                     <!-- Details -->
                     <div class="p-8">
                         <h3 class="mb-6 text-sm font-semibold uppercase tracking-wide text-slate-500">Purchase Information</h3>
@@ -62,33 +37,33 @@
                             <div class="grid grid-cols-3 py-4">
                                 <dt class="font-medium text-slate-500">Ingredient</dt>
                                 <dd class="col-span-2 text-slate-900">
-                                    {{ ingredient_purchase.ingredient.name }}
+                                    {{ purchase.ingredient.name }}
                                 </dd>
                             </div>
                             <div class="grid grid-cols-3 py-4">
                                 <dt class="font-medium text-slate-500">Purchased At</dt>
                                 <dd class="col-span-2 text-slate-900">
-                                    {{ ingredient_purchase.purchased_at|date:"M d, Y" }}
+                                    {{ purchase.purchased_at|date:"M d, Y" }}
                                 </dd>
                             </div>
                             <div class="grid grid-cols-3 py-4">
                                 <dt class="font-medium text-slate-500">Expiration</dt>
                                 <dd class="col-span-2 text-slate-900">
-                                    {{ ingredient_purchase.exp_date|date:"M d, Y"|default:"—" }}
+                                    {{ purchase.exp_date|date:"M d, Y"|default:"—" }}
                                 </dd>
                             </div>
                             <div class="grid grid-cols-3 py-4">
                                 <dt class="font-medium text-slate-500">Quantity Purchased</dt>
                                 <dd class="col-span-2 text-slate-900">
-                                    {{ ingredient_purchase.qty_purchased|floatformat:2|intcomma }}
-                                    {{ ingredient_purchase.ingredient.unit }}
+                                    {{ purchase.qty_purchased|floatformat:2|intcomma }}
+                                    {{ purchase.ingredient.unit }}
                                 </dd>
                             </div>
                             <div class="grid grid-cols-3 py-4">
                                 <dt class="font-medium text-slate-500">Quantity Remaining</dt>
                                 <dd class="col-span-2 text-slate-900">
-                                    {{ ingredient_purchase.get_total_stocks_plus_adjustments|floatformat:2|intcomma }}
-                                    {{ ingredient_purchase.ingredient.unit }}
+                                    {{ purchase.get_total_stocks_plus_adjustments|floatformat:2|intcomma }}
+                                    {{ purchase.ingredient.unit }}
                                 </dd>
                             </div>
                         </dl>
@@ -97,13 +72,13 @@
                             <div class="grid grid-cols-3 py-4">
                                 <dt class="font-medium text-slate-500">Created At</dt>
                                 <dd class="col-span-2 text-slate-900">
-                                    {{ ingredient_purchase.created_at }}
+                                    {{ purchase.created_at }}
                                 </dd>
                             </div>
                             <div class="grid grid-cols-3 py-4">
                                 <dt class="font-medium text-slate-500">Last Modified</dt>
                                 <dd class="col-span-2 text-slate-900">
-                                    {{ ingredient_purchase.modified_at }}
+                                    {{ purchase.modified_at }}
                                 </dd>
                             </div>
                         </dl>
@@ -113,7 +88,7 @@
                 </section>
                 <!-- Adjustment List -->
                 <aside id="adjustment-list"
-                       hx-get="{% url 'inventory:adjustment_list' ingredient_purchase.pk %}"
+                       hx-get="{% url 'inventory:adjustment_list' purchase.pk %}"
                        hx-trigger="load"
                        hx-swap-oob="true">
                 </aside>
