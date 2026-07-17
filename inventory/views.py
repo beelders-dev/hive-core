@@ -127,28 +127,39 @@ class PurchaseListView(LoginRequiredMixin, ListView):
     context_object_name = "purchases"
 
 
-class PurchaseCreateView(LoginRequiredMixin, View):
-
+class PurchaseCreateView(LoginRequiredMixin, CreateView):
+    model = IngredientPurchase
     template_name = "inventory/purchase/partials/_purchase_form.html"
     success_template_name = "inventory/purchase/partials/_purchase_create_success.html"
+    form_class = IngredientPurchaseForm
 
-    def post(self, request, pk):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["action_type"] = "create"
+        context["action_url"] = reverse(
+            "inventory:purchase_create", kwargs={"pk": self.kwargs["pk"]}
+        )
 
-        ingredient = get_object_or_404(Ingredient, pk=pk, user=request.user)
+        return context
 
-        form = IngredientPurchaseForm(request.POST)
+    def form_invalid(self, form):
+        # response = super().form_invalid(form)
+        return render(
+            self.request,
+            self.template_name,
+            {
+                "form": form,
+                "ingredient": get_object_or_404(
+                    Ingredient, pk=self.kwargs.pk, user=self.request.user
+                ),
+            },
+            status=400,
+        )
 
-        if not form.is_valid():
-            return render(
-                request,
-                self.template_name,
-                {
-                    "form": form,
-                    "ingredient": ingredient,
-                },
-                status=400,
-            )
-
+    def form_valid(self, form):
+        ingredient = get_object_or_404(
+            Ingredient, pk=self.kwargs["pk"], user=self.request.user
+        )
         purchase = form.save(commit=False)
         purchase.ingredient = ingredient
         purchase.save()
@@ -156,31 +167,12 @@ class PurchaseCreateView(LoginRequiredMixin, View):
         purchases = ingredient.purchases.all().order_by("purchased_at")
 
         return render(
-            request,
+            self.request,
             self.success_template_name,
             {
                 "form": form,
                 "ingredient": ingredient,
                 "purchases": purchases,
-            },
-        )
-
-    def get(self, request, pk):
-        ingredient = get_object_or_404(Ingredient, pk=pk, user=request.user)
-
-        form = IngredientPurchaseForm()
-
-        return render(
-            request,
-            self.template_name,
-            {
-                "form": form,
-                "ingredient": ingredient,
-                "action_url": reverse(
-                    "inventory:purchase_create",
-                    kwargs={"pk": pk},
-                ),
-                "action_type": "create",
             },
         )
 
