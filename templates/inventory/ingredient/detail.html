@@ -29,16 +29,15 @@
             </div>
         </div>
         <!-- Summary Cards -->
-        <div id="ingredient-stats"
-             class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div id="ingredient-stats" class="grid grid-cols-1 gap-4 sm:grid-cols-3">
             {% include "inventory/ingredient/partials/_stat_cards.html" %}
         </div>
         <!-- Main Content -->
-        <div class="grid grid-cols-1 gap-6 lg:grid-cols-5">
+        <div class="flex">
             <!-- Ingredient Summary -->
-            <div id="ingredient-summary" class="lg:col-span-2">{% include "inventory/ingredient/partials/_summary.html" %}</div>
+            <div id="ingredient-summary" class="card">{% include "inventory/ingredient/partials/_summary.html" %}</div>
             <!-- Stock History -->
-            <div class="card lg:col-span-3">
+            <div class="card">
                 <div class="border-b border-slate-200 p-5">
                     <h2 class="text-base font-semibold text-slate-900">Stock History</h2>
                     <p class="mt-1 text-sm text-slate-500">All stock entries recorded for this ingredient.</p>

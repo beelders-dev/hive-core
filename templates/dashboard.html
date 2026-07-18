@@ -20,13 +20,14 @@
                     <!-- Quick Actions -->
                     <section>
                         <div class="grid gap-3 p-6 sm:grid-cols-2">
-                            <a href="{% url 'inventory:ingredient_create' %}"
-                               class="rounded-lg bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700">
+                            <button hx-get="{% url 'inventory:ingredient_create' %}"
+                                    hx-target="#modal-root"
+                                    class="rounded-lg bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700 ">
                                 <div class="justify-items-center space-y-2">
                                     <p>Add Ingredient</p>
                                     {% include "components/svgs/main_dashboard/_add_ingredient.svg" %}
                                 </div>
-                            </a>
+                            </button>
                             <a href="{% url 'production:recipe_create' %}"
                                class="rounded-lg bg-slate-900 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-slate-800">
                                 <div class="justify-items-center space-y-2">
@@ -34,7 +35,7 @@
                                     {% include "components/svgs/main_dashboard/_create_recipe.svg" %}
                                 </div>
                             </a>
-                            <a href="{% url 'inventory:ingredient_list' %}"
+                            <a href="{% url 'inventory:index' %}"
                                class="rounded-lg border border-slate-300 px-4 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
                                 <div class="justify-items-center space-y-2">
                                     <p>View Inventory</p>
