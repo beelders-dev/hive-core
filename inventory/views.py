@@ -31,7 +31,7 @@ class InventoryHomeView(LoginRequiredMixin, TemplateView):
 
 class IngredientListView(LoginRequiredMixin, ListView):
     model = Ingredient
-    template_name = "inventory/ingredient/partials/_ingredient_results_table.html"
+    template_name = "inventory/ingredient/partials/_results_table.html"
     context_object_name = "ingredient_list"
 
     def get_queryset(self):
@@ -116,16 +116,14 @@ class IngredientDetailView(LoginRequiredMixin, DetailView):
 
 class PurchaseListView(LoginRequiredMixin, ListView):
     model = IngredientPurchase
-    template_name = "inventory/purchase/partials/_purchase_list.html"
+    template_name = "inventory/purchase/partials/_list.html"
     context_object_name = "purchases"
 
 
 class PurchaseCreateView(LoginRequiredMixin, CreateView):
     model = IngredientPurchase
-    template_name = "inventory/purchase/partials/_purchase_form.html"
-    success_template_name = (
-        "inventory/purchase/partials/_purchase_create_success_oob.html"
-    )
+    template_name = "inventory/purchase/partials/_form.html"
+    success_template_name = "inventory/purchase/partials/_create_success_oob.html"
     form_class = IngredientPurchaseForm
 
     def get_context_data(self, **kwargs):
@@ -182,7 +180,7 @@ class PurchaseUpdateView(LoginRequiredMixin, UpdateView):
     model = IngredientPurchase
     form_class = IngredientPurchaseForm
 
-    template_name = "inventory/purchase/partials/_purchase_form.html"
+    template_name = "inventory/purchase/partials/_form.html"
 
     def get_success_url(self):
         return reverse(
@@ -219,13 +217,13 @@ class PurchaseUpdateView(LoginRequiredMixin, UpdateView):
 
 class PurchaseAdjustmentListView(LoginRequiredMixin, ListView):
     model = PurchaseAdjustment
-    template_name = "inventory/purchase/partials/_adjustment_list.html"
+    template_name = "inventory/adjustment/partials/_list.html"
     context_object_name = "adjustment_list"
 
 
 class PurchaseAdjustmentCreateView(LoginRequiredMixin, CreateView):
     model = PurchaseAdjustment
-    template_name = "inventory/purchase/partials/_adjustment_form.html"
+    template_name = "inventory/adjustment/partials/_form.html"
     form_class = PurchaseAdjustmentForm
 
     def get_context_data(self, **kwargs):
@@ -260,7 +258,7 @@ class PurchaseAdjustmentCreateView(LoginRequiredMixin, CreateView):
 
         return render(
             self.request,
-            "inventory/purchase/partials/_adjustment_create_success_oob.html",
+            "inventory/adjustment/partials/_create_success_oob.html",
             {
                 "adjustment_list": purchase.adjustments.all(),
                 "purchase": purchase,

@@ -20,7 +20,7 @@
 
 
 .card {
-    @apply rounded-xl border border-slate-200 bg-white shadow-md m-2
+    @apply rounded-xl border border-slate-200 bg-white shadow-md m-2 
 }
 
 .htmx-indicator {
