@@ -119,6 +119,9 @@ class PurchaseListView(LoginRequiredMixin, ListView):
     template_name = "inventory/purchase/partials/_list.html"
     context_object_name = "purchases"
 
+    def get_queryset(self):
+        return IngredientPurchase.objects.filter(ingredient_id=self.kwargs["pk"])
+
 
 class PurchaseCreateView(LoginRequiredMixin, CreateView):
     model = IngredientPurchase

@@ -1,30 +1,33 @@
-<div class="border-b border-slate-200 p-5">
-    <h2 class="text-base font-semibold text-slate-900">Ingredient Summary</h2>
-    <p class="mt-1 text-sm text-slate-500">Basic information about this ingredient.</p>
-</div>
-<div class="grid grid-cols-1 gap-5 p-5 text-sm sm:grid-cols-2">
-    <div>
-        <p class="font-medium text-slate-500">Name</p>
-        <p class="mt-1 font-semibold text-slate-900">{{ ingredient.name }}</p>
+<div class="card h-[420px]">
+    <div class="border-b border-slate-200 p-5">
+        <h2 class="text-base font-semibold text-slate-900"></h2>
+        <p class="mt-1 text-sm text-slate-500"></p>
+        {% include "components/card/_header.html" with title="Ingredient Summary" subtitle="Basic information about this ingredient." %}
     </div>
-    <div>
-        <p class="font-medium text-slate-500">Base Unit</p>
-        <p class="mt-1 font-semibold text-slate-900">{{ ingredient.get_unit_display }}</p>
-    </div>
-    <div class="sm:col-span-1">
-        <p class="font-medium text-slate-500">Ingredient ID</p>
-        <p class="mt-1 break-all font-mono text-xs text-slate-800">{{ ingredient.id|stringformat:"s"|slice:":8"|upper }}</p>
-    </div>
-    <div class="sm:col-span-1">
-        <p class="font-medium text-slate-500">Low Stock Threshold</p>
-        <p class="mt-1 break-all font-mono text-xs text-slate-800">{{ ingredient.low_stock_threshold }}</p>
-    </div>
-    <div class="sm:col-span-1">
-        <p class="font-medium text-slate-500">Created</p>
-        <p class="mt-1 break-all font-mono text-xs text-slate-800">{{ ingredient.created_at|date:"F j, Y, g:i A" }}</p>
-    </div>
-    <div class="sm:col-span-1">
-        <p class="font-medium text-slate-500">Modified</p>
-        <p class="mt-1 break-all font-mono text-xs text-slate-800">{{ ingredient.modified_at|date:"F j, Y, g:i A" }}</p>
+    <div class="grid grid-cols-1 gap-5 p-5 text-sm sm:grid-cols-2">
+        <div>
+            <p class="font-medium text-slate-500">Name</p>
+            <p class="mt-1 font-semibold text-slate-900">{{ ingredient.name }}</p>
+        </div>
+        <div>
+            <p class="font-medium text-slate-500">Base Unit</p>
+            <p class="mt-1 font-semibold text-slate-900">{{ ingredient.get_unit_display }}</p>
+        </div>
+        <div class="sm:col-span-1">
+            <p class="font-medium text-slate-500">Ingredient ID</p>
+            <p class="mt-1 break-all font-mono text-xs text-slate-800">{{ ingredient.id|stringformat:"s"|slice:":8"|upper }}</p>
+        </div>
+        <div class="sm:col-span-1">
+            <p class="font-medium text-slate-500">Low Stock Threshold</p>
+            <p class="mt-1 break-all font-mono text-xs text-slate-800">{{ ingredient.low_stock_threshold }}</p>
+        </div>
+        <div class="sm:col-span-1">
+            <p class="font-medium text-slate-500">Created</p>
+            <p class="mt-1 break-all font-mono text-xs text-slate-800">{{ ingredient.created_at|date:"F j, Y, g:i A" }}</p>
+        </div>
+        <div class="sm:col-span-1">
+            <p class="font-medium text-slate-500">Modified</p>
+            <p class="mt-1 break-all font-mono text-xs text-slate-800">{{ ingredient.modified_at|date:"F j, Y, g:i A" }}</p>
+        </div>
     </div>
 </div>

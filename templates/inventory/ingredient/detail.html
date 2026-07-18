@@ -4,7 +4,7 @@
         <!-- Header -->
         <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <a href="{% url 'inventory:ingredient_list' %}"
+                <a href="{% url 'inventory:index' %}"
                    class="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-blue-600">
                     ← Back to Inventory
                 </a>
@@ -33,17 +33,18 @@
             {% include "inventory/ingredient/partials/_stat_cards.html" %}
         </div>
         <!-- Main Content -->
-        <div class="flex mt-5">
+        <div class="mt-6 grid grid-cols-3 gap-6">
             <!-- Ingredient Summary -->
-            <div id="ingredient-summary" class="card">{% include "inventory/ingredient/partials/_summary.html" %}</div>
-            <!-- Stock History -->
-            <div class="card">
+            <div class="col-span-1">
+                <div id="ingredient-summary">{% include "inventory/ingredient/partials/_summary.html" %}</div>
+            </div>
+            <!-- Stock Purchases -->
+            <div class="card col-span-2 flex h-[420px] flex-col overflow-hidden">
                 <div class="border-b border-slate-200 p-5">
-                    <h2 class="text-base font-semibold text-slate-900">Stock History</h2>
-                    <p class="mt-1 text-sm text-slate-500">All stock entries recorded for this ingredient.</p>
+                    {% include "components/card/_header.html" with title="Stock Purchases" subtitle="All stock entries recorded for this ingredient." %}
                 </div>
                 <div id="ingredient-purchase-list"
-                     class="p-5"
+                     class="flex-1 overflow-y-auto"
                      hx-get="{% url 'inventory:purchase_list' ingredient.pk %}"
                      hx-trigger="load"
                      hx-swap="innerHTML"></div>
