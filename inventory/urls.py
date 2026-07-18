@@ -12,13 +12,19 @@ from .views import (
     PurchaseUpdateView,
     PurchaseAdjustmentListView,
     PurchaseAdjustmentCreateView,
+    InventoryHomeView,
 )
 
 app_name = "inventory"
 
 urlpatterns = [
     path(
-        "ingredients/",
+        "",
+        InventoryHomeView.as_view(),
+        name="index",
+    ),
+    path(
+        "ingredients/list",
         IngredientListView.as_view(),
         name="ingredient_list",
     ),

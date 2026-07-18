@@ -1,0 +1,32 @@
+{% load humanize %}
+<div class="divide-y divide-slate-200 rounded-lg border border-slate-200 bg-white">
+    {% for ingredient in ingredient_list %}
+        <div class="flex items-center justify-between px-5 py-4 transition hover:bg-slate-50">
+            <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-3">
+                    <a href="{{ ingredient.get_absolute_url }}"
+                       class="font-medium text-slate-900 hover:text-blue-600">{{ ingredient.name }}</a>
+                    {% include "components/_stock_badge.html" with ingredient=ingredient %}
+                </div>
+                <div class="mt-1 flex items-center gap-4 text-sm text-slate-500">
+                    <span>ID: {{ ingredient.id|stringformat:"s"|slice:":8"|upper }}</span>
+                    <span>
+                        Stock:
+                        <span class="font-mono font-semibold text-slate-700">
+                            {{ ingredient.current_stock|floatformat:2|intcomma }}
+                            {{ ingredient.get_unit_display }}
+                        </span>
+                    </span>
+                </div>
+            </div>
+            {% if show_add_button %}
+                <div class="ml-4 shrink-0">{% include "production/recipe/partials/recipe_form/_add_ingredient_button.html" %}</div>
+            {% endif %}
+        </div>
+    {% empty %}
+        <div class="flex min-h-[260px] flex-col items-center justify-center px-6 py-12 text-center">
+            <p class="text-sm font-medium text-slate-700">No ingredients found</p>
+            <p class="mt-1 text-sm text-slate-400">Add ingredients first so they can be used in recipes.</p>
+        </div>
+    {% endfor %}
+</div>

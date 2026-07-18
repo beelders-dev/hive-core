@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
@@ -10,6 +11,7 @@ from django.views.generic import (
     DeleteView,
     DetailView,
     UpdateView,
+    TemplateView,
 )
 from django.urls import reverse_lazy
 
@@ -18,9 +20,18 @@ from .forms import IngredientForm, IngredientPurchaseForm, PurchaseAdjustmentFor
 from .services import PurchaseAdjustmentService
 
 
+class InventoryHomeView(LoginRequiredMixin, TemplateView):
+    template_name = "inventory/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["ingredient_list"] = Ingredient.objects.filter(user=self.request.user)
+        return context
+
+
 class IngredientListView(LoginRequiredMixin, ListView):
     model = Ingredient
-    template_name = "inventory/ingredient/list.html"
+    template_name = "inventory/ingredient/partials/_ingredient_results_table.html"
     context_object_name = "ingredient_list"
 
     def get_queryset(self):
@@ -30,22 +41,6 @@ class IngredientListView(LoginRequiredMixin, ListView):
         if q:
             qs = qs.filter(name__icontains=q)
         return qs
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        context["show_add_button"] = (
-            self.request.GET.get("use_case") == "recipe_add_form"
-        )
-
-        return context
-
-    def get_template_names(self):
-
-        if "HX-Request" in self.request.headers:
-            return ["inventory/ingredient/partials/_ingredient_results.html"]
-
-        return [self.template_name]
 
 
 class IngredientCreateView(LoginRequiredMixin, CreateView):
@@ -65,7 +60,6 @@ class IngredientCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         context["action_url"] = reverse("inventory:ingredient_create")
 
         return context
@@ -98,8 +92,8 @@ class IngredientUpdateView(LoginRequiredMixin, UpdateView):
 
 class IngredientDeleteView(LoginRequiredMixin, DeleteView):
     model = Ingredient
-    template_name = "inventory/ingredient/delete.html"
-    success_url = reverse_lazy("inventory:ingredient_list")
+    template_name = "inventory/ingredient/partials/_delete.html"
+    success_url = reverse_lazy("inventory:index")
 
     def get_queryset(self):
         return Ingredient.objects.filter(user=self.request.user)
