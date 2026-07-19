@@ -16,9 +16,14 @@
                 <section class="flex  flex-col rounded-xl border border-slate-200 bg-white shadow-sm">
                     {% include "components/card/_header.html" with title="Ingredient Library" subtitle="Search and add ingredients to this recipe." %}
                     <div class="border-b border-slate-200 p-6">
-                        {% include "production/recipe/partials/_search_bar.html" with target_id="search-results" use_case="recipe_add_form" %}
+                        {% include "components/_search_bar.html" with target_id="search-results" use_case="recipe_add_form" %}
                     </div>
-                    <div id="search-results"></div>
+                    <!-- Search Results Partial -->
+                    <div id="search-results"
+                         hx-get="{% url 'inventory:ingredient_list' %}?use_case=recipe_form"
+                         hx-swap="innerHTML"
+                         hx-target="this"
+                         hx-trigger="load"></div>
                 </section>
                 <!-- Recipe Information + Selected Ingredients -->
                 <div class="grid gap-8 lg:grid-cols-12">

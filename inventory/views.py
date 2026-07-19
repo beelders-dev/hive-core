@@ -42,6 +42,16 @@ class IngredientListView(LoginRequiredMixin, ListView):
             qs = qs.filter(name__icontains=q)
         return qs
 
+    def get_template_names(self):
+        results_list_partial = (
+            "production/recipe/partials/recipe_form/_ingredient_results_list.html"
+        )
+        use_case = self.request.GET.get("use_case")
+        if use_case == "recipe_form":
+            return [results_list_partial]
+
+        return [self.template_name]
+
 
 class IngredientCreateView(LoginRequiredMixin, CreateView):
     model = Ingredient
