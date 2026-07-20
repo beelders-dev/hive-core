@@ -1,19 +1,16 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models.query import QuerySet
 from django.utils import timezone
 from django.views import View
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse_lazy, reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
+from django.urls import reverse_lazy
+from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 
 from inventory.models import Ingredient
 
 from django.views.generic import (
-    ListView,
     DetailView,
     DeleteView,
-    UpdateView,
     TemplateView,
 )
 from .forms import BatchCancellationForm
@@ -42,7 +39,7 @@ class RecipeUpdateView(LoginRequiredMixin, View):
 
         return render(
             request,
-            "production/recipe/recipe_form.html",
+            "production/recipe/form.html",
             {"recipe": recipe, "recipe_ingredients": recipe.get_all_ingredients()},
         )
 
@@ -150,7 +147,7 @@ class RecipeCreateView(LoginRequiredMixin, View):
 
         return render(
             request,
-            "production/recipe/recipe_form.html",
+            "production/recipe/form.html",
         )
 
 

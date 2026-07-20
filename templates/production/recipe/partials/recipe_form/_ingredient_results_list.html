@@ -1,5 +1,5 @@
 {% load humanize %}
-<div class="divide-y divide-slate-200 rounded-lg border border-slate-200 bg-white">
+<div class="divide-y divide-slate-200 border-slate-200 bg-white ">
     {% for ingredient in ingredient_list %}
         <div class="flex items-center justify-between px-5 py-4 transition hover:bg-slate-50">
             <div class="min-w-0 flex-1">
@@ -19,14 +19,11 @@
                     </span>
                 </div>
             </div>
-            {% if show_add_button %}
-                <div class="ml-4 shrink-0">{% include "production/recipe/partials/recipe_form/_add_ingredient_button.html" %}</div>
-            {% endif %}
+            <div class="ml-4 shrink-0">{% include "production/recipe/partials/recipe_form/_add_ingredient_button.html" %}</div>
         </div>
     {% empty %}
         <div class="flex min-h-[260px] flex-col items-center justify-center px-6 py-12 text-center">
             <p class="text-sm font-medium text-slate-700">No ingredients found</p>
-            <p class="mt-1 text-sm text-slate-400">Add ingredients first so they can be used in recipes.</p>
         </div>
     {% endfor %}
 </div>

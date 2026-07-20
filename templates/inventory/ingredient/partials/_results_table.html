@@ -25,13 +25,6 @@
                     <div class="col-span-3 px-5 py-4">
                         <div class="flex justify-center">{% include "components/_stock_badge.html" with ingredient=ingredient %}</div>
                     </div>
-                    <div class="col-span-2 px-5 py-4">
-                        {% if show_add_button %}
-                            <div class="flex items-center justify-center gap-2">
-                                {% include "production/recipe/partials/recipe_form/_add_ingredient_button.html" %}
-                            </div>
-                        {% endif %}
-                    </div>
                 </div>
             {% empty %}
                 <div class="flex min-h-[260px] flex-col items-center justify-center px-6 py-12 text-center">
