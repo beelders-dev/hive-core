@@ -1,10 +1,10 @@
 {% comment %} MESSAGE {% endcomment %}
 {% include "components/toast/_toast_oob.html" with message=message type=type %}
 {% comment %} SELECTED INGREDIENTS TABLE ROW {% endcomment %}
-<div id="selected-ingredients-row" hx-swap-oob="innerHTML">
-    {% include "production/recipe/partials/_empty_placeholder.html" %}
+<div id="selected-ingredients-table" hx-swap-oob="innerHTML">
+    {% include "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table.html" with recipe_ingredients=recipe_ingredients %}
 </div>
 {% comment %} BASIC FIELDS {% endcomment %}
-<div id="recipe-basic-fields"  hx-swap-oob="outerHTML">
+<div id="recipe-basic-fields" hx-swap-oob="outerHTML">
     {% include "production/recipe/partials/recipe_form/_recipe_basic_fields.html" %}
 </div>

@@ -3,26 +3,22 @@ from django.db import transaction
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ValidationError
 
-from inventory.models import Ingredient
+
 from .models import Recipe, RecipeIngredient, ProductionBatch, BatchIngredient
 
 
 class RecipeService:
 
-    @transaction.atomic()
-    def create_recipe(self, user, recipe_name, recipe_description, ingredients):
+    INGREDIENT_VALIDATION_ERROR = "Add at least 1 ingredient."
 
-        recipe_name = recipe_name.strip()
+    @staticmethod
+    @transaction.atomic()
+    def create_recipe(recipe, ingredients):
 
         if not ingredients:
-            raise ValidationError({"ingredients": ["Add at least 1 ingredient."]})
-
-        recipe = Recipe(user=user, name=recipe_name, description=recipe_description)
-        recipe.full_clean()
-        recipe.save()
+            raise ValidationError(RecipeService.INGREDIENT_VALIDATION_ERROR)
 
         for ingredient in ingredients:
-
             ingredient_id = ingredient["ingredient_id"]
             quantity = Decimal(ingredient["quantity"])
 
@@ -34,9 +30,9 @@ class RecipeService:
 
             recipe_ingredient.full_clean()
             recipe_ingredient.save()
-        return recipe
 
     @staticmethod
+    @transaction.atomic()
     def update_recipe(
         recipe,
         new_ingredients,
@@ -46,7 +42,7 @@ class RecipeService:
 
         if not new_ingredients:
 
-            raise ValidationError("Must have at least one ingredient.")
+            raise ValidationError(RecipeService.INGREDIENT_VALIDATION_ERROR)
 
         for ingredient in new_ingredients:
 
@@ -58,6 +54,7 @@ class RecipeService:
                 ingredient_id=ingredient_id,
                 qty_needed=quantity,
             )
+            recipe_ingredient.full_clean()
             recipe_ingredient.save()
 
 

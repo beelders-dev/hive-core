@@ -23,6 +23,19 @@ class RecipeForm(forms.ModelForm):
             ),
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+            field.widget.attrs.setdefault("autocomplete", "off")
+
+        if self.is_bound:
+            for name, field in self.fields.items():
+                if self.errors.get(name):
+                    field.widget.attrs[
+                        "class"
+                    ] += " border-red-500 focus:border-red-500 focus:ring-red-100"
+
 
 class BatchCancellationForm(forms.ModelForm):
     class Meta:

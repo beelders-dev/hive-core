@@ -2,14 +2,12 @@
 {% block content %}
     <div class="min-h-screen bg-slate-50">
         <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-            <div id="form-messages" class="mx-auto mb-6 max-w-3xl"></div>
             {% include "components/_page_header.html" with section_title="Hive Core" page_title=recipe|yesno:"Edit Recipe,Create Recipe" page_description="Build a recipe by selecting ingredients and defining the required quantities." %}
             <form id="recipe-form"
                   method="post"
                   class="space-y-8"
                   hx-post="{% if recipe %}{% url 'production:recipe_edit' recipe.pk %}{% else %}{% url 'production:recipe_create' %}{% endif %}"
-                  hx-target="#form-messages"
-                  hx-swap="innerHTML">
+                  hx-swap="none">
                 {% csrf_token %}
                 <div class="grid gap-8 lg:grid-cols-12">
                     <!-- Ingredient Library -->
@@ -22,7 +20,6 @@
                              class="flex-1 overflow-y-auto"
                              hx-get="{% url 'inventory:ingredient_list' %}?use_case=recipe_form"
                              hx-trigger="load"
-                             hx-target="this"
                              hx-swap="innerHTML"></div>
                     </section>
                     <!-- Recipe -->
@@ -31,15 +28,12 @@
                             <!-- Recipe Basic Details -->
                             <section>
                                 {% include "components/card/_header.html" with title="Recipe Basic Details" subtitle="Provide the basic information for this recipe." %}
-                                <div id="recipe-basic-fields" class="max-w-3xl space-y-6 p-6">
-                                    {{ form.name }}
-                                    {{ form.description }}
-                                </div>
+                                <div id="recipe-basic-fields">{% include "production/recipe/partials/recipe_form/_recipe_basic_fields.html" %}</div>
                             </section>
                             <!-- Selected Ingredients -->
                             <section>
                                 {% include "components/card/_header.html" with title="Selected Ingredients" subtitle="Review ingredients and adjust their required quantities." %}
-                                <div class="h-[420px] overflow-y-auto">
+                                <div id="selected-ingredients-table">
                                     {% include "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table.html" %}
                                 </div>
                             </section>

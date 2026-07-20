@@ -1,4 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.db.models.query import QuerySet
 from django.utils import timezone
 from django.views import View
 from django.shortcuts import render, get_object_or_404
@@ -9,6 +10,7 @@ from django.core.exceptions import ValidationError
 from inventory.models import Ingredient
 
 from django.views.generic import (
+    CreateView,
     DetailView,
     UpdateView,
     DeleteView,
@@ -39,13 +41,11 @@ class RecipeUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         context["recipe_ingredients"] = self.get_object().get_all_ingredients()
-
         return context
 
     def form_valid(self, form):
-        form.save()
+        recipe = form.save()
 
         ingredients = []
         for ingredient_id in self.request.POST.getlist("ingredient_ids"):
@@ -58,7 +58,7 @@ class RecipeUpdateView(LoginRequiredMixin, UpdateView):
             )
         try:
             RecipeService.update_recipe(
-                recipe=self.get_object(),
+                recipe=recipe,
                 new_ingredients=ingredients,
             )
 
@@ -75,10 +75,12 @@ class RecipeUpdateView(LoginRequiredMixin, UpdateView):
 
         return render(
             self.request,
-            "components/toast/_toast_oob.html",
+            "production/recipe/partials/_recipe_update_success.html",
             {
                 "message": "Recipe updated successfully.",
                 "type": "success",
+                "form": form,
+                "recipe_ingredients": recipe.get_all_ingredients(),
             },
         )
 
@@ -89,57 +91,49 @@ class RecipeDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("production:production_dashboard")
 
 
-class RecipeCreateView(LoginRequiredMixin, View):
+class RecipeCreateView(LoginRequiredMixin, CreateView):
+    model = Recipe
+    template_name = "production/recipe/form.html"
+    form_class = RecipeForm
 
-    def post(self, request):
+    def form_valid(self, form):
+        recipe = form.save(commit=False)
+        recipe.user = self.request.user
+        recipe.save()
 
-        service = RecipeService()
         ingredients = []
-
-        for ingredient_id in request.POST.getlist("ingredient_ids"):
+        for ingredient_id in self.request.POST.getlist("ingredient_ids"):
             ingredient_id = ingredient_id.strip()
             if ingredient_id:
                 ingredients.append(
                     {
                         "ingredient_id": ingredient_id,
-                        "quantity": request.POST.get(f"quantity_{ingredient_id}"),
+                        "quantity": self.request.POST.get(f"quantity_{ingredient_id}"),
                     }
                 )
-
         try:
-            service.create_recipe(
-                user=self.request.user,
-                recipe_name=request.POST.get("recipe_name"),
-                recipe_description=request.POST.get("recipe_description"),
+            RecipeService.create_recipe(
+                recipe=recipe,
                 ingredients=ingredients,
             )
 
         except ValidationError as e:
-
-            message = next(iter(e.message_dict.values()))[0]
+            print(e)
+            message = e.args[0]
             return render(
-                request,
+                self.request,
                 "components/toast/_toast_oob.html",
-                {
-                    "message": str(message),
-                    "type": "error",
-                },
+                {"message": str(message), "type": "error", "form": form},
             )
-
+        recipe.save()
         return render(
-            request,
+            self.request,
             "production/recipe/partials/_recipe_create_success.html",
             {
                 "message": "Recipe created successfully.",
                 "type": "success",
+                "form": RecipeForm(),
             },
-        )
-
-    def get(self, request):
-
-        return render(
-            request,
-            "production/recipe/form.html",
         )
 
 
