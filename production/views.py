@@ -10,10 +10,11 @@ from inventory.models import Ingredient
 
 from django.views.generic import (
     DetailView,
+    UpdateView,
     DeleteView,
     TemplateView,
 )
-from .forms import BatchCancellationForm
+from .forms import BatchCancellationForm, RecipeForm
 from .models import Recipe, ProductionBatch
 from .services import RecipeService, ProductionService
 
@@ -22,7 +23,7 @@ SELECTED_INGREDIENT_TABLE_TEMPLATE = "production/recipe/partials/selected_ingred
 
 class RecipeDetailView(LoginRequiredMixin, DetailView):
     model = Recipe
-    template_name = "production/recipe/recipe_detail.html"
+    template_name = "production/recipe/detail.html"
     context_object_name = "recipe"
 
     def get_queryset(self):
@@ -31,50 +32,41 @@ class RecipeDetailView(LoginRequiredMixin, DetailView):
         )
 
 
-class RecipeUpdateView(LoginRequiredMixin, View):
+class RecipeUpdateView(LoginRequiredMixin, UpdateView):
+    model = Recipe
+    template_name = "production/recipe/form.html"
+    form_class = RecipeForm
 
-    def get(self, request, pk):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-        recipe = Recipe.objects.get(pk=pk)
+        context["recipe_ingredients"] = self.get_object().get_all_ingredients()
 
-        return render(
-            request,
-            "production/recipe/form.html",
-            {"recipe": recipe, "recipe_ingredients": recipe.get_all_ingredients()},
-        )
+        return context
 
-    def post(self, request, pk):
-
-        recipe = Recipe.objects.get(user=self.request.user, pk=pk)
-        service = RecipeService()
-
-        new_recipe_name = request.POST.get("recipe_name")
-        new_description = request.POST.get("recipe_description")
+    def form_valid(self, form):
+        form.save()
 
         ingredients = []
-
-        for ingredient_id in request.POST.getlist("ingredient_ids"):
+        for ingredient_id in self.request.POST.getlist("ingredient_ids"):
             ingredient_id = ingredient_id.strip()
-            if ingredient_id:
-                ingredients.append(
-                    {
-                        "ingredient_id": ingredient_id,
-                        "quantity": request.POST.get(f"quantity_{ingredient_id}"),
-                    }
-                )
-
+            ingredients.append(
+                {
+                    "ingredient_id": ingredient_id,
+                    "quantity": self.request.POST.get(f"quantity_{ingredient_id}"),
+                }
+            )
         try:
-            service.update_recipe(
-                recipe=recipe,
-                new_recipe_name=new_recipe_name,
-                new_recipe_description=new_description,
+            RecipeService.update_recipe(
+                recipe=self.get_object(),
                 new_ingredients=ingredients,
             )
+
         except ValidationError as e:
-            message = next(iter(e.message_dict.values()))[0]
+            message = e.args[0]
             return render(
-                request,
-                "production/recipe/partials/_message.html",
+                self.request,
+                "components/toast/_toast_oob.html",
                 {
                     "message": str(message),
                     "type": "error",
@@ -82,7 +74,7 @@ class RecipeUpdateView(LoginRequiredMixin, View):
             )
 
         return render(
-            request,
+            self.request,
             "components/toast/_toast_oob.html",
             {
                 "message": "Recipe updated successfully.",

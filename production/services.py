@@ -36,26 +36,17 @@ class RecipeService:
             recipe_ingredient.save()
         return recipe
 
+    @staticmethod
     def update_recipe(
-        self,
         recipe,
-        new_recipe_name,
-        new_recipe_description,
         new_ingredients,
     ):
 
-        new_recipe_name = new_recipe_name.strip()
+        recipe.get_all_ingredients().delete()
 
         if not new_ingredients:
-            raise ValidationError({"ingredients": ["Add at least 1 ingredient."]})
 
-        recipe.name = new_recipe_name
-        recipe.description = new_recipe_description
-
-        recipe.full_clean()
-        recipe.save()
-
-        recipe.get_all_ingredients().delete()
+            raise ValidationError("Must have at least one ingredient.")
 
         for ingredient in new_ingredients:
 
@@ -67,11 +58,7 @@ class RecipeService:
                 ingredient_id=ingredient_id,
                 qty_needed=quantity,
             )
-
-            recipe_ingredient.full_clean()
             recipe_ingredient.save()
-
-        return recipe
 
 
 class ProductionService:
