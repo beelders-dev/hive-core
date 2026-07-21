@@ -23,14 +23,53 @@ from .services import RecipeService, ProductionService
 SELECTED_INGREDIENT_TABLE_TEMPLATE = "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table.html"
 
 
-class RecipeDetailView(LoginRequiredMixin, DetailView):
+class RecipeCreateView(LoginRequiredMixin, CreateView):
     model = Recipe
-    template_name = "production/recipe/detail.html"
-    context_object_name = "recipe"
+    template_name = "production/recipe/form.html"
+    form_class = RecipeForm
 
-    def get_queryset(self):
-        return Recipe.objects.prefetch_related(
-            "ingredient_requirements__ingredient",
+    def form_valid(self, form):
+        recipe = form.save(commit=False)
+        recipe.user = self.request.user
+        recipe.save()
+
+        ingredients = []
+        for ingredient_id in self.request.POST.getlist("ingredient_ids"):
+            ingredient_id = ingredient_id.strip()
+            if ingredient_id:
+                ingredients.append(
+                    {
+                        "ingredient_id": ingredient_id,
+                        "quantity": self.request.POST.get(f"quantity_{ingredient_id}"),
+                    }
+                )
+        try:
+            RecipeService.create_recipe(
+                recipe=recipe,
+                ingredients=ingredients,
+            )
+
+        except ValidationError as e:
+            print(e)
+            message = e.args[0]
+            return render(
+                self.request,
+                "components/toast/_toast_oob.html",
+                {
+                    "message": str(message),
+                    "type": "error",
+                    "form": form,
+                },
+            )
+        recipe.save()
+        return render(
+            self.request,
+            "production/recipe/partials/_recipe_create_success.html",
+            {
+                "message": "Recipe created successfully.",
+                "type": "success",
+                "form": RecipeForm(),
+            },
         )
 
 
@@ -70,6 +109,7 @@ class RecipeUpdateView(LoginRequiredMixin, UpdateView):
                 {
                     "message": str(message),
                     "type": "error",
+                    "form": form,
                 },
             )
 
@@ -85,56 +125,21 @@ class RecipeUpdateView(LoginRequiredMixin, UpdateView):
         )
 
 
+class RecipeDetailView(LoginRequiredMixin, DetailView):
+    model = Recipe
+    template_name = "production/recipe/detail.html"
+    context_object_name = "recipe"
+
+    def get_queryset(self):
+        return Recipe.objects.prefetch_related(
+            "ingredient_requirements__ingredient",
+        )
+
+
 class RecipeDeleteView(LoginRequiredMixin, DeleteView):
     model = Recipe
     template_name = "production/recipe/recipe_delete.html"
     success_url = reverse_lazy("production:production_dashboard")
-
-
-class RecipeCreateView(LoginRequiredMixin, CreateView):
-    model = Recipe
-    template_name = "production/recipe/form.html"
-    form_class = RecipeForm
-
-    def form_valid(self, form):
-        recipe = form.save(commit=False)
-        recipe.user = self.request.user
-        recipe.save()
-
-        ingredients = []
-        for ingredient_id in self.request.POST.getlist("ingredient_ids"):
-            ingredient_id = ingredient_id.strip()
-            if ingredient_id:
-                ingredients.append(
-                    {
-                        "ingredient_id": ingredient_id,
-                        "quantity": self.request.POST.get(f"quantity_{ingredient_id}"),
-                    }
-                )
-        try:
-            RecipeService.create_recipe(
-                recipe=recipe,
-                ingredients=ingredients,
-            )
-
-        except ValidationError as e:
-            print(e)
-            message = e.args[0]
-            return render(
-                self.request,
-                "components/toast/_toast_oob.html",
-                {"message": str(message), "type": "error", "form": form},
-            )
-        recipe.save()
-        return render(
-            self.request,
-            "production/recipe/partials/_recipe_create_success.html",
-            {
-                "message": "Recipe created successfully.",
-                "type": "success",
-                "form": RecipeForm(),
-            },
-        )
 
 
 class RemoveIngredientView(LoginRequiredMixin, View):

@@ -954,6 +954,10 @@ video {
   animation: spin 1s linear infinite;
 }
 
+.resize-none {
+  resize: none;
+}
+
 .grid-cols-1 {
   grid-template-columns: repeat(1, minmax(0, 1fr));
 }
@@ -1249,6 +1253,11 @@ video {
 .border-slate-700 {
   --tw-border-opacity: 1;
   border-color: rgb(51 65 85 / var(--tw-border-opacity, 1));
+}
+
+.border-slate-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(100 116 139 / var(--tw-border-opacity, 1));
 }
 
 .bg-amber-100 {
@@ -2326,3 +2335,4 @@ video {
   -webkit-appearance: none;
           appearance: none;
 }
+
