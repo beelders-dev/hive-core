@@ -28,7 +28,7 @@
                             <!-- Recipe Basic Details -->
                             <section>
                                 {% include "components/card/_header.html" with title="Recipe Basic Details" subtitle="Provide the basic information for this recipe." %}
-                                <div id="recipe-basic-fields">{% include "production/recipe/partials/recipe_form/_recipe_basic_fields.html" %}</div>
+                                <div id="recipe-basic-fields">{% include "production/recipe/partials/form/_basic_fields.html" %}</div>
                             </section>
                             <!-- Selected Ingredients -->
                             <section>
@@ -38,7 +38,7 @@
                         </div>
                     </section>
                 </div>
-                <div class="flex justify-end">{% include "production/recipe/partials/recipe_form/_save_recipe_button.html" %}</div>
+                <div class="flex justify-end">{% include "production/recipe/partials/form/_save_button.html" %}</div>
             </form>
         </div>
     </div>

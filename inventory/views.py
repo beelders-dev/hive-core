@@ -43,12 +43,10 @@ class IngredientListView(LoginRequiredMixin, ListView):
         return qs
 
     def get_template_names(self):
-        results_list_partial = (
-            "production/recipe/partials/recipe_form/_ingredient_results_list.html"
-        )
+        list_template = "inventory/ingredient/partials/_results_list.html"
         use_case = self.request.GET.get("use_case")
         if use_case == "recipe_form":
-            return [results_list_partial]
+            return [list_template]
 
         return [self.template_name]
 
