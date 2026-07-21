@@ -60,10 +60,19 @@ class RecipeService:
 
 class ProductionService:
 
+    @staticmethod
     @transaction.atomic
-    def deduct_ingredients(self, recipe, batch_qty=1):
+    def produce_recipe(recipe, batch_qty=1):
 
-        for requirement in recipe.get_all_ingredients():
+        requirements = list(recipe.get_all_ingredients())
+
+        ProductionService.deduct_ingredients(requirements)
+        ProductionService.create_batch(recipe, requirements, batch_qty)
+
+    @staticmethod
+    def deduct_ingredients(requirements, batch_qty=1):
+
+        for requirement in requirements:
             qty_to_deduct = requirement.qty_needed * batch_qty
 
             ingredient = requirement.ingredient
@@ -89,11 +98,8 @@ class ProductionService:
                     purchase.qty_remaining = 0
                     purchase.save()
 
-    @transaction.atomic
-    def produce_recipe(self, recipe, batch_qty=1):
-
-        self.deduct_ingredients(recipe)
-
+    @staticmethod
+    def create_batch(recipe, requirements, batch_qty):
         production_batch = ProductionBatch.objects.create(
             user=recipe.user,
             recipe=recipe,
@@ -103,16 +109,20 @@ class ProductionService:
             est_cost=recipe.total_cost,
         )
 
-        for recipe_ingredient in recipe.get_all_ingredients():
-            BatchIngredient.objects.create(
+        requirements = recipe.get_all_ingredients()
+
+        BatchIngredient.objects.bulk_create(
+            BatchIngredient(
                 production_batch=production_batch,
                 ingredient=recipe_ingredient.ingredient,
                 ingredient_name_snapshot=recipe_ingredient.ingredient.name,
                 unit_snapshot=recipe_ingredient.ingredient.unit,
-                qty_used=recipe_ingredient.qty_needed,
+                qty_used=recipe_ingredient.qty_needed * batch_qty,
                 unit_cost_snapshot=recipe_ingredient.ingredient.average_unit_cost,
                 total_cost=recipe_ingredient.ingredient_cost,
             )
+            for recipe_ingredient in requirements
+        )
 
     @transaction.atomic
     def reinstate(self, batch_ingredient, batch_qty=1):

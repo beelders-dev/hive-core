@@ -163,13 +163,13 @@ class AddIngredientView(LoginRequiredMixin, View):
 
 
 class CreateBatchView(LoginRequiredMixin, View):
+
     def post(self, request, pk):
 
         recipe = Recipe.objects.get(user=request.user, pk=pk)
 
-        production = ProductionService()
         try:
-            production.produce_recipe(recipe)
+            ProductionService.produce_recipe(recipe)
 
         except ValidationError as e:
 

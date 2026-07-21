@@ -824,10 +824,6 @@ video {
   height: 1px;
 }
 
-.h-20 {
-  height: 5rem;
-}
-
 .max-h-\[420px\] {
   max-height: 420px;
 }
@@ -956,10 +952,6 @@ video {
 
 .animate-spin {
   animation: spin 1s linear infinite;
-}
-
-.resize-none {
-  resize: none;
 }
 
 .grid-cols-1 {
