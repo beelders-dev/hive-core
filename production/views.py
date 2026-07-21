@@ -153,7 +153,7 @@ class AddIngredientView(LoginRequiredMixin, View):
 
     def post(self, request, pk):
 
-        ingredient = get_object_or_404(Ingredient, pk=pk)
+        ingredient = get_object_or_404(Ingredient, user=self.request.user, pk=pk)
 
         existing_ids = request.POST.getlist("ingredient_ids")
 
@@ -162,7 +162,7 @@ class AddIngredientView(LoginRequiredMixin, View):
 
         return render(
             request,
-            "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table_row.html",
+            "production/recipe/partials/selected_ingredients_table/_row.html",
             {"ingredient": ingredient},
         )
 

@@ -8,7 +8,7 @@
     <div id="selected-ingredients-row" class="divide-y divide-slate-100">
         {% if recipe_ingredients %}
             {% for recipe_ingredient in recipe_ingredients %}
-                {% include "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table_row.html" with ingredient=recipe_ingredient.ingredient quantity_needed=recipe_ingredient.quantity_needed %}
+                {% include "production/recipe/partials/selected_ingredients/_row.html" with ingredient=recipe_ingredient.ingredient quantity_needed=recipe_ingredient.quantity_needed %}
             {% endfor %}
         {% else %}
             {% include "production/recipe/partials/_empty_placeholder.html" %}
