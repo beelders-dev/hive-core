@@ -61,7 +61,7 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
                     "form": form,
                 },
             )
-        recipe.save()
+
         return render(
             self.request,
             "production/recipe/partials/_recipe_create_success.html",
@@ -162,7 +162,7 @@ class AddIngredientView(LoginRequiredMixin, View):
 
         return render(
             request,
-            "production/recipe/partials/selected_ingredients_table/_row.html",
+            "production/recipe/partials/selected_ingredients/_row.html",
             {"ingredient": ingredient},
         )
 
@@ -171,7 +171,7 @@ class CreateBatchView(LoginRequiredMixin, View):
 
     def post(self, request, pk):
 
-        recipe = Recipe.objects.get(user=request.user, pk=pk)
+        recipe = get_object_or_404(Recipe, user=request.user, pk=pk)
 
         try:
             ProductionService.produce_recipe(recipe)
@@ -200,7 +200,6 @@ class CreateBatchView(LoginRequiredMixin, View):
 
 
 class ProductionDashboardView(LoginRequiredMixin, TemplateView):
-
     template_name = "production/dashboard.html"
 
     def get_context_data(self, **kwargs):
@@ -298,12 +297,10 @@ class CancelProductionView(LoginRequiredMixin, View):
             pk=pk,
         )
 
-        prod_service = ProductionService()
-
         if prod_batch.status != ProductionBatch.Status.IN_PROGRESS:
             for batch_ingredient in prod_batch.batch_ingredients.all():
                 try:
-                    prod_service.reinstate(batch_ingredient, prod_batch.batch_qty)
+                    ProductionService.reinstate(batch_ingredient, prod_batch.batch_qty)
                 except ValidationError as e:
                     print("Error: ", e.message)
 

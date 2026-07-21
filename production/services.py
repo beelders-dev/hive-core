@@ -124,8 +124,9 @@ class ProductionService:
             for recipe_ingredient in requirements
         )
 
+    @staticmethod
     @transaction.atomic
-    def reinstate(self, batch_ingredient, batch_qty=1):
+    def reinstate(batch_ingredient, batch_qty=1):
 
         qty_to_reinstate = batch_ingredient.qty_used * batch_qty
 
