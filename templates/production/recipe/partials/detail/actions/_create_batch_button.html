@@ -1,0 +1,7 @@
+<button hx-post="{% url 'production:create_batch' recipe.pk %}"
+        hx-target="#recipe-produce-message"
+        class="border p-2 rounded-md border-gray-200 bg-blue-500 text-white m-2 active:scale-95">
+    <div class="flex gap-2">
+        <p>Create batch</p>
+    </div>
+</button>

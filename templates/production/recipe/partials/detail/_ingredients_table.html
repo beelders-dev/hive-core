@@ -1,0 +1,81 @@
+{% load humanize %}
+<div class="overflow-hidden card">
+    <div class="border-b border-slate-200 bg-white px-5 py-4">
+        {% include "components/card/_header.html" with title="Required Ingredients" subtitle="Inventory availability and quantity required for this recipe." %}
+    </div>
+    <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-slate-200 text-sm">
+            <thead class="bg-slate-50">
+                <tr>
+                    <th class="whitespace-nowrap px-5 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Ingredient
+                    </th>
+                    <th class="whitespace-nowrap px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Available
+                    </th>
+                    <th class="whitespace-nowrap px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Required
+                    </th>
+                    <th class="whitespace-nowrap px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Avg. Unit Cost
+                    </th>
+                    <th class="whitespace-nowrap px-5 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Est. Total Cost
+                    </th>
+                    <th class="whitespace-nowrap px-5 py-3 text-center text-xs font-semibold uppercase tracking-wide text-slate-500">
+                        Status
+                    </th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100 bg-white">
+                {% for item in recipe.get_all_ingredients %}
+                    <tr class="transition hover:bg-slate-50">
+                        <td class="whitespace-nowrap px-5 py-4">
+                            <a href="{{ item.ingredient.get_absolute_url }}"
+                               class="font-semibold text-slate-900 hover:text-blue-600">{{ item.ingredient.name }}</a>
+                            <p class="mt-1 text-xs text-slate-500">Unit: {{ item.ingredient.unit }}</p>
+                        </td>
+                        <td id="current-stock-{{ item.ingredient.id }}"
+                            class="whitespace-nowrap px-5 py-4 text-right font-mono text-slate-700">
+                            {{ item.ingredient.current_stock | floatformat:2 | intcomma }}
+                            <span class="text-xs text-slate-400">{{ item.ingredient.unit }}</span>
+                        </td>
+                        <td class="whitespace-nowrap px-5 py-4 text-right font-mono font-semibold text-slate-900">
+                            {{ item.qty_needed }}
+                            <span class="text-xs text-slate-400">{{ item.ingredient.unit }}</span>
+                        </td>
+                        <td class="whitespace-nowrap px-5 py-4 text-right font-mono text-slate-700">
+                            ₱{{ item.ingredient.average_unit_cost | floatformat:2 | intcomma }}
+                        </td>
+                        <td class="whitespace-nowrap px-5 py-4 text-right font-mono font-semibold text-slate-900">
+                            ₱{{ item.ingredient_cost | floatformat:2 | intcomma }}
+                        </td>
+                        <td class="whitespace-nowrap px-5 py-4 text-center">
+                            {% if item.ingredient.current_stock == 0 %}
+                                <span class="inline-flex rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700">Out</span>
+                            {% elif item.ingredient.current_stock < item.qty_needed %}
+                                <span class="inline-flex rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700">Short</span>
+                            {% elif item.ingredient.current_stock <= item.ingredient.low_stock_threshold %}
+                                <span class="inline-flex rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700">Low</span>
+                            {% else %}
+                                <span class="inline-flex rounded-full bg-green-50 px-2.5 py-1 text-xs font-medium text-green-700 ">Ready</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="6" class="px-5 py-12 text-center text-sm text-slate-400">No ingredients listed for this recipe.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!-- Footer -->
+    <div class="flex items-center justify-between border-t border-slate-200 bg-slate-50 px-5 py-4">
+        <div>
+            <p class="text-sm font-bold uppercase tracking-wide text-slate-600">Estimated Total Cost</p>
+            <p class="mt-1 text-xs text-slate-500">Based on current ingredient pricing.</p>
+        </div>
+        <p class="font-mono text-xl font-bold text-slate-900">₱{{ recipe.total_cost | default:"0.00"|floatformat:2 }}</p>
+    </div>
+</div>

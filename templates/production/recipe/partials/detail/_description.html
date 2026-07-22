@@ -1,0 +1,8 @@
+<div class="card">
+    {% include "components/card/_header.html" with title="Recipe Notes" %}
+    {% if recipe.description %}
+        <p class="leading-relaxed text-slate-700 whitespace-pre-line mx-3">{{ recipe.description }}</p>
+    {% else %}
+        <p class="italic text-slate-400">No description provided.</p>
+    {% endif %}
+</div>

@@ -1,0 +1,14 @@
+<div class="grid gap-4 sm:grid-cols-3 ">
+    <div class="card">
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Ingredients</p>
+        <p class="mt-2 text-2xl font-bold text-slate-900">{{ recipe.get_all_ingredients.count }}</p>
+    </div>
+    <div class="card">
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Estimated Cost</p>
+        <p class="mt-2 font-mono text-2xl font-bold text-slate-900">₱{{ recipe.total_cost |default:"0.00"|floatformat:2 }}</p>
+    </div>
+    <div class="card">
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">Stock Readiness</p>
+        <p class="mt-2 text-sm font-semibold text-slate-700">Review ingredients below</p>
+    </div>
+</div>
