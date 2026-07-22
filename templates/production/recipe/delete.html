@@ -7,7 +7,7 @@
         <div class="bg-white overflow-hidden ">
             <div class="p-6 bg-red-50 border-b border-red-100 text-center">
                 <div class="w-16 h-16 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                    {% include "components/svgs/production/_warning_icon.html" %}
+                    {% include "components/svgs/_warning_icon.html" %}
                 </div>
                 <h2 class="text-xl font-bold text-red-800">Delete Recipe?</h2>
                 <p class="text-sm text-red-600 mt-1">This action cannot be undone.</p>
@@ -20,17 +20,18 @@
             </div>
             <form method="post"
                   class="p-6 bg-slate-50 border-t border-slate-100 flex flex-col gap-3"
-                  hx-post="{% url 'production:recipe_delete' recipe.pk %}"
+                  action="{% url 'production:recipe_delete' recipe.pk %}"
                   hx-target="#modal-root">
                 {% csrf_token %}
                 <button type="submit"
                         class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-colors shadow-sm">
                     Yes, Delete Permanently
                 </button>
-                <a href="{{ object.get_absolute_url }}"
-                   class="w-full py-3 bg-white border border-slate-300 text-slate-700 font-medium rounded-lg text-center hover:bg-slate-50 transition-colors">
+                <button type="button"
+                        onclick="document.getElementById('modal-root').innerHTML = ''"
+                        class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
                     Cancel, Keep Recipe
-                </a>
+                </button>
             </form>
         </div>
     </div>

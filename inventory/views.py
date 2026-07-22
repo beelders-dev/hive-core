@@ -100,7 +100,7 @@ class IngredientUpdateView(LoginRequiredMixin, UpdateView):
 
 class IngredientDeleteView(LoginRequiredMixin, DeleteView):
     model = Ingredient
-    template_name = "inventory/ingredient/partials/_delete.html"
+    template_name = "inventory/ingredient/delete.html"
     success_url = reverse_lazy("inventory:index")
 
     def get_queryset(self):
