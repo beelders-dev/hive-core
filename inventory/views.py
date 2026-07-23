@@ -42,13 +42,11 @@ class IngredientListView(LoginRequiredMixin, ListView):
             qs = qs.filter(name__icontains=q)
         return qs
 
-    def get_template_names(self):
-        list_template = "inventory/ingredient/partials/_results_list.html"
-        use_case = self.request.GET.get("use_case")
-        if use_case == "recipe_form":
-            return [list_template]
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["action_url"] = reverse("inventory:ingredient_list")
 
-        return [self.template_name]
+        return context
 
 
 class IngredientCreateView(LoginRequiredMixin, CreateView):

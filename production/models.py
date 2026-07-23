@@ -45,6 +45,9 @@ class Recipe(models.Model):
     def __str__(self):
         return f"{self.name}"
 
+    def get_ingredient_ids(self):
+        return self.get_all_ingredients().values_list("ingredient_id", flat=True)
+
     @property
     def total_cost(self):
         total_cost = 0

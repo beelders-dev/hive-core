@@ -18,7 +18,7 @@
                         </div>
                         <div id="search-results"
                              class="flex-1 overflow-y-auto"
-                             hx-get="{% url 'inventory:ingredient_list' %}?use_case=recipe_form"
+                             hx-get="{% url 'production:ingredients' recipe.pk %}"
                              hx-trigger="load"
                              hx-swap="innerHTML"></div>
                     </section>
@@ -33,7 +33,9 @@
                             <!-- Selected Ingredients -->
                             <section>
                                 {% include "components/card/_header.html" with title="Selected Ingredients" subtitle="Review ingredients and adjust their required quantities." %}
-                                <div id="selected-ingredients-table">{% include "production/recipe/partials/selected_ingredients/_table.html" %}</div>
+                                <div id="selected-ingredients-table">
+                                    {% include "production/recipe/partials/selected_ingredients/_table.html" with recipe_id=recipe.pk %}
+                                </div>
                             </section>
                         </div>
                     </section>

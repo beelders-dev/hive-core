@@ -3,7 +3,7 @@ from django.db.models.query import QuerySet
 from django.utils import timezone
 from django.views import View
 from django.shortcuts import render, get_object_or_404
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.http import HttpResponse
 from django.core.exceptions import ValidationError
 
@@ -15,12 +15,48 @@ from django.views.generic import (
     UpdateView,
     DeleteView,
     TemplateView,
+    ListView,
 )
 from .forms import BatchCancellationForm, RecipeForm
 from .models import Recipe, ProductionBatch
 from .services import RecipeService, ProductionService
 
 SELECTED_INGREDIENT_TABLE_TEMPLATE = "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table.html"
+
+
+class RecipeFormIngredientListView(LoginRequiredMixin, ListView):
+    model = Ingredient
+    template_name = "inventory/ingredient/partials/_results_list.html"
+
+    def get_queryset(self):
+
+        recipe = get_object_or_404(Recipe, user=self.request.user, pk=self.kwargs["pk"])
+
+        ingredient_ids = recipe.get_ingredient_ids()
+
+        q = self.request.GET.get("q", "").strip()
+
+        qs = Ingredient.objects.filter(user=self.request.user)
+        if q:
+            qs = qs.filter(name__icontains=q).exclude(ingredient_ids)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        recipe = get_object_or_404(Recipe, user=self.request.user, pk=self.kwargs["pk"])
+
+        ingredient_ids = recipe.get_ingredient_ids()
+
+        context["ingredient_list"] = Ingredient.objects.filter(
+            user=self.request.user
+        ).exclude(pk__in=ingredient_ids)
+
+        context["action_url"] = reverse(
+            "production:ingredients", kwargs={"pk": self.kwargs["pk"]}
+        )
+
+        return context
 
 
 class RecipeCreateView(LoginRequiredMixin, CreateView):
@@ -50,7 +86,7 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
             )
 
         except ValidationError as e:
-            print(e)
+
             message = e.args[0]
             return render(
                 self.request,
@@ -143,9 +179,7 @@ class RecipeDeleteView(LoginRequiredMixin, DeleteView):
 
 
 class RemoveIngredientView(LoginRequiredMixin, View):
-
     def post(self, request, pk):
-
         return HttpResponse("")
 
 
@@ -157,13 +191,21 @@ class AddIngredientView(LoginRequiredMixin, View):
 
         existing_ids = request.POST.getlist("ingredient_ids")
 
-        if str(pk) in existing_ids:
-            return HttpResponse("")
+        if str(ingredient.pk) in existing_ids:
+
+            return render(
+                self.request,
+                "production/recipe/partials/form/_add_button.html",
+                {
+                    "ingredient": ingredient,
+                    "added": True,
+                },
+            )
 
         return render(
-            request,
-            "production/recipe/partials/selected_ingredients/_row.html",
-            {"ingredient": ingredient},
+            self.request,
+            "production/recipe/oob/add_ingredient.html",
+            {"ingredient": ingredient, "added": True},
         )
 
 

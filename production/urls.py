@@ -14,6 +14,7 @@ from .views import (
     CompleteProductionView,
     StartProductionView,
     CancelProductionView,
+    RecipeFormIngredientListView,
 )
 
 app_name = "production"
@@ -35,6 +36,11 @@ urlpatterns = [
     ),
     path("recipes/<uuid:pk>/edit/", RecipeUpdateView.as_view(), name="recipe_edit"),
     path("recipes/<uuid:pk>/delete/", RecipeDeleteView.as_view(), name="recipe_delete"),
+    path(
+        "recipes/<uuid:pk>/ingredients/",
+        RecipeFormIngredientListView.as_view(),
+        name="ingredients",
+    ),
     path(
         "recipes/<uuid:pk>/add-ingredient/",
         AddIngredientView.as_view(),

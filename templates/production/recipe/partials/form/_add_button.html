@@ -1,11 +1,9 @@
 <button type="submit"
         hx-post="{% url 'production:add_ingredient' ingredient.pk %}"
-        hx-target="#selected-ingredients-row"
-        hx-swap="beforeend"
         hx-include="[name='ingredient_ids']"
-        class="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600 text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-        title="Add ingredient"
-        aria-label="Add ingredient">
+        {% if added %}disabled{% endif %}
+        class="inline-flex h-9 w-9 items-center justify-center rounded-lg {% if added %} disabled:bg-gray-600 disabled:shadow-none   {% else %} bg-blue-600 text-white shadow-sm transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2  {% endif %}"
+        aria-label="{% if added %}Ingredient already added{% else %}Add ingredient{% endif %}">
         <svg xmlns="http://www.w3.org/2000/svg"
              fill="none"
              viewBox="0 0 24 24"
