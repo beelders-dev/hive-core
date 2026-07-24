@@ -1,0 +1,4 @@
+<div id="production-search-results" hx-swap-oob="innerHTML">
+    {% include "inventory/ingredient/partials/_results_list.html" with ingredient_list=ingredient_list %}
+</div>
+<div id="ingredient-row-{{ ingredient.id }}" hx-swap-oob="delete"></div>
