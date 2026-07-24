@@ -7,6 +7,7 @@
               hx-get="{{ action_url }}"
               hx-trigger="input changed delay:500ms, keyup[key=='Enter']"
               hx-target="#{{ target_id }}"
+              hx-swap="innerHTML"
               hx-indicator="#search-loading-spinner"
               placeholder="Search ingredients by name, CAS number, or SKU..."
               class="w-full rounded-xl border border-slate-200 bg-white pl-11 pr-12 py-3 text-sm text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent shadow-sm transition-all duration-150">

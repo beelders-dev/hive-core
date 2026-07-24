@@ -34,29 +34,27 @@ class RecipeFormIngredientListView(LoginRequiredMixin, ListView):
 
         ingredient_ids = recipe.get_ingredient_ids()
 
-        q = self.request.GET.get("q", "").strip()
+        q = self.request.GET.get("q", "")
 
-        qs = Ingredient.objects.filter(user=self.request.user)
+        qs = Ingredient.objects.filter(user=self.request.user).exclude(
+            pk__in=ingredient_ids
+        )
+        print("BEFORE FILTER: ", qs)
         if q:
-            qs = qs.filter(name__icontains=q).exclude(ingredient_ids)
+            qs = qs.filter(name__icontains=q)
+            print("AFTER FILTER: ", qs)
         return qs
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
 
-        recipe = get_object_or_404(Recipe, user=self.request.user, pk=self.kwargs["pk"])
+    #     context["action_url"] = reverse(
+    #         "production:ingredients", kwargs={"pk": self.kwargs["pk"]}
+    #     )
+    #     print("ACTION URL HEADER", self.request.headers)
+    #     print("ACTION URL: ", context["action_url"])
 
-        ingredient_ids = recipe.get_ingredient_ids()
-
-        context["ingredient_list"] = Ingredient.objects.filter(
-            user=self.request.user
-        ).exclude(pk__in=ingredient_ids)
-
-        context["action_url"] = reverse(
-            "production:ingredients", kwargs={"pk": self.kwargs["pk"]}
-        )
-
-        return context
+    #     return context
 
 
 class RecipeCreateView(LoginRequiredMixin, CreateView):
@@ -108,16 +106,22 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
             },
         )
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["action_url"] = reverse(
+            "production:ingredients", kwargs={"pk": self.kwargs["pk"]}
+        )
+        print("ACTION URL HEADER", self.request.headers)
+        print("ACTION URL: ", context["action_url"])
+
+        return context
+
 
 class RecipeUpdateView(LoginRequiredMixin, UpdateView):
     model = Recipe
     template_name = "production/recipe/form.html"
     form_class = RecipeForm
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["recipe_ingredients"] = self.get_object().get_all_ingredients()
-        return context
 
     def form_valid(self, form):
         recipe = form.save()
@@ -159,6 +163,17 @@ class RecipeUpdateView(LoginRequiredMixin, UpdateView):
                 "recipe_ingredients": recipe.get_all_ingredients(),
             },
         )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["recipe_ingredients"] = self.get_object().get_all_ingredients()
+        context["action_url"] = reverse(
+            "production:ingredients", kwargs={"pk": self.kwargs["pk"]}
+        )
+        print("ACTION URL HEADER", self.request.headers)
+        print("ACTION URL: ", context["action_url"])
+
+        return context
 
 
 class RecipeDetailView(LoginRequiredMixin, DetailView):

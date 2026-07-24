@@ -1,9 +1,3 @@
-{% comment %} <div id="add-button-{{ ingredient.id }}" hx-swap-oob="true">
-    {% include "production/recipe/partials/form/_add_button.html" with added=added %}
-</div> {% endcomment %}
-<div id="add-button-{{ ingredient.id }}" hx-swap-oob="true">
-    {% include "production/recipe/partials/form/_add_button.html" %}
-</div>
 <div id="selected-ingredients-row" hx-swap-oob="beforeend">
     {% include "production/recipe/partials/selected_ingredients/_row.html" with ingredient=ingredient quantity_needed=recipe_ingredient.quantity_needed %}
 </div>
