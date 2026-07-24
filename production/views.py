@@ -39,22 +39,11 @@ class RecipeFormIngredientListView(LoginRequiredMixin, ListView):
         qs = Ingredient.objects.filter(user=self.request.user).exclude(
             pk__in=ingredient_ids
         )
-        print("BEFORE FILTER: ", qs)
+
         if q:
             qs = qs.filter(name__icontains=q)
-            print("AFTER FILTER: ", qs)
+
         return qs
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-
-    #     context["action_url"] = reverse(
-    #         "production:ingredients", kwargs={"pk": self.kwargs["pk"]}
-    #     )
-    #     print("ACTION URL HEADER", self.request.headers)
-    #     print("ACTION URL: ", context["action_url"])
-
-    #     return context
 
 
 class RecipeCreateView(LoginRequiredMixin, CreateView):
@@ -170,8 +159,6 @@ class RecipeUpdateView(LoginRequiredMixin, UpdateView):
         context["action_url"] = reverse(
             "production:ingredients", kwargs={"pk": self.kwargs["pk"]}
         )
-        print("ACTION URL HEADER", self.request.headers)
-        print("ACTION URL: ", context["action_url"])
 
         return context
 
@@ -200,27 +187,26 @@ class RemoveIngredientView(LoginRequiredMixin, View):
 
 class AddIngredientView(LoginRequiredMixin, View):
 
+    def updated_list(self, existing):
+
+        return Ingredient.objects.filter(user=self.request.user).exclude(
+            pk__in=existing
+        )
+
     def post(self, request, pk):
 
+        existing = self.request.POST.getlist("ingredient_ids")
+        existing.append(str(pk))
+
         ingredient = get_object_or_404(Ingredient, user=self.request.user, pk=pk)
-
-        existing_ids = request.POST.getlist("ingredient_ids")
-
-        if str(ingredient.pk) in existing_ids:
-
-            return render(
-                self.request,
-                "production/recipe/partials/form/_add_button.html",
-                {
-                    "ingredient": ingredient,
-                    "added": True,
-                },
-            )
 
         return render(
             self.request,
             "production/recipe/oob/add_ingredient.html",
-            {"ingredient": ingredient, "added": True},
+            {
+                "ingredient_list": self.updated_list(existing),
+                "ingredient": ingredient,
+            },
         )
 
 
