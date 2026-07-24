@@ -182,21 +182,32 @@ class RecipeDeleteView(LoginRequiredMixin, DeleteView):
 
 class RemoveIngredientView(LoginRequiredMixin, View):
     def post(self, request, pk):
-        return HttpResponse("")
+
+        selected_ingredients = self.request.POST.getlist("ingredient_ids")
+        selected_ingredients.remove(str(pk))
+
+        ingredient_list = Ingredient.objects.filter(user=self.request.user).exclude(
+            pk__in=selected_ingredients
+        )
+
+        return render(
+            self.request,
+            "production/recipe/oob/remove_ingredient.html",
+            {"ingredient_list": ingredient_list},
+        )
 
 
 class AddIngredientView(LoginRequiredMixin, View):
 
     def updated_list(self, existing):
-
         return Ingredient.objects.filter(user=self.request.user).exclude(
             pk__in=existing
         )
 
     def post(self, request, pk):
 
-        existing = self.request.POST.getlist("ingredient_ids")
-        existing.append(str(pk))
+        selected_ingredients = self.request.POST.getlist("ingredient_ids")
+        selected_ingredients.append(str(pk))
 
         ingredient = get_object_or_404(Ingredient, user=self.request.user, pk=pk)
 
