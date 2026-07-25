@@ -2,5 +2,5 @@
     {% include "inventory/ingredient/partials/_results_list.html" with ingredient_list=ingredient_list %}
 </div>
 <div id="ingredient-row" hx-swap-oob="beforeend">
-    {% include "production/recipe/partials/selected_ingredients/_row.html" with ingredient=ingredient quantity_needed=recipe_ingredient.quantity_needed %}
+    {% include "production/recipe/partials/selected_ingredients/_row.html" with ingredient=ingredient %}
 </div>

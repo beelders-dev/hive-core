@@ -199,9 +199,9 @@ class RemoveIngredientView(LoginRequiredMixin, View):
 
 class AddIngredientView(LoginRequiredMixin, View):
 
-    def updated_list(self, existing):
+    def updated_list(self, selected_ingredients):
         return Ingredient.objects.filter(user=self.request.user).exclude(
-            pk__in=existing
+            pk__in=selected_ingredients
         )
 
     def post(self, request, pk):
@@ -215,7 +215,7 @@ class AddIngredientView(LoginRequiredMixin, View):
             self.request,
             "production/recipe/oob/add_ingredient.html",
             {
-                "ingredient_list": self.updated_list(existing),
+                "ingredient_list": self.updated_list(selected_ingredients),
                 "ingredient": ingredient,
             },
         )
