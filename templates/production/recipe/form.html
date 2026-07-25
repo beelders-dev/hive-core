@@ -6,7 +6,7 @@
             <form id="recipe-form"
                   method="post"
                   class="space-y-8"
-                  hx-post="{% if recipe %}{% url 'production:recipe_edit' recipe.pk %}{% else %}{% url 'production:recipe_create' %}{% endif %}"
+                  hx-post="{{ form_action_url }}"
                   hx-swap="none">
                 {% csrf_token %}
                 <div class="grid gap-8 lg:grid-cols-12">
@@ -14,11 +14,11 @@
                     <section class="card flex flex-col lg:col-span-5">
                         {% include "components/card/_header.html" with title="Ingredient Library" subtitle="Search and add ingredients to this recipe." %}
                         <div class="border-b border-slate-200 p-6">
-                            {% include "components/_search_bar.html" with target_id="production-search-results" action_url=action_url %}
+                            {% include "components/_search_bar.html" with target_id="production-search-results" results_url=results_url %}
                         </div>
                         <div id="production-search-results"
                              class="flex-1 overflow-y-auto"
-                             hx-get="{% url 'production:ingredients' recipe.pk %}"
+                             hx-get="{{ results_url }}"
                              hx-trigger="load"
                              hx-swap="innerHTML"></div>
                     </section>

@@ -4,7 +4,7 @@
        </div>
        <input type="search"
               name="q"
-              hx-get="{{ action_url }}"
+              hx-get="{{ results_url }}"
               hx-trigger="input changed delay:500ms, keyup[key=='Enter']"
               hx-target="#{{ target_id }}"
               hx-swap="innerHTML"

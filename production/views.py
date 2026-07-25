@@ -30,12 +30,14 @@ class RecipeFormIngredientListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
 
+        q = self.request.GET.get("q", "")
+
+        if not self.kwargs.get("pk"):
+            return Ingredient.objects.filter(user=self.request.user)
+
         recipe = get_object_or_404(Recipe, user=self.request.user, pk=self.kwargs["pk"])
 
         ingredient_ids = recipe.get_ingredient_ids()
-
-        q = self.request.GET.get("q", "")
-
         qs = Ingredient.objects.filter(user=self.request.user).exclude(
             pk__in=ingredient_ids
         )
@@ -98,11 +100,10 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context["action_url"] = reverse(
-            "production:ingredients", kwargs={"pk": self.kwargs["pk"]}
+        context["results_url"] = reverse(
+            "production:ingredients",
         )
-        print("ACTION URL HEADER", self.request.headers)
-        print("ACTION URL: ", context["action_url"])
+        context["form_action_url"] = reverse("production:recipe_create")
 
         return context
 
@@ -154,11 +155,12 @@ class RecipeUpdateView(LoginRequiredMixin, UpdateView):
         )
 
     def get_context_data(self, **kwargs):
+
         context = super().get_context_data(**kwargs)
         context["recipe_ingredients"] = self.get_object().get_all_ingredients()
-        context["action_url"] = reverse(
-            "production:ingredients", kwargs={"pk": self.kwargs["pk"]}
-        )
+        pk_kwargs = kwargs = {"pk": self.kwargs["pk"]}
+        context["results_url"] = reverse("production:ingredients", kwargs=pk_kwargs)
+        context["form_action_url"] = reverse("production:recipe_edit", kwargs=pk_kwargs)
 
         return context
 

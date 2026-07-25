@@ -42,6 +42,11 @@ urlpatterns = [
         name="ingredients",
     ),
     path(
+        "recipes/ingredients/",
+        RecipeFormIngredientListView.as_view(),
+        name="ingredients",
+    ),
+    path(
         "recipes/<uuid:pk>/add-ingredient/",
         AddIngredientView.as_view(),
         name="add_ingredient",
