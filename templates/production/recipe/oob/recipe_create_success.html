@@ -8,3 +8,7 @@
 <div id="recipe-basic-fields"  hx-swap-oob="outerHTML">
     {% include "production/recipe/partials/form/_basic_fields.html" %}
 </div>
+{% comment %} SEARCH RESULTS SHOULD RELOAD {% endcomment %}
+<div id="production-search-results" hx-swap-oob="innerHTML">
+    {% include "inventory/ingredient/partials/_results_list.html" with ingredient_list=ingredient_list %}
+</div>

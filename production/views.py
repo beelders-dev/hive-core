@@ -94,6 +94,7 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
                 "message": "Recipe created successfully.",
                 "type": "success",
                 "form": RecipeForm(),
+                "ingredient_list": Ingredient.objects.filter(user=self.request.user),
             },
         )
 
