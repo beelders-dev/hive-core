@@ -89,7 +89,7 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
 
         return render(
             self.request,
-            "production/recipe/partials/_recipe_create_success.html",
+            "production/recipe/oob/recipe_create_success.html",
             {
                 "message": "Recipe created successfully.",
                 "type": "success",
