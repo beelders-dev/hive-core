@@ -33,7 +33,9 @@
                             <!-- Selected Ingredients -->
                             <section>
                                 {% include "components/card/_header.html" with title="Selected Ingredients" subtitle="Review ingredients and adjust their required quantities." %}
-                                {% include "production/recipe/partials/selected_ingredients/_table.html" with recipe_id=recipe.pk %}
+                                <div id="selected-ingredients-table">
+                                    {% include "production/recipe/partials/selected_ingredients/_table.html" with recipe_id=recipe.pk %}
+                                </div>
                             </section>
                         </div>
                     </section>

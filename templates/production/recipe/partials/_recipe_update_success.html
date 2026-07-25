@@ -1,7 +1,7 @@
 {% comment %} MESSAGE {% endcomment %}
 {% include "components/toast/_toast_oob.html" with message=message type=type %}
 {% comment %} SELECTED INGREDIENTS TABLE ROW {% endcomment %}
-<div id="selected-ingredients-table" hx-swap-oob="true">
+<div id="selected-ingredients-table" hx-swap-oob="innerHTML">
     {% include "production/recipe/partials/selected_ingredients/_table.html" with recipe_ingredients=recipe_ingredients %}
 </div>
 {% comment %} BASIC FIELDS {% endcomment %}
