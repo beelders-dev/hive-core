@@ -1,6 +1,8 @@
 <div id="production-search-results" hx-swap-oob="innerHTML">
     {% include "inventory/ingredient/partials/_results_list.html" with ingredient_list=ingredient_list %}
 </div>
-<div id="ingredient-row" hx-swap-oob="beforeend">
-    {% include "production/recipe/partials/selected_ingredients/_row.html" with ingredient=ingredient %}
+<div id="selected-ingredients-list" hx-swap-oob="beforeend">
+    <div id="row-{{ ingredient.id }}">
+        {% include "production/recipe/partials/selected_ingredients/_row.html" with ingredient=ingredient %}
+    </div>
 </div>

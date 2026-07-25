@@ -1,21 +1,19 @@
 {% load humanize %}
-<div id="row-{{ ingredient.id }}">
-    <div id="empty-placeholder" hx-swap-oob="delete"></div>
-    <div class="grid grid-cols-12 items-center bg-white transition-colors hover:bg-slate-50 ">
-        <div class="col-span-3 px-4 py-4 ">
-            <p class="truncate font-thin text-slate-900 text-sm">{{ ingredient.name }}</p>
-        </div>
-        <div class="col-span-3 px-4 py-4 ">
-            <p class="truncate font-thin text-slate-900 text-sm">
-                {{ ingredient.current_stock|floatformat:2|intcomma }} {{ ingredient.unit }}
-            </p>
-        </div>
-        <div class="col-span-3 px-4 py-4">
-            {% include "production/recipe/partials/selected_ingredients/_qty_input.html" with qty_needed=recipe_ingredient.qty_needed %}
-        </div>
-        <div class="col-span-3 px-4 py-4 text-center">
-            {% include "production/recipe/partials/selected_ingredients/_remove_button.html" %}
-        </div>
-        <input type="hidden" name="ingredient_ids" value="{{ ingredient.id }}">
+<div id="empty-placeholder" hx-swap-oob="delete"></div>
+<div class="grid grid-cols-12 items-center bg-white transition-colors hover:bg-slate-50 ">
+    <div class="col-span-3 px-4 py-4 ">
+        <p class="truncate font-thin text-slate-900 text-sm">{{ ingredient.name }}</p>
     </div>
+    <div class="col-span-3 px-4 py-4 ">
+        <p class="truncate font-thin text-slate-900 text-sm">
+            {{ ingredient.current_stock|floatformat:2|intcomma }} {{ ingredient.unit }}
+        </p>
+    </div>
+    <div class="col-span-3 px-4 py-4">
+        {% include "production/recipe/partials/selected_ingredients/_qty_input.html" with qty_needed=recipe_ingredient.qty_needed %}
+    </div>
+    <div class="col-span-3 px-4 py-4 text-center">
+        {% include "production/recipe/partials/selected_ingredients/_remove_button.html" %}
+    </div>
+    <input type="hidden" name="ingredient_ids" value="{{ ingredient.id }}">
 </div>

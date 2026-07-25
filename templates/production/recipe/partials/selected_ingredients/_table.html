@@ -5,10 +5,10 @@
         <div class="col-span-3 px-3 py-3 text-center ">Qty</div>
         <div class="col-span-3 px-3 py-3 text-center ">Action</div>
     </div>
-    <div class="divide-y divide-slate-100">
+    <div id="selected-ingredients-list" class="divide-y divide-slate-100">
         {% if recipe_ingredients %}
             {% for recipe_ingredient in recipe_ingredients %}
-                <div id="ingredient-row">
+                <div id="row-{{ recipe_ingredient.ingredient.id }}">
                     {% include "production/recipe/partials/selected_ingredients/_row.html" with ingredient=recipe_ingredient.ingredient quantity_needed=recipe_ingredient.quantity_needed %}
                 </div>
             {% endfor %}
