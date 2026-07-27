@@ -29,19 +29,11 @@ class RecipeFormIngredientListView(LoginRequiredMixin, ListView):
     template_name = "inventory/ingredient/partials/_results_list.html"
 
     def get_queryset(self):
-
         q = self.request.GET.get("q", "")
-
-        if not self.kwargs.get("pk"):
-            return Ingredient.objects.filter(user=self.request.user)
-
-        recipe = get_object_or_404(Recipe, user=self.request.user, pk=self.kwargs["pk"])
-
-        ingredient_ids = recipe.get_ingredient_ids()
+        selected_ingredients = self.request.GET.getlist("ingredient_ids")
         qs = Ingredient.objects.filter(user=self.request.user).exclude(
-            pk__in=ingredient_ids
+            pk__in=selected_ingredients
         )
-
         if q:
             qs = qs.filter(name__icontains=q)
 
@@ -189,37 +181,43 @@ class RemoveIngredientView(LoginRequiredMixin, View):
         selected_ingredients = self.request.POST.getlist("ingredient_ids")
         selected_ingredients.remove(str(pk))
 
-        ingredient_list = Ingredient.objects.filter(user=self.request.user).exclude(
+        ingredient_results = Ingredient.objects.filter(user=self.request.user).exclude(
             pk__in=selected_ingredients
         )
+        q = self.request.POST.get("q", "")
+        if q:
+            ingredient_results = ingredient_results.filter(name__icontains=q)
 
         return render(
             self.request,
             "production/recipe/oob/remove_ingredient.html",
-            {"ingredient_list": ingredient_list},
+            {"ingredient_list": ingredient_results},
         )
 
 
 class AddIngredientView(LoginRequiredMixin, View):
-
-    def updated_list(self, selected_ingredients):
-        return Ingredient.objects.filter(user=self.request.user).exclude(
-            pk__in=selected_ingredients
-        )
 
     def post(self, request, pk):
 
         selected_ingredients = self.request.POST.getlist("ingredient_ids")
         selected_ingredients.append(str(pk))
 
-        ingredient = get_object_or_404(Ingredient, user=self.request.user, pk=pk)
+        ingredient_results = Ingredient.objects.filter(user=self.request.user).exclude(
+            pk__in=selected_ingredients
+        )
+
+        q = self.request.POST.get("q", "")
+        if q:
+            ingredient_results = ingredient_results.filter(name__icontains=q)
 
         return render(
             self.request,
             "production/recipe/oob/add_ingredient.html",
             {
-                "ingredient_list": self.updated_list(selected_ingredients),
-                "ingredient": ingredient,
+                "ingredient_list": ingredient_results,
+                "ingredient": get_object_or_404(
+                    Ingredient, user=self.request.user, pk=pk
+                ),
             },
         )
 

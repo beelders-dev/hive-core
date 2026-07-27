@@ -20,6 +20,7 @@
                              class="flex-1 overflow-y-auto"
                              hx-get="{{ results_url }}"
                              hx-trigger="load"
+                             hx-include="input[name='ingredient_ids']"
                              hx-swap="innerHTML"></div>
                     </section>
                     <!-- Recipe -->

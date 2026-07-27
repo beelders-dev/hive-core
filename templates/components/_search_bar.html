@@ -2,11 +2,14 @@
        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-blue-600 transition-colors">
               {% include "components/svgs/search/_search_icon.html" %}
        </div>
+       {{ target_id }}
+       {{ results_url }}
        <input type="search"
               name="q"
               hx-get="{{ results_url }}"
               hx-trigger="input changed delay:500ms, keyup[key=='Enter']"
               hx-target="#{{ target_id }}"
+              hx-include="input[name='ingredient_ids']"
               hx-swap="innerHTML"
               hx-indicator="#search-loading-spinner"
               placeholder="Search ingredients by name, CAS number, or SKU..."
