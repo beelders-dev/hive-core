@@ -92,7 +92,6 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         context["results_url"] = reverse(
             "production:ingredients",
         )
@@ -148,7 +147,6 @@ class RecipeUpdateView(LoginRequiredMixin, UpdateView):
         )
 
     def get_context_data(self, **kwargs):
-
         context = super().get_context_data(**kwargs)
         context["recipe_ingredients"] = self.get_object().get_all_ingredients()
         pk_kwargs = kwargs = {"pk": self.kwargs["pk"]}
@@ -180,18 +178,17 @@ class RemoveIngredientView(LoginRequiredMixin, View):
 
         selected_ingredients = self.request.POST.getlist("ingredient_ids")
         selected_ingredients.remove(str(pk))
-
-        ingredient_results = Ingredient.objects.filter(user=self.request.user).exclude(
+        qs = Ingredient.objects.filter(user=self.request.user).exclude(
             pk__in=selected_ingredients
         )
         q = self.request.POST.get("q", "")
         if q:
-            ingredient_results = ingredient_results.filter(name__icontains=q)
+            qs = qs.filter(name__icontains=q)
 
         return render(
             self.request,
             "production/recipe/oob/remove_ingredient.html",
-            {"ingredient_list": ingredient_results},
+            {"ingredient_list": qs},
         )
 
 
@@ -201,20 +198,18 @@ class AddIngredientView(LoginRequiredMixin, View):
 
         selected_ingredients = self.request.POST.getlist("ingredient_ids")
         selected_ingredients.append(str(pk))
-
-        ingredient_results = Ingredient.objects.filter(user=self.request.user).exclude(
+        qs = Ingredient.objects.filter(user=self.request.user).exclude(
             pk__in=selected_ingredients
         )
-
         q = self.request.POST.get("q", "")
         if q:
-            ingredient_results = ingredient_results.filter(name__icontains=q)
+            qs = qs.filter(name__icontains=q)
 
         return render(
             self.request,
             "production/recipe/oob/add_ingredient.html",
             {
-                "ingredient_list": ingredient_results,
+                "ingredient_list": qs,
                 "ingredient": get_object_or_404(
                     Ingredient, user=self.request.user, pk=pk
                 ),
@@ -225,7 +220,7 @@ class AddIngredientView(LoginRequiredMixin, View):
 class CreateBatchView(LoginRequiredMixin, View):
 
     def post(self, request, pk):
-
+        print(self.request.headers)
         recipe = get_object_or_404(Recipe, user=request.user, pk=pk)
 
         try:
