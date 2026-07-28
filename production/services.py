@@ -130,8 +130,6 @@ class ProductionService:
 
         qty_to_reinstate = batch_ingredient.qty_used * batch_qty
 
-        # If all purchases are full, then, create a new purchase instead of raising an error.
-
         for purchase in batch_ingredient.ingredient.purchases.order_by("purchased_at"):
 
             if purchase.get_stock_difference <= qty_to_reinstate:

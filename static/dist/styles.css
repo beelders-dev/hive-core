@@ -2025,6 +2025,12 @@ video {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
+/* A work-around for Recipe description textarea not detecting resize-none*/
+
+textarea {
+  resize: none;
+}
+
 .placeholder\:text-slate-400::-moz-placeholder {
   --tw-text-opacity: 1;
   color: rgb(148 163 184 / var(--tw-text-opacity, 1));
@@ -2286,4 +2292,3 @@ video {
   -webkit-appearance: none;
           appearance: none;
 }
-

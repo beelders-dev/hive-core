@@ -72,3 +72,8 @@
     @apply bg-red-600 hover:bg-red-700 active:scale-95
 }
 
+/* A work-around for Recipe description textarea not detecting resize-none*/
+
+textarea {
+    @apply resize-none
+}
