@@ -31,44 +31,7 @@
                     <!-- Summary -->
                     <div id="purchase-summary">{% include "inventory/purchase/partials/_summary.html" %}</div>
                     <!-- Details -->
-                    <div class="p-8">
-                        <h3 class="mb-6 text-sm font-semibold uppercase tracking-wide text-slate-500">Purchase Information</h3>
-                        <dl class="divide-y divide-slate-100">
-                            <div class="grid grid-cols-3 py-4">
-                                <dt class="font-medium text-slate-500">Ingredient</dt>
-                                <dd class="col-span-2 text-slate-900">
-                                    {{ purchase.ingredient.name }}
-                                </dd>
-                            </div>
-                            <div class="grid grid-cols-3 py-4">
-                                <dt class="font-medium text-slate-500">Purchased At</dt>
-                                <dd class="col-span-2 text-slate-900">
-                                    {{ purchase.purchased_at|date:"M d, Y" }}
-                                </dd>
-                            </div>
-                            <div class="grid grid-cols-3 py-4">
-                                <dt class="font-medium text-slate-500">Expiration</dt>
-                                <dd class="col-span-2 text-slate-900">
-                                    {{ purchase.exp_date|date:"M d, Y"|default:"—" }}
-                                </dd>
-                            </div>
-                        </dl>
-                        <h3 class="mt-10 mb-6 text-sm font-semibold uppercase tracking-wide text-slate-500">Metadata</h3>
-                        <dl class="divide-y divide-slate-100">
-                            <div class="grid grid-cols-3 py-4">
-                                <dt class="font-medium text-slate-500">Created At</dt>
-                                <dd class="col-span-2 text-slate-900">
-                                    {{ purchase.created_at|date:"F j, Y, g:i A" }}
-                                </dd>
-                            </div>
-                            <div class="grid grid-cols-3 py-4">
-                                <dt class="font-medium text-slate-500">Last Modified</dt>
-                                <dd class="col-span-2 text-slate-900">
-                                    {{ purchase.modified_at|date:"F j, Y, g:i A" }}
-                                </dd>
-                            </div>
-                        </dl>
-                    </div>
+                    <div id="main-info">{% include "inventory/purchase/partials/_main_info.html" %}</div>
                     <!-- Footer -->
                     <div class="flex justify-end border-t border-slate-200 bg-slate-50 px-8 py-5"></div>
                 </section>

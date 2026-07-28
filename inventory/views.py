@@ -203,7 +203,6 @@ class PurchaseUpdateView(LoginRequiredMixin, UpdateView):
             self.request,
             self.success_template_name,
             {
-                "form": form,
                 "purchase": self.object,
                 "message": "Purchase detail updated successfully.",
                 "type": "success",
@@ -215,7 +214,6 @@ class PurchaseUpdateView(LoginRequiredMixin, UpdateView):
             self.request,
             self.template_name,
             {
-                "form": form,
                 "purchase": self.get_object(),
                 "message": "Incorrect",
                 "type": "error",
@@ -267,7 +265,7 @@ class PurchaseAdjustmentCreateView(LoginRequiredMixin, CreateView):
 
         return render(
             self.request,
-            "inventory/adjustment/partials/_create_success_oob.html",
+            "inventory/adjustment/oob/_create_success.html",
             {
                 "adjustment_list": purchase.adjustments.all(),
                 "purchase": purchase,
