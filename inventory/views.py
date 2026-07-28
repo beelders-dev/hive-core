@@ -227,6 +227,10 @@ class PurchaseAdjustmentListView(LoginRequiredMixin, ListView):
     template_name = "inventory/adjustment/partials/_list.html"
     context_object_name = "adjustment_list"
 
+    def get_queryset(self):
+        purchases = IngredientPurchase.objects.get(pk=self.kwargs["pk"])
+        return purchases.adjustments.all()
+
 
 class PurchaseAdjustmentCreateView(LoginRequiredMixin, CreateView):
     model = PurchaseAdjustment
