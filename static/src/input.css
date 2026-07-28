@@ -77,3 +77,15 @@
 textarea {
     @apply resize-none
 }
+
+/* Purchase detail */
+.main-info-title {
+    @apply my-6 text-sm font-bold  uppercase tracking-wide text-slate-600 border-b pb-1
+}
+
+
+/* Reusables */
+
+button {
+    @apply rounded-md text-sm font-medium transition px-4 py-2 
+}

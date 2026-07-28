@@ -1,47 +1,43 @@
 {% extends "base.html" %}
 {% load humanize %}
 {% block content %}
-    <div class="min-h-screen bg-slate-50">
-        <div class="mx-auto max-w-7xl px-6 py-10">
-            <!-- Header -->
-            <div class="mb-8 flex items-start justify-between">
+    <div class="mx-auto max-w-7xl px-6 py-10">
+        <!-- Header -->
+        <div class="flex flex-row justify-between">
+            <div>
                 {% include "components/_page_header.html" with page_title="Purchase Detail" page_description="Review this ingredient purchase record." %}
+            </div>
+            <div class="flex flex-col mb-2 items-end space-y-2">
+                <button class="border border-slate-300 bg-white text-slate-700 transition hover:bg-slate-100"
+                        hx-get="{% url 'inventory:purchase_edit' purchase.pk %}"
+                        hx-target="#modal-root"
+                        hx-swap="innerHTML">Edit Purchase Stock</button>
+                <button class=" bg-indigo-600  text-white  hover:bg-indigo-700"
+                        hx-get="{% url 'inventory:adjustment_create' purchase.pk %}"
+                        hx-target="#modal-root"
+                        hx-swap="innerHTML">Adjust Stock</button>
+            </div>
+        </div>
+        <div class="grid grid-cols-12 gap-6">
+            <!-- Purchase Card -->
+            <section class="col-span-8 overflow-hidden card">
+                <!-- Card Header -->
                 <div>
-                    <button class="rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-                            hx-get="{% url 'inventory:purchase_edit' purchase.pk %}"
-                            hx-target="#modal-root"
-                            hx-swap="innerHTML">Edit Purchase Stock</button>
-                    <button class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-indigo-700"
-                            hx-get="{% url 'inventory:adjustment_create' purchase.pk %}"
-                            hx-target="#modal-root"
-                            hx-swap="innerHTML">Adjust Stock</button>
+                    {% include "components/card/_header.html" with title=purchase.ingredient.name subtitle="Purchase ID: "|add:purchase.short_id %}
                 </div>
-            </div>
-            <div class="grid grid-cols-12 gap-6">
-                <!-- Purchase Card -->
-                <section class="col-span-8 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-                    <!-- Card Header -->
-                    <div class="border-b border-slate-200 bg-slate-50 px-8 py-6">
-                        <div class="flex items-start justify-between">
-                            <div>
-                                {% include "components/card/_header.html" with title=purchase.ingredient.name subtitle="Purchase ID: "|add:purchase.short_id %}
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Summary -->
-                    <div id="purchase-summary">{% include "inventory/purchase/partials/_summary.html" %}</div>
-                    <!-- Details -->
-                    <div id="main-info">{% include "inventory/purchase/partials/_main_info.html" %}</div>
-                    <!-- Footer -->
-                    <div class="flex justify-end border-t border-slate-200 bg-slate-50 px-8 py-5"></div>
-                </section>
-                <!-- Adjustment List -->
-                <aside id="adjustment-list"
-                       hx-get="{% url 'inventory:adjustment_list' purchase.pk %}"
-                       hx-trigger="load"
-                       hx-swap-oob="true">
-                </aside>
-            </div>
+                <!-- Summary -->
+                <div id="purchase-summary">{% include "inventory/purchase/partials/_summary.html" %}</div>
+                <!-- Details -->
+                <div id="main-info">{% include "inventory/purchase/partials/_main_info.html" %}</div>
+                <!-- Footer -->
+                <div class="flex justify-end border-t border-slate-200 bg-slate-50 px-8 py-5"></div>
+            </section>
+            <!-- Adjustment List -->
+            <aside id="adjustment-list"
+                   hx-get="{% url 'inventory:adjustment_list' purchase.pk %}"
+                   hx-trigger="load"
+                   hx-swap-oob="true">
+            </aside>
         </div>
     </div>
 {% endblock content %}
