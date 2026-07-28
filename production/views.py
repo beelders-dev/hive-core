@@ -175,13 +175,12 @@ class RecipeDeleteView(LoginRequiredMixin, DeleteView):
 
 class RemoveIngredientView(LoginRequiredMixin, View):
     def post(self, request, pk):
-
+        q = self.request.POST.get("q", "")
         selected_ingredients = self.request.POST.getlist("ingredient_ids")
         selected_ingredients.remove(str(pk))
         qs = Ingredient.objects.filter(user=self.request.user).exclude(
             pk__in=selected_ingredients
         )
-        q = self.request.POST.get("q", "")
         if q:
             qs = qs.filter(name__icontains=q)
 
@@ -195,13 +194,12 @@ class RemoveIngredientView(LoginRequiredMixin, View):
 class AddIngredientView(LoginRequiredMixin, View):
 
     def post(self, request, pk):
-
+        q = self.request.POST.get("q", "")
         selected_ingredients = self.request.POST.getlist("ingredient_ids")
         selected_ingredients.append(str(pk))
         qs = Ingredient.objects.filter(user=self.request.user).exclude(
             pk__in=selected_ingredients
         )
-        q = self.request.POST.get("q", "")
         if q:
             qs = qs.filter(name__icontains=q)
 

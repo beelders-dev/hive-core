@@ -13,7 +13,9 @@
         </div>
         <!-- Search Section -->
         <div class="mb-4 w-1/2">
-            <div>{% include "components/_search_bar.html" with target_id="ingredients-search-results" %}</div>
+            <div>
+                {% include "components/_search_bar.html" with target_id="inventory-search-results" results_url=results_url %}
+            </div>
         </div>
         <!-- Results Section -->
         <div class="overflow-hidden card">
@@ -21,7 +23,7 @@
                 <h2 class="text-sm font-semibold text-slate-800">Ingredients</h2>
                 <p class="mt-1 text-sm text-slate-500">Current list of ingredients available in your inventory.</p>
             </div>
-            <div id="ingredients-search-results"
+            <div id="inventory-search-results"
                  hx-swap="innerHTML"
                  hx-get="{% url 'inventory:ingredient_list' %}"
                  hx-trigger="load"></div>

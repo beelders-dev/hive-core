@@ -26,6 +26,7 @@ class InventoryHomeView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["ingredient_list"] = Ingredient.objects.filter(user=self.request.user)
+        context["results_url"] = reverse("inventory:ingredient_list")
         return context
 
 
@@ -41,12 +42,6 @@ class IngredientListView(LoginRequiredMixin, ListView):
         if q:
             qs = qs.filter(name__icontains=q)
         return qs
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["action_url"] = reverse("inventory:ingredient_list")
-
-        return context
 
 
 class IngredientCreateView(LoginRequiredMixin, CreateView):
