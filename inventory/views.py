@@ -124,10 +124,16 @@ class PurchaseListView(LoginRequiredMixin, ListView):
         return IngredientPurchase.objects.filter(ingredient_id=self.kwargs["pk"])
 
 
+class PurchaseDetailView(LoginRequiredMixin, DetailView):
+    model = IngredientPurchase
+    context_object_name = "purchase"
+    template_name = "inventory/purchase/detail.html"
+
+
 class PurchaseCreateView(LoginRequiredMixin, CreateView):
     model = IngredientPurchase
-    template_name = "inventory/purchase/partials/_form.html"
-    success_template_name = "inventory/purchase/partials/_create_success_oob.html"
+    template_name = "inventory/purchase/form.html"
+    success_template_name = "inventory/purchase/oob/_create_success.html"
     form_class = IngredientPurchaseForm
 
     def get_context_data(self, **kwargs):
@@ -174,49 +180,48 @@ class PurchaseCreateView(LoginRequiredMixin, CreateView):
         )
 
 
-class PurchaseDetailView(LoginRequiredMixin, DetailView):
-    model = IngredientPurchase
-    context_object_name = "purchase"
-    template_name = "inventory/purchase/detail.html"
-
-
 class PurchaseUpdateView(LoginRequiredMixin, UpdateView):
     model = IngredientPurchase
     form_class = IngredientPurchaseForm
-
-    template_name = "inventory/purchase/partials/_form.html"
-
-    def get_success_url(self):
-        return reverse(
-            "inventory:purchase",
-            kwargs={"pk": self.object.pk},
-        )
+    template_name = "inventory/purchase/form.html"
+    success_template_name = "inventory/purchase/oob/_edit_success.html"
 
     def get_context_data(self, **kwargs):
         purchase = self.get_object()
-
         context = super().get_context_data(**kwargs)
-
         context["action_url"] = reverse(
             "inventory:purchase_edit",
             kwargs={"pk": purchase.pk},
         )
-
         return context
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-
         self.object.save()
 
-        if self.request.headers.get("HX-Request"):
-            response = HttpResponse(
-                '<div id="modal-root" hx-swap-oob="innerHTML"></div>'
-            )
-            response["HX-Refresh"] = "true"
-            return response
+        return render(
+            self.request,
+            self.success_template_name,
+            {
+                "form": form,
+                "purchase": self.object,
+                "message": "Purchase detail updated successfully.",
+                "type": "success",
+            },
+        )
 
-        return HttpResponseRedirect(self.get_success_url())
+    def form_invalid(self, form):
+        return render(
+            self.request,
+            self.template_name,
+            {
+                "form": form,
+                "purchase": self.get_object(),
+                "message": "Incorrect",
+                "type": "error",
+            },
+            status=400,
+        )
 
 
 class PurchaseAdjustmentListView(LoginRequiredMixin, ListView):
