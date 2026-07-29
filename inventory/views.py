@@ -44,7 +44,7 @@ class IngredientListView(LoginRequiredMixin, ListView):
 
 class IngredientCreateView(LoginRequiredMixin, CreateView):
     model = Ingredient
-    template_name = "inventory/ingredient/partials/_form.html"
+    template_name = "inventory/ingredient/form.html"
     success_template = "inventory/ingredient/oob/_create_success.html"
     form_class = IngredientForm
 
@@ -64,18 +64,14 @@ class IngredientCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["action_url"] = reverse("inventory:ingredient_create")
-
         return context
 
 
 class IngredientUpdateView(LoginRequiredMixin, UpdateView):
     model = Ingredient
-    template_name = "inventory/ingredient/partials/_form.html"
-    success_template = "inventory/ingredient/oob/_edit_success.html"
+    template_name = "inventory/ingredient/form.html"
+    success_template = "inventory/ingredient/oob/_update_success.html"
     form_class = IngredientForm
-
-    def get_queryset(self):
-        return Ingredient.objects.filter(user=self.request.user)
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -83,15 +79,20 @@ class IngredientUpdateView(LoginRequiredMixin, UpdateView):
         return render(
             self.request,
             self.success_template,
+            {
+                "ingredient": get_object_or_404(
+                    Ingredient,
+                    user=self.request.user,
+                    pk=self.kwargs["pk"],
+                )
+            },
         )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         context["action_url"] = reverse(
             "inventory:ingredient_update", kwargs={"pk": self.kwargs["pk"]}
         )
-
         return context
 
 

@@ -109,3 +109,73 @@ class IngredientCreateViewTests(TestCase):
         )
         self.client.force_login(self.user)
         self.url = reverse("inventory:ingredient_create")
+
+    def test_ingredient_create_view_renders_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "inventory/ingredient/form.html")
+
+    def test_ingredient_create_view_renders_success_template(self):
+        response = self.client.post(
+            self.url,
+            data={
+                "user": self.user,
+                "name": "Cocoa Powder",
+                "unit": "g",
+                "low_stock_threshold": "100",
+            },
+            HTTP_HX_REQUEST="true",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(
+            response, "inventory/ingredient/oob/_create_success.html"
+        )
+
+    def test_ingredient_create_view_renders_ingredient_created(self):
+        response = self.client.post(
+            self.url,
+            data={
+                "user": self.user,
+                "name": "Cocoa Powder",
+                "unit": "g",
+                "low_stock_threshold": "100",
+            },
+            HTTP_HX_REQUEST="true",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Cocoa Powder")
+
+
+class IngredientUpdateViewTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.ingredient = Ingredient.objects.create(user=self.user, name="Cocoa Powder")
+        self.url = reverse(
+            "inventory:ingredient_update", kwargs={"pk": self.ingredient.pk}
+        )
+
+    def test_ingredient_update_view_renders_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "inventory/ingredient/form.html")
+
+    def test_ingredient_update_view_renders_success_template(self):
+        response = self.client.post(
+            self.url,
+            data={
+                "user": self.user,
+                "name": "Cocoa Powder",
+                "unit": "g",
+                "low_stock_threshold": "200",
+            },
+            HTTP_HX_REQUEST="true",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(
+            response, "inventory/ingredient/oob/_create_success.html"
+        )
