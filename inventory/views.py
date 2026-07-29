@@ -1,7 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models.query import QuerySet
 from django.shortcuts import render, get_object_or_404
-from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 
@@ -47,16 +45,20 @@ class IngredientListView(LoginRequiredMixin, ListView):
 class IngredientCreateView(LoginRequiredMixin, CreateView):
     model = Ingredient
     template_name = "inventory/ingredient/partials/_form.html"
+    success_template = "inventory/ingredient/oob/_create_success.html"
     form_class = IngredientForm
-    success_url = reverse_lazy("inventory:ingredient_list")
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         form.save()
         return render(
             self.request,
-            "inventory/ingredient/partials/_create_success_oob.html",
-            {"ingredient_list": Ingredient.objects.filter(user=self.request.user)},
+            self.success_template,
+            {
+                "ingredient_list": Ingredient.objects.filter(user=self.request.user),
+                "message": "Ingredient successfully added.",
+                "type": "success",
+            },
         )
 
     def get_context_data(self, **kwargs):
@@ -69,6 +71,7 @@ class IngredientCreateView(LoginRequiredMixin, CreateView):
 class IngredientUpdateView(LoginRequiredMixin, UpdateView):
     model = Ingredient
     template_name = "inventory/ingredient/partials/_form.html"
+    success_template = "inventory/ingredient/oob/_edit_success.html"
     form_class = IngredientForm
 
     def get_queryset(self):
@@ -78,7 +81,8 @@ class IngredientUpdateView(LoginRequiredMixin, UpdateView):
         form.instance.user = self.request.user
         form.save()
         return render(
-            self.request, "inventory/ingredient/partials/_edit_success_oob.html"
+            self.request,
+            self.success_template,
         )
 
     def get_context_data(self, **kwargs):

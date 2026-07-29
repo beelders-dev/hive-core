@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from django.utils import timezone
 from decimal import Decimal
-from .models import Ingredient, IngredientPurchase, PurchaseAdjustment
+from ..models import Ingredient, IngredientPurchase, PurchaseAdjustment
 
 
 class IngredientModelTests(TestCase):

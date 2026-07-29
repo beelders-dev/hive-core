@@ -1,0 +1,5 @@
+<div id="inventory-search-results" hx-swap-oob="innerHTML">
+    {% include "inventory/ingredient/partials/_results_table.html" %}
+</div>
+<div id="modal-root" hx-swap-oob="true"></div>
+{% include "components/toast/_toast_oob.html" with message=message type=type %}
