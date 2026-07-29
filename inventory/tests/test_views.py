@@ -1,3 +1,4 @@
+from datetime import date
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
@@ -33,10 +34,13 @@ class InventoryHomeViewTests(TestCase):
         response = self.client.get(self.url)
         self.assertIn("results_url", response.context)
 
-    def test_inventory_home_view_is_inaccessible_when_logged_out(self):
+    def test_inventory_home_view_requires_login(self):
         self.client.logout()
         response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
 
 
 class IngredientListViewTests(TestCase):
@@ -45,7 +49,7 @@ class IngredientListViewTests(TestCase):
             username="Mike", password="testpass123"
         )
         self.client.force_login(self.user)
-        self.url = reverse("inventory:ingredient_list")
+        self.url = reverse("inventory:list")
 
     def test_ingredient_list_view_renders_correct_template(self):
         response = self.client.get(self.url)
@@ -82,10 +86,13 @@ class IngredientListViewTests(TestCase):
         response = self.client.get(self.url)
         self.assertContains(response, "Sugar")
 
-    def test_ingredient_list_view_not_viewable_when_user_is_logged_out(self):
+    def test_ingredient_list_view_requires_login(self):
         self.client.logout()
-        response = self.client.get(self.url, {"q": "sugar"})
-        self.assertEqual(response.status_code, 302)
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
 
     def test_ingredient_list_view_not_viewable_when_different_user_is_logged_in(self):
         Ingredient.objects.create(user=self.user, name="Flour")
@@ -97,7 +104,7 @@ class IngredientListViewTests(TestCase):
         another_user_ingredient = Ingredient.objects.create(
             user=another_user, name="Sugar"
         )
-        response = self.client.get(reverse("inventory:ingredient_list"))
+        response = self.client.get(reverse("inventory:list"))
         ingredients = response.context["ingredient_list"]
         self.assertEqual(list(ingredients), [another_user_ingredient])
 
@@ -108,7 +115,7 @@ class IngredientCreateViewTests(TestCase):
             username="Mike", password="testpass123"
         )
         self.client.force_login(self.user)
-        self.url = reverse("inventory:ingredient_create")
+        self.url = reverse("inventory:create")
 
     def test_ingredient_create_view_renders_correct_template(self):
         response = self.client.get(self.url)
@@ -146,6 +153,14 @@ class IngredientCreateViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Cocoa Powder")
 
+    def test_ingredient_create_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
+
 
 class IngredientUpdateViewTests(TestCase):
     def setUp(self):
@@ -154,9 +169,7 @@ class IngredientUpdateViewTests(TestCase):
         )
         self.client.force_login(self.user)
         self.ingredient = Ingredient.objects.create(user=self.user, name="Cocoa Powder")
-        self.url = reverse(
-            "inventory:ingredient_update", kwargs={"pk": self.ingredient.pk}
-        )
+        self.url = reverse("inventory:update", kwargs={"pk": self.ingredient.pk})
 
     def test_ingredient_update_view_renders_correct_template(self):
         response = self.client.get(self.url)
@@ -177,5 +190,257 @@ class IngredientUpdateViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(
-            response, "inventory/ingredient/oob/_create_success.html"
+            response, "inventory/ingredient/oob/_update_success.html"
         )
+
+    def test_ingredient_update_view_ingredient_updated(self):
+        response = self.client.post(
+            self.url,
+            data={
+                "user": self.user,
+                "name": "Cocoa Powder Updated",
+                "unit": "g",
+                "low_stock_threshold": "200",
+            },
+            HTTP_HX_REQUEST="true",
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Cocoa Powder Updated")
+
+    def test_ingredient_update_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
+
+
+class IngredientDeleteViewTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.ingredient = Ingredient.objects.create(user=self.user, name="Cocoa Powder")
+        self.url = reverse("inventory:delete", kwargs={"pk": self.ingredient.pk})
+
+    def test_ingredient_delete_view_renders_object_and_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["object"], self.ingredient)
+        self.assertTemplateUsed(response, "inventory/ingredient/delete.html")
+
+    def test_ingredient_delete_view_redirects_to_inventory_home_after_delete(self):
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("inventory:index"))
+
+    def test_ingredient_delete_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
+
+
+class IngredientDetailViewTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.ingredient = Ingredient.objects.create(user=self.user, name="Cocoa Powder")
+        self.url = reverse("inventory:ingredient", kwargs={"pk": self.ingredient.pk})
+
+    def test_ingredient_detail_view_renders_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "inventory/ingredient/detail.html")
+
+    def test_ingredient_detail_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
+
+
+class PurchaseListViewTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.ingredient = Ingredient.objects.create(user=self.user, name="Cocoa Powder")
+        self.purchase = IngredientPurchase.objects.create(
+            ingredient=self.ingredient,
+            purchased_at=timezone.now(),
+            qty_purchased=Decimal("100"),
+            total_cost=Decimal("100"),
+        )
+        self.url = reverse("inventory:purchase_list", kwargs={"pk": self.ingredient.pk})
+
+    def test_purchase_list_view_renders_object_and_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        purchases = response.context["purchases"]
+        self.assertEqual(list(purchases), [self.purchase])
+        self.assertTemplateUsed(response, "inventory/purchase/partials/_list.html")
+
+    def test_purchase_list_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
+
+
+class PurchaseDetailViewTests(TestCase):
+
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.ingredient = Ingredient.objects.create(user=self.user, name="Cocoa Powder")
+        self.purchase = IngredientPurchase.objects.create(
+            ingredient=self.ingredient,
+            purchased_at=timezone.now(),
+            qty_purchased=Decimal("100"),
+            total_cost=Decimal("100"),
+        )
+        self.url = reverse("inventory:purchase", kwargs={"pk": self.purchase.pk})
+
+    def test_purchase_detail_view_renders_object_and_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        purchase = response.context["purchase"]
+        self.assertEqual(purchase, self.purchase)
+        self.assertTemplateUsed(response, "inventory/purchase/detail.html")
+
+    def test_purchase_detail_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
+
+
+class PurchaseCreateViewTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.ingredient = Ingredient.objects.create(user=self.user, name="Cocoa Powder")
+        self.url = reverse(
+            "inventory:purchase_create", kwargs={"pk": self.ingredient.pk}
+        )
+
+    def test_purchase_create_view_renders_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "inventory/purchase/form.html")
+
+    def test_purchase_create_view_renders_success_template_after_create(self):
+        response = self.client.post(
+            self.url,
+            data={
+                "purchased_at": date.today(),
+                "qty_purchased": Decimal("100"),
+                "total_cost": Decimal("100"),
+            },
+            HTTP_HX_REQUEST="true",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "inventory/purchase/oob/_create_success.html")
+
+    def test_purchase_create_view_creates_purchase_successfully(self):
+        self.client.post(
+            self.url,
+            data={
+                "purchased_at": date.today(),
+                "qty_purchased": Decimal("100"),
+                "total_cost": Decimal("100"),
+            },
+            HTTP_HX_REQUEST="true",
+        )
+        purchase = IngredientPurchase.objects.get()
+        self.assertEqual(purchase.ingredient, self.ingredient)
+
+    def test_purchase_create_view_does_not_create_with_zero_total_cost(self):
+        self.client.post(
+            self.url,
+            data={
+                "purchased_at": date.today(),
+                "qty_purchased": Decimal("100"),
+                "total_cost": "",
+            },
+            HTTP_HX_REQUEST="true",
+        )
+        self.assertEqual(IngredientPurchase.objects.count(), 0)
+
+    def test_purchase_create_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
+
+
+class PurchaseUpdateViewTests(TestCase):
+
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.ingredient = Ingredient.objects.create(user=self.user, name="Cocoa Powder")
+        self.purchase = IngredientPurchase.objects.create(
+            ingredient=self.ingredient,
+            purchased_at=date.today(),
+            qty_purchased=Decimal("100"),
+            total_cost=Decimal("100"),
+        )
+        self.url = reverse("inventory:purchase_update", kwargs={"pk": self.purchase.pk})
+
+    def test_purchase_update_view_renders_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "inventory/purchase/form.html")
+
+    def test_purchase_update_view_renders_success_template(self):
+        response = self.client.post(
+            self.url,
+            data={
+                "purchased_at": date.today(),
+                "qty_purchased": Decimal("100"),
+                "total_cost": Decimal("100"),
+            },
+            HTTP_HX_REQUEST="true",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "inventory/purchase/oob/_edit_success.html")
+
+    def test_purchase_update_view_does_not_update_purchase_when_form_is_invalid(self):
+        response = self.client.post(
+            self.url,
+            data={
+                "purchased_at": date.today(),
+                "qty_purchased": Decimal("100"),
+                "total_cost": "",
+            },
+            HTTP_HX_REQUEST="true",
+        )
+        self.assertEqual(response.status_code, 400)
+
+        self.assertTemplateUsed(response, "inventory/purchase/form.html")
+        self.purchase.refresh_from_db()
+        self.assertEqual(self.purchase.total_cost, Decimal("100"))

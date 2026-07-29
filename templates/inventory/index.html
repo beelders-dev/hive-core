@@ -4,7 +4,7 @@
         <!-- Page Header -->
         <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
             {% include "components/_page_header.html" with page_title="Ingredients" page_description="Manage your ingredients, monitor available stock, and keep your recipe costs accurate." %}
-            <button hx-get="{% url 'inventory:ingredient_create' %}"
+            <button hx-get="{{ create_ingredient_url }}"
                     hx-target="#modal-root"
                     hx-swap="true"
                     class="inline-flex items-center justify-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
@@ -25,7 +25,7 @@
             </div>
             <div id="inventory-search-results"
                  hx-swap="innerHTML"
-                 hx-get="{% url 'inventory:ingredient_list' %}"
+                 hx-get="{{ results_url }}"
                  hx-trigger="load"></div>
         </div>
     </div>

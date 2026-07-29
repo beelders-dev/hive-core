@@ -1,2 +1,7 @@
-<div id="ingredient-purchase-list" hx-swap-oob="innerHTML">{% include "inventory/purchase/partials/_list.html" %}</div>
-<div id="ingredient-stats" hx-swap-oob="innerHTML">{% include "inventory/ingredient/partials/_stat_cards.html" %}</div>
+<div id="ingredient-purchase-list" hx-swap-oob="innerHTML">
+    {% include "inventory/purchase/partials/_list.html" with purchases=purchases %}
+</div>
+<div id="ingredient-stats" hx-swap-oob="innerHTML">
+    {% include "inventory/ingredient/partials/_stat_cards.html" with ingredient=ingredient %}
+</div>
+{% include "components/toast/_toast_oob.html" with message=message type=type %}

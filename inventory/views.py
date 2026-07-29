@@ -24,7 +24,8 @@ class InventoryHomeView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["ingredient_list"] = Ingredient.objects.filter(user=self.request.user)
-        context["results_url"] = reverse("inventory:ingredient_list")
+        context["results_url"] = reverse("inventory:list")
+        context["create_ingredient_url"] = reverse("inventory:create")
         return context
 
 
@@ -63,7 +64,7 @@ class IngredientCreateView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["action_url"] = reverse("inventory:ingredient_create")
+        context["action_url"] = reverse("inventory:create")
         return context
 
 
@@ -91,7 +92,7 @@ class IngredientUpdateView(LoginRequiredMixin, UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["action_url"] = reverse(
-            "inventory:ingredient_update", kwargs={"pk": self.kwargs["pk"]}
+            "inventory:update", kwargs={"pk": self.kwargs["pk"]}
         )
         return context
 
@@ -100,9 +101,6 @@ class IngredientDeleteView(LoginRequiredMixin, DeleteView):
     model = Ingredient
     template_name = "inventory/ingredient/delete.html"
     success_url = reverse_lazy("inventory:index")
-
-    def get_queryset(self):
-        return Ingredient.objects.filter(user=self.request.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -115,9 +113,6 @@ class IngredientDetailView(LoginRequiredMixin, DetailView):
     model = Ingredient
     template_name = "inventory/ingredient/detail.html"
     context_object_name = "ingredient"
-
-    def get_queryset(self):
-        return Ingredient.objects.filter(user=self.request.user)
 
 
 class PurchaseListView(LoginRequiredMixin, ListView):
@@ -135,6 +130,9 @@ class PurchaseDetailView(LoginRequiredMixin, DetailView):
     template_name = "inventory/purchase/detail.html"
 
 
+from pprint import pprint
+
+
 class PurchaseCreateView(LoginRequiredMixin, CreateView):
     model = IngredientPurchase
     template_name = "inventory/purchase/form.html"
@@ -147,40 +145,38 @@ class PurchaseCreateView(LoginRequiredMixin, CreateView):
         context["action_url"] = reverse(
             "inventory:purchase_create", kwargs={"pk": self.kwargs["pk"]}
         )
-
         return context
 
     def form_invalid(self, form):
-
         return render(
             self.request,
             self.template_name,
             {
                 "form": form,
                 "ingredient": get_object_or_404(
-                    Ingredient, pk=self.kwargs.pk, user=self.request.user
+                    Ingredient, pk=self.kwargs["pk"], user=self.request.user
                 ),
             },
             status=400,
         )
 
     def form_valid(self, form):
+        purchase = form.save(commit=False)
         ingredient = get_object_or_404(
             Ingredient, pk=self.kwargs["pk"], user=self.request.user
         )
-        purchase = form.save(commit=False)
         purchase.ingredient = ingredient
         purchase.save()
-
         purchases = ingredient.purchases.all().order_by("purchased_at")
 
         return render(
             self.request,
             self.success_template_name,
             {
-                "form": form,
                 "ingredient": ingredient,
                 "purchases": purchases,
+                "message": "A purchase has been added.",
+                "type": "success",
             },
         )
 
@@ -195,7 +191,7 @@ class PurchaseUpdateView(LoginRequiredMixin, UpdateView):
         purchase = self.get_object()
         context = super().get_context_data(**kwargs)
         context["action_url"] = reverse(
-            "inventory:purchase_edit",
+            "inventory:purchase_update",
             kwargs={"pk": purchase.pk},
         )
         return context
