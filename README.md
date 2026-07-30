@@ -185,5 +185,3 @@ The project follows:
 Michael Uy
 
 Backend Developer (Python / Django)
-
-GitHub: https://github.com/your-github-username
