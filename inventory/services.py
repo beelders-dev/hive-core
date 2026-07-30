@@ -7,12 +7,16 @@ from .models import PurchaseAdjustment
 
 class PurchaseAdjustmentService:
 
+    STOCK_QTY_CANNOT_BE_NEGATIVE = "Adjustment cannot reduce stock below zero."
+
     @staticmethod
     @transaction.atomic
     def create(purchase, qty_adjustment, note):
         new_qty = qty_adjustment + purchase.total_stocks_plus_adjustments
         if new_qty < 0:
-            raise ValidationError("Stock quantity cannot be negative.")
+            raise ValidationError(
+                PurchaseAdjustmentService.STOCK_QTY_CANNOT_BE_NEGATIVE
+            )
 
         PurchaseAdjustment.objects.create(
             purchase=purchase,

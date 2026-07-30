@@ -444,3 +444,108 @@ class PurchaseUpdateViewTests(TestCase):
         self.assertTemplateUsed(response, "inventory/purchase/form.html")
         self.purchase.refresh_from_db()
         self.assertEqual(self.purchase.total_cost, Decimal("100"))
+
+    def test_purchase_update_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
+
+
+class PurchaseAdjustmentListView(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.ingredient = Ingredient.objects.create(user=self.user, name="Cocoa Powder")
+        self.purchase = IngredientPurchase.objects.create(
+            ingredient=self.ingredient,
+            purchased_at=date.today(),
+            qty_purchased=Decimal("100"),
+            total_cost=Decimal("100"),
+        )
+        self.adjustment = PurchaseAdjustment.objects.create(
+            purchase=self.purchase,
+            qty_adjustment=Decimal("100"),
+        )
+
+        self.url = reverse("inventory:adjustment_list", kwargs={"pk": self.purchase.pk})
+
+    def test_purchase_adjustment_list_view_renders_objects_and_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        adjustments = response.context["adjustment_list"]
+        self.assertEqual(list(adjustments), [self.adjustment])
+        self.assertTemplateUsed(response, "inventory/adjustment/partials/_list.html")
+
+    def test_purchase_adjustment_list_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
+
+
+class PurchaseAdjustmentCreateView(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.ingredient = Ingredient.objects.create(user=self.user, name="Cocoa Powder")
+        self.purchase = IngredientPurchase.objects.create(
+            ingredient=self.ingredient,
+            purchased_at=date.today(),
+            qty_purchased=Decimal("100"),
+            total_cost=Decimal("100"),
+        )
+
+        self.url = reverse(
+            "inventory:adjustment_create",
+            kwargs={"pk": self.purchase.pk},
+        )
+
+    def test_purchase_adjustment_create_view_renders_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "inventory/adjustment/partials/_form.html")
+
+    def test_purchase_adjustment_create_view_renders_success_template(self):
+        response = self.client.post(
+            self.url,
+            data={
+                "qty_adjustment": Decimal("-50"),
+                "note": "Adjustment",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(
+            response, "inventory/adjustment/oob/_create_success.html"
+        )
+
+    def test_purchase_adjustment_create_view_does_not_save_when_qty_is_negative(self):
+        response = self.client.post(
+            self.url,
+            data={
+                "qty_adjustment": Decimal("-150"),
+                "note": "Adjustment",
+            },
+        )
+        self.purchase.refresh_from_db()
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.purchase.total_stocks_plus_adjustments, Decimal("100"))
+        self.assertEqual(self.purchase.adjustments.count(), 0)
+        self.assertContains(response, "Adjustment cannot reduce stock below zero.")
+
+    def test_purchase_adjustment_create_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )

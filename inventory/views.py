@@ -229,22 +229,21 @@ class PurchaseAdjustmentListView(LoginRequiredMixin, ListView):
     context_object_name = "adjustment_list"
 
     def get_queryset(self):
-        purchases = IngredientPurchase.objects.get(pk=self.kwargs["pk"])
-        return purchases.adjustments.all()
+        purchase = IngredientPurchase.objects.get(pk=self.kwargs["pk"])
+        return purchase.adjustments.all()
 
 
 class PurchaseAdjustmentCreateView(LoginRequiredMixin, CreateView):
     model = PurchaseAdjustment
     template_name = "inventory/adjustment/partials/_form.html"
+    success_template_name = "inventory/adjustment/oob/_create_success.html"
     form_class = PurchaseAdjustmentForm
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         context["purchase"] = get_object_or_404(
             IngredientPurchase, pk=self.kwargs["pk"]
         )
-
         return context
 
     def form_valid(self, form):
@@ -270,7 +269,7 @@ class PurchaseAdjustmentCreateView(LoginRequiredMixin, CreateView):
 
         return render(
             self.request,
-            "inventory/adjustment/oob/_create_success.html",
+            self.success_template_name,
             {
                 "adjustment_list": purchase.adjustments.all(),
                 "purchase": purchase,

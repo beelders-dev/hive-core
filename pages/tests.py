@@ -18,4 +18,4 @@ class HomePageTests(TestCase):
 
     def test_homepage_template(self):
         """Ensure that home page is using the home.html template."""
-        self.assertTemplateUsed(self.response, "home.html")
+        self.assertTemplateUsed(self.response, "dashboard.html")

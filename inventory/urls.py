@@ -49,12 +49,12 @@ urlpatterns = [
         name="update",
     ),
     path(
-        "purchase/<uuid:pk>/list/",
+        "ingredient/<uuid:pk>/purchase/list/",
         PurchaseListView.as_view(),
         name="purchase_list",
     ),
     path(
-        "ingredient/<uuid:pk>/purchases/create/",
+        "ingredient/<uuid:pk>/purchase/create/",
         PurchaseCreateView.as_view(),
         name="purchase_create",
     ),
@@ -69,12 +69,12 @@ urlpatterns = [
         name="purchase_update",
     ),
     path(
-        "purchase/<uuid:pk>/adjustments/",
+        "ingredient/<uuid:pk>/purchase/adjustment/list",
         PurchaseAdjustmentListView.as_view(),
         name="adjustment_list",
     ),
     path(
-        "purchase/<uuid:pk>/adjustments-create/",
+        "purchase/<uuid:pk>/purchase/adjustment/create/",
         PurchaseAdjustmentCreateView.as_view(),
         name="adjustment_create",
     ),
