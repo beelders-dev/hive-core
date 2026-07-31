@@ -1,8 +1,8 @@
 from django.contrib import admin
-
 from .models import Ingredient, IngredientPurchase, PurchaseAdjustment
 
 
+@admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
     list_display = [
         "name",
@@ -11,6 +11,7 @@ class IngredientAdmin(admin.ModelAdmin):
     ]
 
 
+@admin.register(IngredientPurchase)
 class IngredientPurchaseAdmin(admin.ModelAdmin):
     list_display = [
         "purchased_at",
@@ -23,7 +24,3 @@ class IngredientPurchaseAdmin(admin.ModelAdmin):
 @admin.register(PurchaseAdjustment)
 class PurchaseAdjustmentAdmin(admin.ModelAdmin):
     list_display = ["qty_adjustment"]
-
-
-admin.site.register(Ingredient, IngredientAdmin)
-admin.site.register(IngredientPurchase, IngredientPurchaseAdmin)
