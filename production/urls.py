@@ -25,34 +25,32 @@ urlpatterns = [
         ProductionDashboardView.as_view(),
         name="production_dashboard",
     ),
+    path("recipe/create/", RecipeCreateView.as_view(), name="recipe_create"),
+    path("recipe/<uuid:pk>/", RecipeDetailView.as_view(), name="recipe"),
+    path("recipe/<uuid:pk>/edit/", RecipeUpdateView.as_view(), name="recipe_edit"),
+    path("recipe/<uuid:pk>/delete/", RecipeDeleteView.as_view(), name="recipe_delete"),
     path(
-        "recipes/create/", RecipeCreateView.as_view(), name="recipe_create"
-    ),  # endpoint name will need to change
-    path("recipes/<uuid:pk>/", RecipeDetailView.as_view(), name="recipe"),
-    path(
-        "recipes/<uuid:pk>/remove/",
-        RemoveIngredientView.as_view(),
-        name="remove_ingredient",
-    ),
-    path("recipes/<uuid:pk>/edit/", RecipeUpdateView.as_view(), name="recipe_edit"),
-    path("recipes/<uuid:pk>/delete/", RecipeDeleteView.as_view(), name="recipe_delete"),
-    path(
-        "recipes/<uuid:pk>/ingredients/",
+        "recipe/<uuid:pk>/ingredients/",
         RecipeFormIngredientListView.as_view(),
         name="ingredients",
     ),
     path(
-        "recipes/ingredients/",
+        "recipe/ingredients/",
         RecipeFormIngredientListView.as_view(),
         name="ingredients",
     ),
     path(
-        "recipes/<uuid:pk>/add-ingredient/",
+        "recipe/<uuid:pk>/ingredient/add",
         AddIngredientView.as_view(),
         name="add_ingredient",
     ),
     path(
-        "recipes/<uuid:pk>/create-batch",
+        "recipe/<uuid:pk>/ingredient/remove/",
+        RemoveIngredientView.as_view(),
+        name="remove_ingredient",
+    ),
+    path(
+        "recipe/<uuid:pk>/batch/create",
         CreateBatchView.as_view(),
         name="create_batch",
     ),

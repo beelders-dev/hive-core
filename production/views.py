@@ -21,8 +21,6 @@ from .forms import BatchCancellationForm, RecipeForm
 from .models import Recipe, ProductionBatch
 from .services import RecipeService, ProductionService
 
-SELECTED_INGREDIENT_TABLE_TEMPLATE = "production/recipe/partials/selected_ingredients_table/_selected_ingredients_table.html"
-
 
 class RecipeFormIngredientListView(LoginRequiredMixin, ListView):
     model = Ingredient
