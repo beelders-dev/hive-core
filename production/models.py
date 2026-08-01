@@ -142,7 +142,7 @@ class ProductionBatch(models.Model):
     cancellation_note = models.TextField(blank=True, null=True)
 
     def get_absolute_url(self):
-        return reverse("batch_detail", kwargs={"pk": self.pk})
+        return reverse("production:batch", kwargs={"pk": self.pk})
 
 
 class BatchIngredient(models.Model):
