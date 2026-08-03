@@ -41,32 +41,34 @@ class RecipeFormIngredientListView(LoginRequiredMixin, ListView):
 class RecipeCreateView(LoginRequiredMixin, CreateView):
     model = Recipe
     template_name = "production/recipe/form.html"
+    success_template_name = "production/recipe/oob/_create_success.html"
     form_class = RecipeForm
 
     def form_valid(self, form):
         recipe = form.save(commit=False)
         recipe.user = self.request.user
-        recipe.save()
 
         ingredients = []
-        for ingredient_id in self.request.POST.getlist("ingredient_ids"):
-            ingredient_id = ingredient_id.strip()
-            if ingredient_id:
-                ingredients.append(
-                    {
-                        "ingredient_id": ingredient_id,
-                        "quantity": self.request.POST.get(f"quantity_{ingredient_id}"),
-                    }
-                )
+        ingredient_ids = self.request.POST.getlist("ingredient_ids")
+        quantities = self.request.POST.getlist("quantities")
+
+        for ingredient_id, quantity in zip(ingredient_ids, quantities):
+            ingredients.append(
+                {
+                    "ingredient_id": ingredient_id,
+                    "quantity": quantity,
+                }
+            )
         try:
-            RecipeService.create_recipe(
+
+            RecipeService.create(
                 recipe=recipe,
                 ingredients=ingredients,
             )
 
         except ValidationError as e:
-
             message = e.args[0]
+
             return render(
                 self.request,
                 "components/toast/_toast_oob.html",
@@ -79,13 +81,20 @@ class RecipeCreateView(LoginRequiredMixin, CreateView):
 
         return render(
             self.request,
-            "production/recipe/oob/recipe_create_success.html",
+            "production/recipe/oob/_create_success.html",
             {
                 "message": "Recipe created successfully.",
                 "type": "success",
                 "form": RecipeForm(),
                 "ingredient_list": Ingredient.objects.filter(user=self.request.user),
             },
+        )
+
+    def form_invalid(self, form):
+        return render(
+            self.request,
+            "production/recipe/oob/_form_error.html",
+            {"form": form},
         )
 
     def get_context_data(self, **kwargs):
@@ -104,15 +113,16 @@ class RecipeUpdateView(LoginRequiredMixin, UpdateView):
     form_class = RecipeForm
 
     def form_valid(self, form):
-        recipe = form.save()
+        recipe = form.save(commit=False)
 
         ingredients = []
-        for ingredient_id in self.request.POST.getlist("ingredient_ids"):
-            ingredient_id = ingredient_id.strip()
+        ingredient_ids = self.request.POST.getlist("ingredient_ids")
+        quantities = self.request.POST.getlist("quantities")
+        for ingredient_id, quantity in zip(ingredient_ids, quantities):
             ingredients.append(
                 {
                     "ingredient_id": ingredient_id,
-                    "quantity": self.request.POST.get(f"quantity_{ingredient_id}"),
+                    "quantity": quantity,
                 }
             )
         try:
@@ -129,28 +139,42 @@ class RecipeUpdateView(LoginRequiredMixin, UpdateView):
                 {
                     "message": str(message),
                     "type": "error",
-                    "form": form,
                 },
             )
 
         return render(
             self.request,
-            "production/recipe/partials/_recipe_update_success.html",
+            "production/recipe/oob/_update_success.html",
             {
                 "message": "Recipe updated successfully.",
                 "type": "success",
-                "form": form,
                 "recipe_ingredients": recipe.get_all_ingredients(),
             },
+        )
+
+    def form_invalid(self, form):
+        return render(
+            self.request,
+            "production/recipe/oob/_form_error.html",
+            {"form": form},
         )
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["recipe_ingredients"] = self.get_object().get_all_ingredients()
-        pk_kwargs = kwargs = {"pk": self.kwargs["pk"]}
-        context["results_url"] = reverse("production:ingredients", kwargs=pk_kwargs)
-        context["form_action_url"] = reverse("production:recipe_edit", kwargs=pk_kwargs)
 
+        context["results_url"] = reverse(
+            "production:ingredients",
+            kwargs={
+                "pk": self.kwargs["pk"],
+            },
+        )
+        context["form_action_url"] = reverse(
+            "production:recipe_edit",
+            kwargs={
+                "pk": self.kwargs["pk"],
+            },
+        )
         return context
 
 

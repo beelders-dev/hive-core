@@ -1,4 +1,10 @@
 <div class="max-w-3xl space-y-6 p-6">
-    <p>{{ form.name }}</p>
-    <p>{{ form.description }}</p>
+    <div>
+        {{ form.name }}
+        {% for error in form.name.errors %}<p class="mt-1 text-sm text-red-600">{{ error }}</p>{% endfor %}
+    </div>
+    <div>
+        {{ form.description }}
+        {% for error in form.description.errors %}<p class="mt-1 text-sm text-red-600">{{ error }}</p>{% endfor %}
+    </div>
 </div>

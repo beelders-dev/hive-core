@@ -1,14 +1,10 @@
-{% comment %} MESSAGE {% endcomment %}
 {% include "components/toast/_toast_oob.html" with message=message type=type %}
-{% comment %} SELECTED INGREDIENTS TABLE ROW {% endcomment %}
 <div id="selected-ingredient-rows" hx-swap-oob="true">
     {% include "production/recipe/partials/_empty_placeholder.html" %}
 </div>
-{% comment %} BASIC FIELDS {% endcomment %}
-<div id="recipe-basic-fields"  hx-swap-oob="outerHTML">
+<div id="recipe-basic-fields"  hx-swap-oob="innerHTML">
     {% include "production/recipe/partials/form/_basic_fields.html" %}
 </div>
-{% comment %} SEARCH RESULTS SHOULD RELOAD {% endcomment %}
 <div id="production-search-results" hx-swap-oob="innerHTML">
     {% include "inventory/ingredient/partials/_results_list.html" with ingredient_list=ingredient_list %}
 </div>

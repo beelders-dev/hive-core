@@ -6,6 +6,8 @@ from decimal import Decimal
 from inventory.models import Ingredient
 from production.models import Recipe, RecipeIngredient
 
+from bs4 import BeautifulSoup
+
 
 class RecipeFormIngredientListViewTests(TestCase):
     def setUp(self):
@@ -106,17 +108,50 @@ class RecipeCreateViewTests(TestCase):
             reverse("production:recipe_create"),
         )
 
-    # def test_recipe_create_view_renders_success_template(self):
+    def test_recipe_create_view_renders_success_template(self):
+        response = self.client.post(
+            self.url,
+            data={
+                "name": "Chocolate Cake",
+                "description": "Lorem Ipsum",
+                "ingredient_ids": [str(self.flour.pk)],
+                "quantities": Decimal("100"),
+            },
+        )
 
-    #     response = self.client.post(
-    #         self.url,
-    #         data={
-    #             "name": "Chocolate Cake",
-    #             "ingredients": [{"ingredient": self.flour, "qty_needed": Decimal("100")}]
-    #             "description": "Test recipe",
-    #         },
-    #     )
-    #     print(response.context["form"].errors)
-    #     self.assertTemplateUsed(
-    #         response, "production/recipe/oob/recipe_create_success.html"
-    #     )
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "production/recipe/oob/_create_success.html")
+
+    def test_recipe_create_view_renders_error_template_when_name_is_blank(self):
+        response = self.client.post(
+            self.url,
+            data={
+                "name": " ",
+                "description": "Lorem Ipsum",
+                "ingredient_ids": [str(self.flour.pk)],
+                "quantities": Decimal("100"),
+            },
+        )
+        self.assertTemplateUsed(response, "production/recipe/oob/_create_error.html")
+
+    def test_recipe_create_view_renders_error_toast_when_zero_ingredient(
+        self,
+    ):
+        response = self.client.post(
+            self.url,
+            data={
+                "name": "Chocolate Cake",
+                "description": "Lorem Ipsum",
+                "ingredient_ids": [],
+                "quantities": Decimal("100"),
+            },
+        )
+        self.assertTemplateUsed(response, "components/toast/_toast_oob.html")
+
+    def test_recipe_create_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )

@@ -1,0 +1,4 @@
+{% include "components/toast/_toast_oob.html" with message=message type=type %}
+<div id="selected-ingredients-table" hx-swap-oob="innerHTML">
+    {% include "production/recipe/partials/selected_ingredients/_table.html" with recipe_ingredients=recipe_ingredients %}
+</div>

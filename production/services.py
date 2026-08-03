@@ -9,18 +9,16 @@ from .models import Recipe, RecipeIngredient, ProductionBatch, BatchIngredient
 
 class RecipeService:
 
-    INGREDIENT_VALIDATION_ERROR = "Add at least 1 ingredient."
-
     @staticmethod
     @transaction.atomic()
-    def create_recipe(recipe, ingredients):
+    def create(recipe, ingredients):
 
         if not ingredients:
-            raise ValidationError(RecipeService.INGREDIENT_VALIDATION_ERROR)
-
+            raise ValidationError("Add at least 1 ingredient.")
+        recipe.save()
         for ingredient in ingredients:
             ingredient_id = ingredient["ingredient_id"]
-            quantity = Decimal(ingredient["quantity"])
+            quantity = ingredient["quantity"]
 
             recipe_ingredient = RecipeIngredient(
                 recipe=recipe,
@@ -35,19 +33,18 @@ class RecipeService:
     @transaction.atomic()
     def update_recipe(
         recipe,
-        new_ingredients,
+        ingredients,
     ):
 
         recipe.get_all_ingredients().delete()
 
-        if not new_ingredients:
-
-            raise ValidationError(RecipeService.INGREDIENT_VALIDATION_ERROR)
-
-        for ingredient in new_ingredients:
+        if not ingredients:
+            raise ValidationError("Add at least 1 ingredient.")
+        recipe.save()
+        for ingredient in ingredients:
 
             ingredient_id = ingredient["ingredient_id"]
-            quantity = Decimal(ingredient["quantity"])
+            quantity = ingredient["quantity"]
 
             recipe_ingredient = RecipeIngredient(
                 recipe=recipe,
