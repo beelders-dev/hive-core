@@ -196,24 +196,6 @@ class RecipeDeleteView(LoginRequiredMixin, DeleteView):
     success_url = reverse_lazy("production:production_dashboard")
 
 
-class RemoveIngredientView(LoginRequiredMixin, View):
-    def post(self, request, pk):
-        q = self.request.POST.get("q", "")
-        selected_ingredients = self.request.POST.getlist("ingredient_ids")
-        selected_ingredients.remove(str(pk))
-        qs = Ingredient.objects.filter(user=self.request.user).exclude(
-            pk__in=selected_ingredients
-        )
-        if q:
-            qs = qs.filter(name__icontains=q)
-
-        return render(
-            self.request,
-            "production/recipe/oob/remove_ingredient.html",
-            {"ingredient_list": qs},
-        )
-
-
 class AddIngredientView(LoginRequiredMixin, View):
 
     def post(self, request, pk):
@@ -235,6 +217,24 @@ class AddIngredientView(LoginRequiredMixin, View):
                     Ingredient, user=self.request.user, pk=pk
                 ),
             },
+        )
+
+
+class RemoveIngredientView(LoginRequiredMixin, View):
+    def post(self, request, pk):
+        q = self.request.POST.get("q", "")
+        selected_ingredients = self.request.POST.getlist("ingredient_ids")
+        selected_ingredients.remove(str(pk))
+        qs = Ingredient.objects.filter(user=self.request.user).exclude(
+            pk__in=selected_ingredients
+        )
+        if q:
+            qs = qs.filter(name__icontains=q)
+
+        return render(
+            self.request,
+            "production/recipe/oob/remove_ingredient.html",
+            {"ingredient_list": qs},
         )
 
 

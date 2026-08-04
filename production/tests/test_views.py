@@ -234,3 +234,28 @@ class RecipeUpdateViewTests(TestCase):
             response,
             f"{reverse('login')}?next={self.url}",
         )
+
+
+class RemoveIngredientTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.flour = Ingredient.objects.create(
+            user=self.user,
+            name="Flour",
+        )
+        self.chocolate_bar = Ingredient.objects.create(
+            user=self.user,
+            name="Chocolate Bar",
+        )
+        self.recipe = Recipe.objects.create(user=self.user, name="Chocolate Cake")
+
+        RecipeIngredient.objects.create(
+            recipe=self.recipe,
+            ingredient=self.flour,
+            qty_needed=Decimal("100"),
+        )
+
+        self.url = reverse("production:recipe_create")
