@@ -10,37 +10,22 @@ from .models import Recipe, RecipeIngredient, ProductionBatch, BatchIngredient
 class RecipeService:
 
     @staticmethod
-    @transaction.atomic()
     def create(recipe, ingredients):
+        RecipeService._save(recipe, ingredients)
 
-        if not ingredients:
-            raise ValidationError("Add at least 1 ingredient.")
-        recipe.save()
-        for ingredient in ingredients:
-            ingredient_id = ingredient["ingredient_id"]
-            quantity = ingredient["quantity"]
-
-            recipe_ingredient = RecipeIngredient(
-                recipe=recipe,
-                ingredient_id=ingredient_id,
-                qty_needed=quantity,
-            )
-
-            recipe_ingredient.full_clean()
-            recipe_ingredient.save()
+    @staticmethod
+    def update(recipe, ingredients):
+        recipe.get_all_ingredients().delete()
+        RecipeService._save(recipe, ingredients)
 
     @staticmethod
     @transaction.atomic()
-    def update_recipe(
-        recipe,
-        ingredients,
-    ):
-
-        recipe.get_all_ingredients().delete()
+    def _save(recipe, ingredients):
 
         if not ingredients:
             raise ValidationError("Add at least 1 ingredient.")
         recipe.save()
+
         for ingredient in ingredients:
 
             ingredient_id = ingredient["ingredient_id"]

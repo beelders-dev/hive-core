@@ -132,9 +132,88 @@ class RecipeCreateViewTests(TestCase):
                 "quantities": Decimal("100"),
             },
         )
-        self.assertTemplateUsed(response, "production/recipe/oob/_create_error.html")
+        self.assertTemplateUsed(response, "production/recipe/oob/_form_error.html")
 
     def test_recipe_create_view_renders_error_toast_when_zero_ingredient(
+        self,
+    ):
+        response = self.client.post(
+            self.url,
+            data={
+                "user": self.user,
+                "name": "Chocolate Cake",
+                "description": "Lorem Ipsum",
+                "ingredient_ids": [],
+                "quantities": Decimal("100"),
+            },
+        )
+        self.assertTemplateUsed(response, "components/toast/_toast_oob.html")
+
+    def test_recipe_create_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
+
+
+class RecipeUpdateViewTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.flour = Ingredient.objects.create(
+            user=self.user,
+            name="Flour",
+        )
+        self.chocolate_bar = Ingredient.objects.create(
+            user=self.user,
+            name="Chocolate Bar",
+        )
+        self.recipe = Recipe.objects.create(user=self.user, name="Chocolate Cake")
+        RecipeIngredient.objects.create(
+            recipe=self.recipe,
+            ingredient=self.flour,
+            qty_needed=Decimal("100"),
+        )
+        self.url = reverse("production:recipe_edit", kwargs={"pk": self.recipe.pk})
+
+    def test_recipe_update_view_renders_object_and_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "production/recipe/form.html")
+
+    def test_recipe_update_view_renders_success_template(self):
+        response = self.client.post(
+            self.url,
+            data={
+                "name": "Updated name",
+                "description": "Lorem Ipsum",
+                "ingredient_ids": [self.flour.id],
+                "quantities": Decimal("100"),
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "production/recipe/oob/_update_success.html")
+
+    def test_recipe_update_view_renders_form_error_when_blank_name(self):
+        response = self.client.post(
+            self.url,
+            data={
+                "name": " ",
+                "description": "Lorem Ipsum",
+                "ingredient_ids": [self.flour.id],
+                "quantities": Decimal("100"),
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, "production/recipe/oob/_form_error.html")
+
+    def test_recipe_update_view_renders_error_toast_when_zero_ingredient(
         self,
     ):
         response = self.client.post(
@@ -148,7 +227,7 @@ class RecipeCreateViewTests(TestCase):
         )
         self.assertTemplateUsed(response, "components/toast/_toast_oob.html")
 
-    def test_recipe_create_view_requires_login(self):
+    def test_recipe_update_view_requires_login(self):
         self.client.logout()
         response = self.client.get(self.url)
         self.assertRedirects(

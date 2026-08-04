@@ -126,13 +126,14 @@ class RecipeUpdateView(LoginRequiredMixin, UpdateView):
                 }
             )
         try:
-            RecipeService.update_recipe(
+            RecipeService.update(
                 recipe=recipe,
-                new_ingredients=ingredients,
+                ingredients=ingredients,
             )
 
         except ValidationError as e:
             message = e.args[0]
+            print(message)
             return render(
                 self.request,
                 "components/toast/_toast_oob.html",
