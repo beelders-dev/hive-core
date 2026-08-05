@@ -236,7 +236,7 @@ class RecipeUpdateViewTests(TestCase):
         )
 
 
-class RemoveIngredientTests(TestCase):
+class AddIngredientTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
             username="Mike", password="testpass123"
@@ -258,4 +258,13 @@ class RemoveIngredientTests(TestCase):
             qty_needed=Decimal("100"),
         )
 
-        self.url = reverse("production:recipe_create")
+    def test_add_ingredient_adds_ingredient(self):
+        self.url = reverse(
+            "production:add_ingredient",
+            kwargs={
+                "pk": self.chocolate_bar.pk,
+            },
+        )
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Chocolate Bar")
