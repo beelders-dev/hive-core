@@ -258,7 +258,7 @@ class AddIngredientTests(TestCase):
             qty_needed=Decimal("100"),
         )
 
-    def test_add_ingredient_adds_ingredient(self):
+    def test_add_ingredient_view_adds_ingredient_successfully(self):
         self.url = reverse(
             "production:add_ingredient",
             kwargs={
