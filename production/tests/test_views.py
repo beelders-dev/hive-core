@@ -6,8 +6,6 @@ from decimal import Decimal
 from inventory.models import Ingredient
 from production.models import Recipe, RecipeIngredient
 
-from bs4 import BeautifulSoup
-
 
 class RecipeFormIngredientListViewTests(TestCase):
     def setUp(self):
@@ -258,13 +256,20 @@ class AddIngredientTests(TestCase):
             qty_needed=Decimal("100"),
         )
 
-    def test_add_ingredient_view_adds_ingredient_successfully(self):
+    def test_add_ingredient_view_adds_and_posts_ingredient_successfully(self):
         self.url = reverse(
             "production:add_ingredient",
             kwargs={
                 "pk": self.chocolate_bar.pk,
             },
         )
-        response = self.client.post(self.url)
+        response = self.client.post(
+            self.url,
+            data={
+                "ingredient_ids": [str(self.flour.pk)],
+            },
+            HTTP_HX_REQUEST="true",
+        )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Chocolate Bar")
+        self.assertNotContains(response, "Flour")
