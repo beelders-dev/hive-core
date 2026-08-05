@@ -234,7 +234,7 @@ class RecipeUpdateViewTests(TestCase):
         )
 
 
-class AddIngredientTests(TestCase):
+class AddIngredientViewTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
             username="Mike", password="testpass123"
@@ -255,21 +255,76 @@ class AddIngredientTests(TestCase):
             ingredient=self.flour,
             qty_needed=Decimal("100"),
         )
-
-    def test_add_ingredient_view_adds_and_posts_ingredient_successfully(self):
         self.url = reverse(
             "production:add_ingredient",
             kwargs={
                 "pk": self.chocolate_bar.pk,
             },
         )
+
+    def test_add_ingredient_view_adds_and_posts_ingredient_successfully(self):
         response = self.client.post(
             self.url,
             data={
                 "ingredient_ids": [str(self.flour.pk)],
             },
-            HTTP_HX_REQUEST="true",
         )
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Chocolate Bar")
         self.assertNotContains(response, "Flour")
+
+    def test_add_ingredient_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
+
+
+class RemoveIngredientViewTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.flour = Ingredient.objects.create(
+            user=self.user,
+            name="Flour",
+        )
+        self.chocolate_bar = Ingredient.objects.create(
+            user=self.user,
+            name="Chocolate Bar",
+        )
+        self.recipe = Recipe.objects.create(user=self.user, name="Chocolate Cake")
+
+        RecipeIngredient.objects.create(
+            recipe=self.recipe,
+            ingredient=self.flour,
+            qty_needed=Decimal("100"),
+        )
+        self.url = reverse(
+            "production:remove_ingredient",
+            kwargs={
+                "pk": self.chocolate_bar.pk,
+            },
+        )
+
+    def test_remove_ingredient_view_removes_and_posts_ingredient_successfully(self):
+        response = self.client.post(
+            self.url,
+            data={
+                "ingredient_ids": [str(self.chocolate_bar.pk)],
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Flour")
+        self.assertNotContains(response, "Chocolate bar")
+
+    def test_remove_ingredient_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
