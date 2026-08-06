@@ -299,7 +299,7 @@ class LinkProductsView(LoginRequiredMixin, View):
 
 
 class CompleteProductionView(LoginRequiredMixin, View):
-    template_name = "production/batch/partials/_action_btn_reload_oob.html"
+    template_name = "production/batch/oob/_action_btn_reload.html"
 
     def post(self, request, pk):
         prod_batch = get_object_or_404(
@@ -320,7 +320,7 @@ class CompleteProductionView(LoginRequiredMixin, View):
 
 
 class StartProductionView(LoginRequiredMixin, View):
-    template_name = "production/batch/partials/_action_btn_reload_oob.html"
+    template_name = "production/batch/oob/_action_btn_reload.html"
 
     def post(self, request, pk):
         prod_batch = get_object_or_404(
@@ -341,7 +341,7 @@ class StartProductionView(LoginRequiredMixin, View):
 
 
 class CancelProductionView(LoginRequiredMixin, View):
-    template_name = "production/batch/partials/_cancel_modal.html"
+    template_name = "production/batch/partials/_cancel_modal_form.html"
 
     def get(self, request, pk):
         prod_batch = get_object_or_404(
@@ -353,7 +353,7 @@ class CancelProductionView(LoginRequiredMixin, View):
 
         return render(
             request,
-            "production/batch/partials/_cancel_modal_form.html",
+            self.template_name,
             {"form": form, "batch": prod_batch},
         )
 
@@ -381,6 +381,6 @@ class CancelProductionView(LoginRequiredMixin, View):
 
         return render(
             request,
-            "production/batch/partials/_action_btn_reload_oob.html",
+            "production/batch/oob/_action_btn_reload.html",
             {"batch": prod_batch, "form": form},
         )

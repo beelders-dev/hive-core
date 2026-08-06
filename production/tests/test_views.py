@@ -380,6 +380,14 @@ class CreateBatchViewTests(TestCase):
         self.assertEqual(batch.recipe, self.recipe)
         self.assertTemplateUsed(response, "production/batch/oob/_create_success.html")
 
+    def test_create_batch_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
+
 
 class ProductionDashboardViewTests(TestCase):
 
@@ -421,23 +429,31 @@ class ProductionDashboardViewTests(TestCase):
             "production:index",
         )
 
-    def test_production_dashboard_renders_correct_template(self):
+    def test_production_dashboard_view_renders_correct_template(self):
         response = self.client.get(self.url)
         self.assertTemplateUsed(response, "production/index.html")
 
-    def test_production_dashboard_renders_recipe(self):
+    def test_production_dashboard_view_renders_recipe(self):
         response = self.client.get(self.url)
         self.assertEqual(response.context["recipes"][0], self.recipe)
 
-    def test_production_dashboard_renders_batch(self):
+    def test_production_dashboard_view_renders_batch(self):
         response = self.client.get(self.url)
         self.assertEqual(response.context["batches"][0], self.batch)
 
-    def test_production_dashboard_renders_completed_today(self):
+    def test_production_dashboard_view_renders_completed_today(self):
         self.batch.completed_at = timezone.now()
         self.batch.save()
         response = self.client.get(self.url)
         self.assertEqual(response.context["completed_today"], 1)
+
+    def test_production_dashboard_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
 
 
 class BatchDetailViewTests(TestCase):
@@ -483,6 +499,120 @@ class BatchDetailViewTests(TestCase):
             },
         )
 
-    def test_batch_detail_renders_correct_template(self):
+    def test_batch_detail_view_renders_correct_template(self):
         response = self.client.get(self.url)
         self.assertTemplateUsed(response, "production/batch/detail.html")
+
+    def test_batch_detail_view_dashboard_view_requires_login(self):
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertRedirects(
+            response,
+            f"{reverse('login')}?next={self.url}",
+        )
+
+
+class CompleteProductionViewTests(TestCase):
+
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.flour = Ingredient.objects.create(
+            user=self.user,
+            name="Flour",
+        )
+        self.chocolate_bar = Ingredient.objects.create(
+            user=self.user,
+            name="Chocolate Bar",
+        )
+        IngredientPurchase.objects.create(
+            ingredient=self.flour,
+            purchased_at=date.today(),
+            qty_purchased=Decimal("300"),
+            total_cost=Decimal("300"),
+        )
+
+        self.recipe = Recipe.objects.create(user=self.user, name="Chocolate Cake")
+
+        RecipeIngredient.objects.create(
+            recipe=self.recipe,
+            ingredient=self.flour,
+            qty_needed=Decimal("100"),
+        )
+        self.batch = ProductionBatch.objects.create(
+            user=self.user,
+            recipe=self.recipe,
+            batch_qty=Decimal("100"),
+            recipe_name=self.recipe.name,
+            est_cost=Decimal("100"),
+        )
+        self.url = reverse(
+            "production:complete",
+            kwargs={
+                "pk": self.batch.pk,
+            },
+        )
+
+    def test_complete_production_view_changes_status(self):
+
+        response = self.client.post(
+            self.url,
+            data={"batch": self.batch.pk},
+            HTTP_HX_REQUEST="true",
+        )
+        self.assertContains(response, "Complete")
+
+
+class StartProductionViewTests(TestCase):
+
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.flour = Ingredient.objects.create(
+            user=self.user,
+            name="Flour",
+        )
+        self.chocolate_bar = Ingredient.objects.create(
+            user=self.user,
+            name="Chocolate Bar",
+        )
+        IngredientPurchase.objects.create(
+            ingredient=self.flour,
+            purchased_at=date.today(),
+            qty_purchased=Decimal("300"),
+            total_cost=Decimal("300"),
+        )
+
+        self.recipe = Recipe.objects.create(user=self.user, name="Chocolate Cake")
+
+        RecipeIngredient.objects.create(
+            recipe=self.recipe,
+            ingredient=self.flour,
+            qty_needed=Decimal("100"),
+        )
+        self.batch = ProductionBatch.objects.create(
+            user=self.user,
+            recipe=self.recipe,
+            batch_qty=Decimal("100"),
+            recipe_name=self.recipe.name,
+            est_cost=Decimal("100"),
+        )
+        self.url = reverse(
+            "production:produce",
+            kwargs={
+                "pk": self.batch.pk,
+            },
+        )
+
+    def test_start_production_view_changes_status(self):
+
+        response = self.client.post(
+            self.url,
+            data={"batch": self.batch.pk},
+            HTTP_HX_REQUEST="true",
+        )
+        self.assertContains(response, "In Progress")
