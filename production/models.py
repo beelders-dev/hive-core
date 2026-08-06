@@ -144,6 +144,9 @@ class ProductionBatch(models.Model):
     def get_absolute_url(self):
         return reverse("production:batch", kwargs={"pk": self.pk})
 
+    def __str__(self):
+        return self.recipe_name
+
 
 class BatchIngredient(models.Model):
     id = models.UUIDField(

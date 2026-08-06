@@ -23,7 +23,7 @@ urlpatterns = [
     path(
         "",
         ProductionDashboardView.as_view(),
-        name="production_dashboard",
+        name="index",
     ),
     path("recipe/create/", RecipeCreateView.as_view(), name="recipe_create"),
     path("recipe/<uuid:pk>/", RecipeDetailView.as_view(), name="recipe"),
@@ -60,22 +60,22 @@ urlpatterns = [
         name="batch",
     ),
     path(
-        "batches/<uuid:pk>/link-products",
+        "recipe/<uuid:pk>/batch/link-products/",
         LinkProductsView.as_view(),
         name="link_products",
     ),
     path(
-        "batches/<uuid:pk>/complete",
+        "recipe/<uuid:pk>/batch/complete/",
         CompleteProductionView.as_view(),
         name="complete",
     ),
     path(
-        "batches/<uuid:pk>/produce",
+        "recipe/<uuid:pk>/batch/produce/",
         StartProductionView.as_view(),
         name="produce",
     ),
     path(
-        "batches/<uuid:pk>/cancel",
+        "recipe/<uuid:pk>/batch/cancel/",
         CancelProductionView.as_view(),
         name="cancel",
     ),
