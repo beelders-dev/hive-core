@@ -1,5 +1,6 @@
 from datetime import date
 from decimal import Decimal
+from django.utils import timezone
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
@@ -422,8 +423,14 @@ class ProductionDashboardViewTests(TestCase):
 
     def test_production_dashboard_renders_recipe(self):
         response = self.client.get(self.url)
-        self.assertEqual(response.context["recipe"], self.recipe)
+        self.assertEqual(response.context["recipes"][0], self.recipe)
 
     def test_production_dashboard_renders_batch(self):
         response = self.client.get(self.url)
         self.assertEqual(response.context["batches"][0], self.batch)
+
+    def test_production_dashboard_renders_completed_today(self):
+        self.batch.completed_at = timezone.now()
+        self.batch.save()
+        response = self.client.get(self.url)
+        self.assertEqual(response.context["completed_today"], 1)
