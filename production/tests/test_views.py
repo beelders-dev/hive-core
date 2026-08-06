@@ -1,10 +1,12 @@
+from datetime import date
+from decimal import Decimal
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 from django.urls import reverse
-from decimal import Decimal
 
-from inventory.models import Ingredient
-from production.models import Recipe, RecipeIngredient
+
+from inventory.models import Ingredient, IngredientPurchase
+from production.models import Recipe, RecipeIngredient, ProductionBatch
 
 
 class RecipeFormIngredientListViewTests(TestCase):
@@ -328,3 +330,55 @@ class RemoveIngredientViewTests(TestCase):
             response,
             f"{reverse('login')}?next={self.url}",
         )
+
+
+class CreateBatchViewTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.flour = Ingredient.objects.create(
+            user=self.user,
+            name="Flour",
+        )
+        self.chocolate_bar = Ingredient.objects.create(
+            user=self.user,
+            name="Chocolate Bar",
+        )
+        IngredientPurchase.objects.create(
+            ingredient=self.flour,
+            purchased_at=date.today(),
+            qty_purchased=Decimal("300"),
+            total_cost=Decimal("300"),
+        )
+
+        self.recipe = Recipe.objects.create(user=self.user, name="Chocolate Cake")
+
+        RecipeIngredient.objects.create(
+            recipe=self.recipe,
+            ingredient=self.flour,
+            qty_needed=Decimal("100"),
+        )
+        self.url = reverse(
+            "production:create_batch",
+            kwargs={
+                "pk": self.recipe.pk,
+            },
+        )
+
+    def test_create_batch_view_is_executed_when_recipe_is_created(self):
+        response = self.client.post(
+            self.url,
+            data={"recipe": self.recipe.pk},
+            HTTP_HX_REQUEST="true",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(ProductionBatch.objects.count(), 1)
+        batch = ProductionBatch.objects.get()
+        self.assertEqual(batch.recipe, self.recipe)
+        self.assertTemplateUsed(response, "production/batch/oob/_create_success.html")
+
+
+class ProductionDashboardViewTests(TestCase):
+    pass

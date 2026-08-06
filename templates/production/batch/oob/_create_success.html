@@ -1,0 +1,10 @@
+{% load humanize %}
+{% include "components/toast/_toast_oob.html" with message=message type=type %}
+{% for item in recipe.get_all_ingredients %}
+    <p id="current-stock-{{ item.ingredient.id }}"
+       hx-swap-oob="true"
+       class="mt-1 font-mono font-semibold text-slate-900">
+        {{ item.ingredient.current_stock|floatformat:2|intcomma }}
+        <span class="text-xs text-slate-400">{{ item.ingredient.unit }}</span>
+    </p>
+{% endfor %}

@@ -133,7 +133,7 @@ class RecipeUpdateView(LoginRequiredMixin, UpdateView):
 
         except ValidationError as e:
             message = e.args[0]
-            print(message)
+
             return render(
                 self.request,
                 "components/toast/_toast_oob.html",
@@ -237,14 +237,14 @@ class RemoveIngredientView(LoginRequiredMixin, View):
 class CreateBatchView(LoginRequiredMixin, View):
 
     def post(self, request, pk):
-        print(self.request.headers)
+
         recipe = get_object_or_404(Recipe, user=request.user, pk=pk)
 
         try:
             ProductionService.produce_recipe(recipe)
 
         except ValidationError as e:
-
+            print(e.message)
             return render(
                 request,
                 "components/toast/_toast_oob.html",
@@ -253,11 +253,10 @@ class CreateBatchView(LoginRequiredMixin, View):
                     "type": "error",
                 },
             )
-        recipe.refresh_from_db()
 
         return render(
             request,
-            "production/recipe/partials/_recipe_produce_message.html",
+            "production/batch/oob/_create_success.html",
             {
                 "recipe": recipe,
                 "message": "Batch created.",

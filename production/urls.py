@@ -50,12 +50,12 @@ urlpatterns = [
         name="remove_ingredient",
     ),
     path(
-        "recipe/<uuid:pk>/batch/create",
+        "recipe/<uuid:pk>/batch/create/",
         CreateBatchView.as_view(),
         name="create_batch",
     ),
     path(
-        "batches/<uuid:pk>/",
+        "recipe/<uuid:pk>/batch/",
         BatchDetailView.as_view(),
         name="batch",
     ),
