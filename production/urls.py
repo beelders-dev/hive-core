@@ -55,27 +55,27 @@ urlpatterns = [
         name="create_batch",
     ),
     path(
-        "recipe/<uuid:pk>/batch/",
+        "batch/<uuid:pk>/",
         BatchDetailView.as_view(),
         name="batch",
     ),
     path(
-        "recipe/<uuid:pk>/batch/link-products/",
+        "batch/<uuid:pk>/link-products/",
         LinkProductsView.as_view(),
         name="link_products",
     ),
     path(
-        "recipe/<uuid:pk>/batch/complete/",
+        "batch/<uuid:pk>/complete/",
         CompleteProductionView.as_view(),
         name="complete",
     ),
     path(
-        "recipe/<uuid:pk>/batch/produce/",
+        "batch/<uuid:pk>/produce/",
         StartProductionView.as_view(),
         name="produce",
     ),
     path(
-        "recipe/<uuid:pk>/batch/cancel/",
+        "batch/<uuid:pk>/cancel/",
         CancelProductionView.as_view(),
         name="cancel",
     ),
