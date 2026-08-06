@@ -267,7 +267,7 @@ class CreateBatchView(LoginRequiredMixin, View):
 
 
 class ProductionDashboardView(LoginRequiredMixin, TemplateView):
-    template_name = "production/dashboard.html"
+    template_name = "production/index.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

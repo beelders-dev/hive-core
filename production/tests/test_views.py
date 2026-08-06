@@ -421,6 +421,10 @@ class ProductionDashboardViewTests(TestCase):
             "production:index",
         )
 
+    def test_production_dashboard_renders_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertTemplateUsed(response, "production/index.html")
+
     def test_production_dashboard_renders_recipe(self):
         response = self.client.get(self.url)
         self.assertEqual(response.context["recipes"][0], self.recipe)
