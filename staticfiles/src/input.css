@@ -1,0 +1,129 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes toast {
+    0%, 85% {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateX(1rem);
+    }
+}
+
+.toast {
+    animation: toast 2s forwards;
+}
+
+
+.card {
+    @apply rounded-md border border-slate-100 bg-white shadow-md m-2 p-3 
+}
+
+.htmx-indicator {
+    opacity: 0;
+    transition: opacity 150ms ease-in;
+}
+.htmx-request .htmx-indicator, 
+.htmx-request.htmx-indicator {
+    opacity: 1;
+}
+
+.status-badge {
+    @apply inline-flex rounded-full px-3 py-1 text-xs font-semibold;
+}
+
+.status-badge-pending {
+    @apply bg-yellow-100 text-yellow-700;
+}
+
+.status-badge-in-progress {
+    @apply bg-blue-100 text-blue-700;
+}
+
+.status-badge-complete {
+    @apply bg-green-100 text-green-700;
+}
+
+.status-badge-cancelled {
+    @apply bg-red-100 text-red-700;
+}
+
+/* Batch Process Buttons */
+
+.batch-process-btn {
+    @apply w-full items-center rounded-md px-4 py-2 text-sm font-medium text-white shadow-lg transition 
+}
+
+.disabled-btn-color {
+    @apply bg-slate-400
+}
+
+.complete-btn {
+    @apply bg-green-600 hover:bg-green-700 active:scale-95
+}
+.in-progress-btn {
+    @apply bg-blue-600 hover:bg-blue-700 active:scale-95
+}
+.cancel-btn{
+    @apply bg-red-600 hover:bg-red-700 active:scale-95
+}
+
+/* A work-around for Recipe description textarea not detecting resize-none*/
+
+textarea {
+    @apply resize-none
+}
+
+/* Purchase detail */
+.main-info-title {
+    @apply my-6 text-sm font-bold  uppercase tracking-wide text-slate-600 border-b pb-1
+}
+
+
+/* Reusables */
+
+.action {
+    @apply  transition-colors duration-200 hover:bg-slate-50 font-medium px-4 py-2 rounded ;
+}
+
+a {
+    @apply block hover:text-slate-500 text-slate-800 
+}
+
+button {
+    @apply shadow-sm text-sm focus:ring-2 focus:outline-none focus:ring-offset-2
+}
+
+/* Primary */
+.button-primary {
+  @apply bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500;
+}
+
+/* Secondary */
+.button-secondary {
+  @apply border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-gray-300;
+}
+
+/* Success */
+.button-success {
+  @apply bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500;
+}
+
+/* Delete (soft) */
+.button-delete {
+  @apply border border-red-200 bg-red-50 text-red-700 hover:border-red-300 hover:bg-red-100 focus:ring-red-300;
+}
+
+/* Danger (high emphasis) */
+.button-danger {
+  @apply bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+}
+
+/* Ghost */
+.button-ghost {
+  @apply bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-300;
+}

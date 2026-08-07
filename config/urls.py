@@ -17,15 +17,21 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path, include
-from debug_toolbar.toolbar import debug_toolbar_urls
+
+from django.conf import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("django.contrib.auth.urls")),
     path("accounts/", include("accounts.urls")),
-    path("__reload__/", include("django_browser_reload.urls")),
     path("", include("pages.urls")),
     path("products/", include("products.urls")),
     path("inventory/", include("inventory.urls")),
     path("production/", include("production.urls")),
-] + debug_toolbar_urls()
+]
+
+if settings.DEBUG:
+    urlpatterns += [
+        path("__debug__/", include("debug_toolbar.urls")),
+        path("__reload__/", include("django_browser_reload.urls")),
+    ]
