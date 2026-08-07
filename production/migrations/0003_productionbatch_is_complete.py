@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('production', '0002_alter_productionbatch_produced_at'),
+        ("production", "0002_alter_productionbatch_produced_at"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='productionbatch',
-            name='is_complete',
+            model_name="productionbatch",
+            name="is_complete",
             field=models.BooleanField(default=False),
         ),
     ]

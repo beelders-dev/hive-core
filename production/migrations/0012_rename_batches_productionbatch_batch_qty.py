@@ -6,13 +6,13 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('production', '0011_rename_produced_at_productionbatch_created_at'),
+        ("production", "0011_rename_produced_at_productionbatch_created_at"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='productionbatch',
-            old_name='batches',
-            new_name='batch_qty',
+            model_name="productionbatch",
+            old_name="batches",
+            new_name="batch_qty",
         ),
     ]

@@ -7,19 +7,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('production', '0003_productionbatch_is_complete'),
-        ('products', '0001_initial'),
+        ("production", "0003_productionbatch_is_complete"),
+        ("products", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='productionbatch',
-            name='completed_at',
+            model_name="productionbatch",
+            name="completed_at",
             field=models.DateTimeField(null=True),
         ),
         migrations.AddField(
-            model_name='productionbatch',
-            name='product',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='products', to='products.product'),
+            model_name="productionbatch",
+            name="product",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="products",
+                to="products.product",
+            ),
         ),
     ]

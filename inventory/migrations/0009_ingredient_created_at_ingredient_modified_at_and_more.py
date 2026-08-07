@@ -9,24 +9,35 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('inventory', '0008_alter_purchaseadjustment_note'),
+        ("inventory", "0008_alter_purchaseadjustment_note"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='ingredient',
-            name='created_at',
-            field=models.DateTimeField(auto_now_add=True, default=django.utils.timezone.now),
+            model_name="ingredient",
+            name="created_at",
+            field=models.DateTimeField(
+                auto_now_add=True, default=django.utils.timezone.now
+            ),
             preserve_default=False,
         ),
         migrations.AddField(
-            model_name='ingredient',
-            name='modified_at',
+            model_name="ingredient",
+            name="modified_at",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AlterField(
-            model_name='ingredient',
-            name='low_stock_threshold',
-            field=models.DecimalField(decimal_places=2, default=Decimal('0'), max_digits=10, validators=[django.core.validators.MinValueValidator(Decimal('0'), message='Value cannot be negative.')]),
+            model_name="ingredient",
+            name="low_stock_threshold",
+            field=models.DecimalField(
+                decimal_places=2,
+                default=Decimal("0"),
+                max_digits=10,
+                validators=[
+                    django.core.validators.MinValueValidator(
+                        Decimal("0"), message="Value cannot be negative."
+                    )
+                ],
+            ),
         ),
     ]

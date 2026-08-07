@@ -7,18 +7,31 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('production', '0007_alter_productionbatch_status'),
+        ("production", "0007_alter_productionbatch_status"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='productionbatch',
-            name='recipe',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, related_name='batches', to='production.recipe'),
+            model_name="productionbatch",
+            name="recipe",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.DO_NOTHING,
+                related_name="batches",
+                to="production.recipe",
+            ),
         ),
         migrations.AlterField(
-            model_name='productionbatch',
-            name='status',
-            field=models.CharField(choices=[('p', 'Pending'), ('c', 'Complete'), ('d', 'Disabled'), ('i', 'In Progress')], default='p', max_length=1),
+            model_name="productionbatch",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("p", "Pending"),
+                    ("c", "Complete"),
+                    ("d", "Disabled"),
+                    ("i", "In Progress"),
+                ],
+                default="p",
+                max_length=1,
+            ),
         ),
     ]

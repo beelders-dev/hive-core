@@ -13,63 +13,167 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('inventory', '0001_initial'),
+        ("inventory", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ProductionBatch',
+            name="ProductionBatch",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('produced_at', models.DateField(auto_now_add=True)),
-                ('batches', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('notes', models.TextField(blank=True, null=True)),
-                ('recipe_name', models.CharField(max_length=100)),
-                ('est_cost', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='production_batches', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("produced_at", models.DateField(auto_now_add=True)),
+                ("batches", models.DecimalField(decimal_places=2, max_digits=10)),
+                ("notes", models.TextField(blank=True, null=True)),
+                ("recipe_name", models.CharField(max_length=100)),
+                ("est_cost", models.DecimalField(decimal_places=2, max_digits=10)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="production_batches",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='BatchIngredient',
+            name="BatchIngredient",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('ingredient_name_snapshot', models.CharField(max_length=100)),
-                ('unit_snapshot', models.CharField(max_length=20)),
-                ('quantity_used', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('unit_cost_snapshot', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('total_cost', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('ingredient', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='inventory.ingredient')),
-                ('production_batch', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='batch_ingredients', to='production.productionbatch')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("ingredient_name_snapshot", models.CharField(max_length=100)),
+                ("unit_snapshot", models.CharField(max_length=20)),
+                ("quantity_used", models.DecimalField(decimal_places=2, max_digits=10)),
+                (
+                    "unit_cost_snapshot",
+                    models.DecimalField(decimal_places=2, max_digits=10),
+                ),
+                ("total_cost", models.DecimalField(decimal_places=2, max_digits=10)),
+                (
+                    "ingredient",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="inventory.ingredient",
+                    ),
+                ),
+                (
+                    "production_batch",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="batch_ingredients",
+                        to="production.productionbatch",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Recipe',
+            name="Recipe",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('name', models.CharField(error_messages={'blank': 'Recipe name cannot be blank.', 'max_length': 'Max characters for recipe name: 100'}, max_length=100)),
-                ('description', models.TextField(blank=True, null=True)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='recipe', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "name",
+                    models.CharField(
+                        error_messages={
+                            "blank": "Recipe name cannot be blank.",
+                            "max_length": "Max characters for recipe name: 100",
+                        },
+                        max_length=100,
+                    ),
+                ),
+                ("description", models.TextField(blank=True, null=True)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="recipe",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='productionbatch',
-            name='recipe',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='batches', to='production.recipe'),
+            model_name="productionbatch",
+            name="recipe",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.PROTECT,
+                related_name="batches",
+                to="production.recipe",
+            ),
         ),
         migrations.CreateModel(
-            name='RecipeIngredient',
+            name="RecipeIngredient",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('quantity_needed', models.DecimalField(decimal_places=2, max_digits=10, validators=[django.core.validators.MinValueValidator(Decimal('0.01'), message='Quantity must be greater than or equal to 0.01.')])),
-                ('ingredient', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='inventory.ingredient')),
-                ('recipe', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ingredient_requirements', to='production.recipe')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "quantity_needed",
+                    models.DecimalField(
+                        decimal_places=2,
+                        max_digits=10,
+                        validators=[
+                            django.core.validators.MinValueValidator(
+                                Decimal("0.01"),
+                                message="Quantity must be greater than or equal to 0.01.",
+                            )
+                        ],
+                    ),
+                ),
+                (
+                    "ingredient",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="inventory.ingredient",
+                    ),
+                ),
+                (
+                    "recipe",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="ingredient_requirements",
+                        to="production.recipe",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='recipe',
-            name='ingredients',
-            field=models.ManyToManyField(through='production.RecipeIngredient', to='inventory.ingredient'),
+            model_name="recipe",
+            name="ingredients",
+            field=models.ManyToManyField(
+                through="production.RecipeIngredient", to="inventory.ingredient"
+            ),
         ),
     ]

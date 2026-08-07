@@ -6,13 +6,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('production', '0006_alter_productionbatch_status'),
+        ("production", "0006_alter_productionbatch_status"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='productionbatch',
-            name='status',
-            field=models.CharField(choices=[('p', 'Pending'), ('c', 'Complete'), ('d', 'Disabled')], default='p', max_length=1),
+            model_name="productionbatch",
+            name="status",
+            field=models.CharField(
+                choices=[("p", "Pending"), ("c", "Complete"), ("d", "Disabled")],
+                default="p",
+                max_length=1,
+            ),
         ),
     ]

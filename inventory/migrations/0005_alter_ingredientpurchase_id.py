@@ -7,13 +7,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('inventory', '0004_alter_ingredientpurchase_id'),
+        ("inventory", "0004_alter_ingredientpurchase_id"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='ingredientpurchase',
-            name='id',
-            field=models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False),
+            model_name="ingredientpurchase",
+            name="id",
+            field=models.UUIDField(
+                default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+            ),
         ),
     ]

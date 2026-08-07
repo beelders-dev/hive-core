@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('production', '0016_productionbatch_cancellation_note_and_more'),
+        ("production", "0016_productionbatch_cancellation_note_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='productionbatch',
-            name='started_at',
+            model_name="productionbatch",
+            name="started_at",
             field=models.DateTimeField(null=True),
         ),
     ]

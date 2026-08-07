@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('production', '0015_rename_quantity_needed_recipeingredient_qty_needed'),
+        ("production", "0015_rename_quantity_needed_recipeingredient_qty_needed"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='productionbatch',
-            name='cancellation_note',
+            model_name="productionbatch",
+            name="cancellation_note",
             field=models.TextField(blank=True, null=True),
         ),
         migrations.AddField(
-            model_name='productionbatch',
-            name='cancelled_at',
+            model_name="productionbatch",
+            name="cancelled_at",
             field=models.DateTimeField(null=True),
         ),
     ]

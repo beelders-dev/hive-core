@@ -7,16 +7,34 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('inventory', '0005_alter_ingredientpurchase_id'),
+        ("inventory", "0005_alter_ingredientpurchase_id"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='PurchaseAdjustment',
+            name="PurchaseAdjustment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('qty_adjustment', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('purchase', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='adjustments', to='inventory.ingredientpurchase')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "qty_adjustment",
+                    models.DecimalField(decimal_places=2, max_digits=10),
+                ),
+                (
+                    "purchase",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="adjustments",
+                        to="inventory.ingredientpurchase",
+                    ),
+                ),
             ],
         ),
     ]

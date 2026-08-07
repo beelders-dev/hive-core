@@ -7,18 +7,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('inventory', '0002_alter_ingredientpurchase_total_cost'),
+        ("inventory", "0002_alter_ingredientpurchase_total_cost"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='ingredientpurchase',
-            name='modified_at',
+            model_name="ingredientpurchase",
+            name="modified_at",
             field=models.DateTimeField(auto_now=True),
         ),
         migrations.AlterField(
-            model_name='ingredientpurchase',
-            name='id',
-            field=models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False),
+            model_name="ingredientpurchase",
+            name="id",
+            field=models.UUIDField(
+                default=uuid.uuid4, editable=False, primary_key=True, serialize=False
+            ),
         ),
     ]

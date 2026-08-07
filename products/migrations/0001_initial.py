@@ -8,24 +8,31 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Product',
+            name="Product",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=50)),
-                ('stock', models.IntegerField()),
-                ('price', models.DecimalField(decimal_places=2, max_digits=6)),
-                ('short_description', models.CharField(blank=True, max_length=255)),
-                ('full_description', models.TextField(blank=True)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("stock", models.IntegerField()),
+                ("price", models.DecimalField(decimal_places=2, max_digits=6)),
+                ("short_description", models.CharField(blank=True, max_length=255)),
+                ("full_description", models.TextField(blank=True)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
             options={
-                'indexes': [models.Index(fields=['name'], name='name_idx')],
+                "indexes": [models.Index(fields=["name"], name="name_idx")],
             },
         ),
     ]

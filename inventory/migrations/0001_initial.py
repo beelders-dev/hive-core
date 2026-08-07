@@ -18,26 +18,88 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Ingredient',
+            name="Ingredient",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=100)),
-                ('unit', models.CharField(choices=[('g', 'Grams'), ('ml', 'Mililiters')], default='g', max_length=2)),
-                ('low_stock_threshold', models.DecimalField(decimal_places=2, default=0, max_digits=10)),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='ingredients', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("name", models.CharField(max_length=100)),
+                (
+                    "unit",
+                    models.CharField(
+                        choices=[("g", "Grams"), ("ml", "Mililiters")],
+                        default="g",
+                        max_length=2,
+                    ),
+                ),
+                (
+                    "low_stock_threshold",
+                    models.DecimalField(decimal_places=2, default=0, max_digits=10),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="ingredients",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='IngredientPurchase',
+            name="IngredientPurchase",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('purchased_at', models.DateField()),
-                ('exp_date', models.DateField(blank=True, null=True)),
-                ('qty_purchased', models.DecimalField(decimal_places=2, max_digits=10, validators=[django.core.validators.MinValueValidator(Decimal('0.01'), message='Must be at least 0.01.')])),
-                ('qty_remaining', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('total_cost', models.DecimalField(decimal_places=2, max_digits=6, validators=[django.core.validators.MinValueValidator(Decimal('0.01'), message='Must be at least 0.01.')])),
-                ('ingredient', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='purchases', to='inventory.ingredient')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("purchased_at", models.DateField()),
+                ("exp_date", models.DateField(blank=True, null=True)),
+                (
+                    "qty_purchased",
+                    models.DecimalField(
+                        decimal_places=2,
+                        max_digits=10,
+                        validators=[
+                            django.core.validators.MinValueValidator(
+                                Decimal("0.01"), message="Must be at least 0.01."
+                            )
+                        ],
+                    ),
+                ),
+                ("qty_remaining", models.DecimalField(decimal_places=2, max_digits=10)),
+                (
+                    "total_cost",
+                    models.DecimalField(
+                        decimal_places=2,
+                        max_digits=6,
+                        validators=[
+                            django.core.validators.MinValueValidator(
+                                Decimal("0.01"), message="Must be at least 0.01."
+                            )
+                        ],
+                    ),
+                ),
+                (
+                    "ingredient",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="purchases",
+                        to="inventory.ingredient",
+                    ),
+                ),
             ],
         ),
     ]
