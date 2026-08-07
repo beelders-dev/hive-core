@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Recipe, RecipeIngredient, BatchIngredient, ProductionBatch
+from .models import Recipe, RecipeIngredient, ProductionBatch
 
 
 # Register your models here.
