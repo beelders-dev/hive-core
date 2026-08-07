@@ -512,7 +512,7 @@ class PurchaseAdjustmentCreateView(TestCase):
     def test_purchase_adjustment_create_view_renders_correct_template(self):
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, "inventory/adjustment/partials/_form.html")
+        self.assertTemplateUsed(response, "inventory/adjustment/form.html")
 
     def test_purchase_adjustment_create_view_renders_success_template(self):
         response = self.client.post(
