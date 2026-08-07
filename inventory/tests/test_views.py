@@ -25,6 +25,7 @@ class InventoryHomeViewTests(TestCase):
 
     def test_inventory_home_view_has_results_ingredient_list_context(self):
         response = self.client.get(self.url)
+
         self.assertQuerySetEqual(
             response.context["ingredient_list"],
             Ingredient.objects.filter(user=self.user),
