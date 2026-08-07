@@ -130,9 +130,6 @@ class PurchaseDetailView(LoginRequiredMixin, DetailView):
     template_name = "inventory/purchase/detail.html"
 
 
-from pprint import pprint
-
-
 class PurchaseCreateView(LoginRequiredMixin, CreateView):
     model = IngredientPurchase
     template_name = "inventory/purchase/form.html"
@@ -235,7 +232,7 @@ class PurchaseAdjustmentListView(LoginRequiredMixin, ListView):
 
 class PurchaseAdjustmentCreateView(LoginRequiredMixin, CreateView):
     model = PurchaseAdjustment
-    template_name = "inventory/adjustment/partials/_form.html"
+    template_name = "inventory/adjustment/form.html"
     success_template_name = "inventory/adjustment/oob/_create_success.html"
     form_class = PurchaseAdjustmentForm
 

@@ -20,7 +20,7 @@
 
 
 .card {
-    @apply rounded-xl border border-slate-200 bg-white shadow-md m-2 p-3 m-3
+    @apply rounded-md border border-slate-100 bg-white shadow-md m-2 p-3 
 }
 
 .htmx-indicator {
@@ -86,6 +86,44 @@ textarea {
 
 /* Reusables */
 
+.action {
+    @apply  transition-colors duration-200 hover:bg-slate-50 font-medium px-4 py-2 rounded ;
+}
+
+a {
+    @apply block hover:text-slate-500 text-slate-800 
+}
+
 button {
-    @apply rounded-md text-sm font-medium transition px-4 py-2 
+    @apply shadow-sm text-sm focus:ring-2 focus:outline-none focus:ring-offset-2
+}
+
+/* Primary */
+.button-primary {
+  @apply bg-indigo-600 text-white hover:bg-indigo-700 focus:ring-indigo-500;
+}
+
+/* Secondary */
+.button-secondary {
+  @apply border border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-gray-300;
+}
+
+/* Success */
+.button-success {
+  @apply bg-emerald-600 text-white hover:bg-emerald-700 focus:ring-emerald-500;
+}
+
+/* Delete (soft) */
+.button-delete {
+  @apply border border-red-200 bg-red-50 text-red-700 hover:border-red-300 hover:bg-red-100 focus:ring-red-300;
+}
+
+/* Danger (high emphasis) */
+.button-danger {
+  @apply bg-red-600 text-white hover:bg-red-700 focus:ring-red-500;
+}
+
+/* Ghost */
+.button-ghost {
+  @apply bg-transparent text-gray-700 hover:bg-gray-100 focus:ring-gray-300;
 }

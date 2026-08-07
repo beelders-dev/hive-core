@@ -13,27 +13,28 @@
     <!-- Purchase List -->
     <div class="divide-y divide-slate-100">
         {% for purchase in purchases %}
-            <a href="{% url 'inventory:purchase' purchase.id %}"
-               class="grid grid-cols-7 items-center gap-4 px-5 py-4 transition-colors hover:bg-slate-50">
-                <div class="text-slate-600">{{ purchase.short_id }}</div>
-                <div class="text-slate-700">{{ purchase.purchased_at|date:"M d, Y" }}</div>
-                <div class="text-slate-600">
-                    {% if purchase.exp_date %}
-                        {{ purchase.exp_date|date:"M, Y" }}
-                    {% else %}
-                        —
-                    {% endif %}
+            <a href="{% url 'inventory:purchase' purchase.id %}">
+                <div class="grid grid-cols-7 items-center gap-4  p-3 hover:bg-slate-50 transition-colors">
+                    <div class="text-slate-600">{{ purchase.short_id }}</div>
+                    <div class="text-slate-700">{{ purchase.purchased_at|date:"M d, Y" }}</div>
+                    <div class="text-slate-600">
+                        {% if purchase.exp_date %}
+                            {{ purchase.exp_date|date:"M, Y" }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </div>
+                    <div class="text-slate-700">{{ purchase.created_at|date:"M d, Y" }}</div>
+                    <div class="text-right font-medium text-slate-900">{{ purchase.qty_purchased|intcomma }}</div>
+                    <div class="text-right">
+                        {% if purchase.qty_remaining > 0 %}
+                            <span class="font-medium text-emerald-600">{{ purchase.qty_remaining|intcomma }}</span>
+                        {% else %}
+                            <span class="font-medium text-rose-600">0</span>
+                        {% endif %}
+                    </div>
+                    <div class="text-right font-semibold text-slate-900">₱{{ purchase.total_cost|intcomma }}</div>
                 </div>
-                <div class="text-slate-700">{{ purchase.created_at|date:"M d, Y" }}</div>
-                <div class="text-right font-medium text-slate-900">{{ purchase.qty_purchased|intcomma }}</div>
-                <div class="text-right">
-                    {% if purchase.qty_remaining > 0 %}
-                        <span class="font-medium text-emerald-600">{{ purchase.qty_remaining|intcomma }}</span>
-                    {% else %}
-                        <span class="font-medium text-rose-600">0</span>
-                    {% endif %}
-                </div>
-                <div class="text-right font-semibold text-slate-900">₱{{ purchase.total_cost|intcomma }}</div>
             </a>
         {% endfor %}
     </div>

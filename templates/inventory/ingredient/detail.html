@@ -4,28 +4,19 @@
         <!-- Header -->
         <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <a href="{% url 'inventory:index' %}"
-                   class="inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-blue-600">
-                    ← Back to Inventory
-                </a>
+                <a href="{% url 'inventory:index' %}" class="action">← Back to Inventory</a>
                 {% include "components/_page_header.html" with page_title=ingredient.name %}
             </div>
             <div class="flex items-center gap-3">
                 <button hx-get="{% url 'inventory:purchase_create' ingredient.pk %}"
                         hx-target="#modal-root"
-                        class="inline-flex items-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700">
-                    Add Purchase Stock
-                </button>
+                        class="action button-primary">Add Purchase Stock</button>
                 <button hx-get="{% url 'inventory:update' ingredient.pk %}"
                         hx-target="#modal-root"
-                        class="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700">
-                    Edit Ingredient
-                </button>
+                        class="action button-secondary">Edit Ingredient</button>
                 <button hx-get="{% url 'inventory:delete' ingredient.pk %}"
                         hx-target="#modal-root"
-                        class="rounded-lg border border-rose-200 bg-white px-4 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-50">
-                    Delete
-                </button>
+                        class="action button-delete">Delete</button>
             </div>
         </div>
         <!-- Summary Cards -->

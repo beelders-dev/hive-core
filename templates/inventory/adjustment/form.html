@@ -23,11 +23,11 @@
                 {{ form.note }}
                 {% for error in form.note.errors %}<p class="mt-1 text-sm text-red-600">{{ error }}</p>{% endfor %}
             </div>
-            <div class="flex justify-end">
-                <button type="submit"
-                        class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700">
-                    Save Adjustment
-                </button>
+            <div class="flex justify-end gap-2">
+                <button type="button"
+                        class="action button-secondary"
+                        onclick="document.getElementById('modal-root').innerHTML = ''">Cancel</button>
+                <button type="submit" class="action button-primary">Save Adjustment</button>
             </div>
         </div>
     </form>

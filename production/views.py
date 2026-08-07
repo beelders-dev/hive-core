@@ -194,7 +194,7 @@ class RecipeDetailView(LoginRequiredMixin, DetailView):
 class RecipeDeleteView(LoginRequiredMixin, DeleteView):
     model = Recipe
     template_name = "production/recipe/delete.html"
-    success_url = reverse_lazy("production:production_dashboard")
+    success_url = reverse_lazy("production:index")
 
 
 class AddIngredientView(LoginRequiredMixin, View):

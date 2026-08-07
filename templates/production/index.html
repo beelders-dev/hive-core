@@ -5,11 +5,6 @@
             <!-- Header -->
             <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
                 {% include "components/_page_header.html" with page_title="Production" page_description="Manage recipes and review your latest production batches." %}
-                <a href="{% url 'production:recipe_create' %}"
-                   class="inline-flex items-center rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700">
-                    {% include "components/svgs/production/plus.html" %}
-                    New Recipe
-                </a>
             </div>
             <!-- Stats -->
             <div class="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -26,7 +21,22 @@
                 </section>
                 <!-- Recipe Library -->
                 <section class="flex h-[500px] flex-col card">
-                    {% include "components/card/_header.html" with title="Recipe Library" subtitle="Available recipes." %}
+                    <div class="flex justify-between items-center">
+                        {% include "components/card/_header.html" with title="Recipe Library" subtitle="Available recipes." %}
+                        <div>
+                            <a href="{% url 'production:recipe_create' %}"
+                               class=" h-10 content-center justify-items-center text-center rounded bg-blue-600 px-4 py-2 text-sm font-medium lg text-white shadow-sm transition hover:bg-blue-700">
+                                <svg xmlns="http://www.w3.org/2000/svg"
+                                     fill="none"
+                                     viewBox="0 0 24 24"
+                                     stroke-width="1.5"
+                                     stroke="currentColor"
+                                     class="size-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
                     <div class="flex-1 overflow-y-auto">{% include "production/recipe/partials/_recipe_list.html" %}</div>
                 </section>
             </div>

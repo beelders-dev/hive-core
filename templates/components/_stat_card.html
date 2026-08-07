@@ -1,14 +1,12 @@
-<div class="card ">
-    <div class="flex items-start justify-between">
-        <div>
-            <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ label }}</p>
-            <div class="mt-2 flex items-end gap-1">
-                {% if prefix %}<span class="text-3xl font-bold text-slate-900">{{ prefix }}</span>{% endif %}
-                <span class="text-3xl font-bold text-slate-900">{{ value|default:"--" }}</span>
-                {% if suffix %}<span class="mb-1 text-sm text-slate-500">{{ suffix }}</span>{% endif %}
-            </div>
-            {% if helper %}<p class="mt-3 text-xs text-slate-500">{{ helper }}</p>{% endif %}
+<div class="card flex items-start justify-between">
+    <div>
+        <p class="text-xs font-semibold uppercase tracking-wide text-slate-500">{{ label }}</p>
+        <div class="mt-2 flex items-end gap-1">
+            {% if prefix %}<span class="text-3xl font-bold text-slate-900">{{ prefix }}</span>{% endif %}
+            <span class="text-4xl font-bold text-slate-900 font-mono">{{ value|default:"0" }}</span>
+            {% if suffix %}<span class="mb-1  text-sm text-slate-500">{{ suffix }}</span>{% endif %}
         </div>
-        {% if badge %}<span class="rounded-full px-3 py-1 text-xs font-medium {{ badge_class }}">{{ badge }}</span>{% endif %}
+        {% if helper %}<p class="mt-3 text-xs text-slate-500">{{ helper }}</p>{% endif %}
     </div>
+    {% if badge %}<span class="rounded px-3 py-1 text-xs font-medium {{ badge_class }}">{{ badge }}</span>{% endif %}
 </div>

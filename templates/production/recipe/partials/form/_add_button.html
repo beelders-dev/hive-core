@@ -1,5 +1,13 @@
-<button type="submit"
-        hx-post="{% url 'production:add_ingredient' ingredient.pk %}"
-        hx-include="[name='ingredient_ids']"
-        class="size-8 flex items-center justify-center text-xl  bg-blue-600 text-white transition-colors hover:bg-blue-700 focus:ring-2 "
-        aria-label="Add ingredient">+</button>
+<div hx-post="{% url 'production:add_ingredient' ingredient.pk %}"
+     hx-include="[name='ingredient_ids']"
+     class=""
+     aria-label="Add ingredient">
+        <svg xmlns="http://www.w3.org/2000/svg"
+             fill="none"
+             viewBox="0 0 24 24"
+             stroke-width="1.5"
+             stroke="currentColor"
+             class="size-10 rounded text-slate-600 hover:cursor-pointer hover:scale-105 hover:text-slate-700 transition-all">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+        </svg>
+</div>

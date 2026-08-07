@@ -42,14 +42,10 @@
                 <span class="text-sm text-red-500">{{ form.low_stock_threshold.errors }}</span>
             </div>
             <div class="flex items-center justify-end gap-3  border-slate-100 pt-4">
-                <button type="submit"
-                        class=" bg-blue-600   text-white shadow-sm transition-colors duration-200 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                    {% if object %}
-                        Save Changes
-                    {% else %}
-                        Add Ingredient
-                    {% endif %}
-                </button>
+                <button type="button"
+                        class="action button-secondary"
+                        onclick="document.getElementById('modal-root').innerHTML = ''">Cancel</button>
+                <button type="submit" class="action button-primary">Submit</button>
             </div>
         </form>
     </div>

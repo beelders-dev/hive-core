@@ -5,7 +5,7 @@
             {% include "components/_page_header.html" with section_title="Hive Core" page_title=recipe|yesno:"Edit Recipe,Create Recipe" page_description="Build a recipe by selecting ingredients and defining the required quantities." %}
             <form id="recipe-form"
                   method="post"
-                  class="space-y-8"
+                  class="space-y-4"
                   hx-post="{{ form_action_url }}"
                   hx-swap="none">
                 {% csrf_token %}
@@ -41,7 +41,11 @@
                         </div>
                     </section>
                 </div>
-                <div class="flex justify-end">{% include "production/recipe/partials/form/_save_button.html" %}</div>
+                <!-- Form Actions -->
+                <div class="flex justify-end gap-3">
+                    <a href="{% url 'production:index' %}"  class="action button-secondary">Cancel</a>
+                    <button type="submit" class="action button-primary">Save Recipe</button>
+                </div>
             </form>
         </div>
     </div>

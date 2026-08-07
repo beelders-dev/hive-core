@@ -37,14 +37,11 @@
             {{ form.total_cost }}
             <p class="mt-1 text-xs text-red-600">{{ form.total_cost.errors }}</p>
         </div>
-        <button type="submit"
-                class="w-full rounded-lg bg-indigo-600 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700">
-            {% if action_type == "create" %}
-                Add
-            {% else %}
-                Edit
-            {% endif %}
-            Purchase Stock
-        </button>
+        <div class="flex justify-end gap-2">
+            <button type="button"
+                    class="action button-secondary"
+                    onclick="document.getElementById('modal-root').innerHTML = ''">Cancel</button>
+            <button type="submit" class="action button-primary">Submit</button>
+        </div>
     </form>
 {% endblock modal_content %}
