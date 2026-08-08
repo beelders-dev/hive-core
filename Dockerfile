@@ -20,7 +20,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 # The "Final" step: Copy your code
 COPY . .
 
-RUN python manage.py collectstatic --noinput
+
 
 RUN SECRET_KEY="django-insecure-build-key" \
     POSTGRES_DB="build" \
