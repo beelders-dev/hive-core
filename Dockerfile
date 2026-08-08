@@ -22,6 +22,13 @@ COPY . .
 
 RUN python manage.py collectstatic --noinput
 
+RUN echo "=== STATIC FILES ===" && \
+    ls -lh /app/static/dist/styles.css && \
+    echo "=== COLLECTED FILE ===" && \
+    ls -lh /app/staticfiles/dist/styles.css && \
+    echo "=== MANIFEST ===" && \
+    grep -o "dist/styles.css" /app/staticfiles/staticfiles.json
+
 EXPOSE 8080
 
 CMD ["sh", "-c", "gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"]
