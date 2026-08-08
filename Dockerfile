@@ -23,11 +23,7 @@ COPY . .
 
 
 RUN SECRET_KEY="django-insecure-build-key" \
-    POSTGRES_DB="build" \
-    POSTGRES_USER="build" \
-    POSTGRES_PASSWORD="build" \
-    POSTGRES_HOST="localhost" \
-    POSTGRES_PORT="5432" \
+    DATABASE_URL="postgresql://build:build@localhost:5432/build" \
     python manage.py collectstatic --noinput
 
 EXPOSE 8080
