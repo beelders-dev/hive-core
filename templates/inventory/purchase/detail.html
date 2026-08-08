@@ -4,16 +4,16 @@
     <div class="mx-auto max-w-7xl px-6 py-10">
         <!-- Header -->
         <a href="{{ object.ingredient.get_absolute_url }}" class="action">← Back</a>
-        <div class="flex flex-row justify-between">
-            <div>
+        <div class="header-container">
+            <div class="flex-1">
                 {% include "components/_page_header.html" with page_title="Purchase Detail" page_description="Review this ingredient purchase record." %}
             </div>
-            <div class="flex flex-col mb-2 items-end space-y-2">
-                <button class="action button-primary"
+            <div>
+                <button class="action button-secondary"
                         hx-get="{% url 'inventory:purchase_update' purchase.pk %}"
                         hx-target="#modal-root"
                         hx-swap="innerHTML">Edit Purchase Stock</button>
-                <button class="action button-secondary"
+                <button class="action button-success"
                         hx-get="{% url 'inventory:adjustment_create' purchase.pk %}"
                         hx-target="#modal-root"
                         hx-swap="innerHTML">Adjust Stock</button>

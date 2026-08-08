@@ -2,12 +2,12 @@
 {% block content %}
     <div class="mx-auto my-12 max-w-7xl px-4 font-sans">
         <!-- Header -->
-        <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
+        <div class="header-container">
+            <div class="flex-1">
                 <a href="{% url 'inventory:index' %}" class="action">← Back</a>
                 {% include "components/_page_header.html" with page_title=ingredient.name %}
             </div>
-            <div class="flex items-center gap-3">
+            <div class="flex gap-3">
                 <button hx-get="{% url 'inventory:purchase_create' ingredient.pk %}"
                         hx-target="#modal-root"
                         class="action button-primary">Add Purchase Stock</button>

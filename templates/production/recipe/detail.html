@@ -3,10 +3,10 @@
 {% block content %}
     <div class="mx-auto my-12 max-w-6xl px-4 font-sans">
         <!-- Header -->
-        <div class="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
+        <div class="header-container">
+            <div class="flex-1">
                 <a href="{% url 'production:index' %}" class="action">← Back</a>
-                <div class="mt-4">{% include "components/_page_header.html" with page_title=recipe.name %}</div>
+                {% include "components/_page_header.html" with page_title=recipe.name %}
             </div>
             <div class="flex gap-2">
                 {% include "production/recipe/partials/detail/actions/_edit_button.html" %}
