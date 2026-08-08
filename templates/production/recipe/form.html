@@ -2,6 +2,7 @@
 {% block content %}
     <div class="min-h-screen bg-slate-50">
         <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+            <a href="{% url 'production:index' %}" class="action">← Back</a>
             {% include "components/_page_header.html" with section_title="Hive Core" page_title=recipe|yesno:"Edit Recipe,Create Recipe" page_description="Build a recipe by selecting ingredients and defining the required quantities." %}
             <form id="recipe-form"
                   method="post"
