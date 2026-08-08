@@ -22,12 +22,13 @@ COPY . .
 
 RUN python manage.py collectstatic --noinput
 
-RUN echo "=== STATIC FILES ===" && \
-    ls -lh /app/static/dist/styles.css && \
-    echo "=== COLLECTED FILE ===" && \
-    ls -lh /app/staticfiles/dist/styles.css && \
-    echo "=== MANIFEST ===" && \
-    grep -o "dist/styles.css" /app/staticfiles/staticfiles.json
+RUN SECRET_KEY="django-insecure-build-key" \
+    POSTGRES_DB="build" \
+    POSTGRES_USER="build" \
+    POSTGRES_PASSWORD="build" \
+    POSTGRES_HOST="localhost" \
+    POSTGRES_PORT="5432" \
+    python manage.py collectstatic --noinput
 
 EXPOSE 8080
 
