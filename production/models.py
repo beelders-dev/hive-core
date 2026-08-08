@@ -36,6 +36,10 @@ class Recipe(models.Model):
         through="RecipeIngredient",
     )
 
+    @property
+    def short_id(self):
+        return str(self.id)[:8].upper()
+
     def get_absolute_url(self):
         return reverse("production:recipe", kwargs={"pk": self.pk})
 

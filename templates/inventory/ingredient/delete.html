@@ -1,4 +1,7 @@
 {% extends "components/modal.html" %}
+{% block modal_title %}
+    Delete {{ ingredient }} ID: {{ ingredient.short_id }}
+{% endblock modal_title %}
 {% load humanize %}
 {% block modal_content %}
     <!-- Header -->

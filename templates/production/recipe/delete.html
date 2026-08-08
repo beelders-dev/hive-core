@@ -1,6 +1,6 @@
 {% extends "components/modal.html" %}
 {% block modal_title %}
-    Delete Recipe
+    Delete {{ recipe }} ID: {{ recipe.short_id }}
 {% endblock modal_title %}
 {% block modal_content %}
     <div class="mx-auto font-sans">
@@ -19,19 +19,15 @@
                 </p>
             </div>
             <form method="post"
-                  class="p-6 bg-slate-50 border-t border-slate-100 flex flex-col gap-3"
                   action="{% url 'production:recipe_delete' recipe.pk %}"
                   hx-target="#modal-root">
                 {% csrf_token %}
-                <button type="submit"
-                        class="w-full py-3 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg transition-colors shadow-sm">
-                    Yes, Delete Permanently
-                </button>
-                <button type="button"
-                        onclick="document.getElementById('modal-root').innerHTML = ''"
-                        class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
-                    Cancel, Keep Recipe
-                </button>
+                <div class="flex justify-end gap-2">
+                    <button type="button"
+                            onclick="document.getElementById('modal-root').innerHTML = ''"
+                            class="action button-secondary">Cancel</button>
+                    <button type="submit" class="action button-danger">Yes, Delete Permanently</button>
+                </div>
             </form>
         </div>
     </div>

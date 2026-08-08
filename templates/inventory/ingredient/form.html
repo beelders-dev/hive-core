@@ -1,52 +1,42 @@
 {% extends "components/modal.html" %}
+{% block modal_title %}
+    {% if object %}
+        Edit
+    {% else %}
+        Create
+    {% endif %}
+    Ingredient
+{% endblock modal_title %}
 {% block modal_content %}
-    <div class="overflow-hidden  bg-white p-6 shadow-sm sm:p-8">
-        <div class="mb-6">
-            <h2 class="text-xl font-bold text-slate-800">
-                {% if object %}
-                    Edit {{ object.name }}
-                {% else %}
-                    Add New Ingredient
-                {% endif %}
-            </h2>
-            <p class="mt-1 text-sm text-slate-500">
-                {% if object %}
-                    Update this ingredient's basic details.
-                {% else %}
-                    Create the ingredient first. You can add stock later by recording a purchase.
-                {% endif %}
-            </p>
+    <form method="post"
+          class="space-y-5"
+          hx-post="{{ action_url }}"
+          hx-target="#modal-root">
+        {% csrf_token %}
+        <div>
+            <label for="{{ form.name.id_for_label }}"
+                   class="mb-1 block text-sm font-medium text-slate-700">Name</label>
+            {{ form.name }}
+            <span class="text-sm text-red-500">{{ form.name.errors }}</span>
         </div>
-        <form method="post"
-              class="space-y-5"
-              hx-post="{{ action_url }}"
-              hx-target="#modal-root">
-            {% csrf_token %}
-            <div>
-                <label for="{{ form.name.id_for_label }}"
-                       class="mb-1 block text-sm font-medium text-slate-700">Name</label>
-                {{ form.name }}
-                <span class="text-sm text-red-500">{{ form.name.errors }}</span>
-            </div>
-            <div>
-                <label for="{{ form.unit.id_for_label }}"
-                       class="mb-1 block text-sm font-medium text-slate-700">Base Unit</label>
-                {{ form.unit }}
-                <span class="text-sm text-red-500">{{ form.unit.errors }}</span>
-            </div>
-            <div>
-                <label for="{{ form.low_stock_threshold.id_for_label }}"
-                       class="mb-1 block text-sm font-medium text-slate-700">Low Stock Alert</label>
-                {{ form.low_stock_threshold }}
-                <p class="mt-1 text-xs text-slate-500">Choose when the system should warn you that this ingredient is running low.</p>
-                <span class="text-sm text-red-500">{{ form.low_stock_threshold.errors }}</span>
-            </div>
-            <div class="flex items-center justify-end gap-3  border-slate-100 pt-4">
-                <button type="button"
-                        class="action button-secondary"
-                        onclick="document.getElementById('modal-root').innerHTML = ''">Cancel</button>
-                <button type="submit" class="action button-primary">Submit</button>
-            </div>
-        </form>
-    </div>
+        <div>
+            <label for="{{ form.unit.id_for_label }}"
+                   class="mb-1 block text-sm font-medium text-slate-700">Base Unit</label>
+            {{ form.unit }}
+            <span class="text-sm text-red-500">{{ form.unit.errors }}</span>
+        </div>
+        <div>
+            <label for="{{ form.low_stock_threshold.id_for_label }}"
+                   class="mb-1 block text-sm font-medium text-slate-700">Low Stock Alert</label>
+            {{ form.low_stock_threshold }}
+            <p class="mt-1 text-xs text-slate-500">Choose when the system should warn you that this ingredient is running low.</p>
+            <span class="text-sm text-red-500">{{ form.low_stock_threshold.errors }}</span>
+        </div>
+        <div class="flex items-center justify-end gap-3  border-slate-100 pt-4">
+            <button type="button"
+                    class="action button-secondary"
+                    onclick="document.getElementById('modal-root').innerHTML = ''">Cancel</button>
+            <button type="submit" class="action button-primary">Submit</button>
+        </div>
+    </form>
 {% endblock modal_content %}

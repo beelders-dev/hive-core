@@ -83,6 +83,10 @@ class Ingredient(models.Model):
         else:
             return "in"
 
+    @property
+    def short_id(self):
+        return str(self.id)[:8].upper()
+
 
 class IngredientPurchase(models.Model):
     id = models.UUIDField(
