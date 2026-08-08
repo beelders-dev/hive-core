@@ -20,6 +20,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # The "Final" step: Copy your code
 COPY . .
 
+RUN python manage.py collectstatic --noinput
+
 EXPOSE 8080
 
-CMD ["sh", "-c", "gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --access-logfile - --error-logfile - --log-level debug"]
+CMD ["sh", "-c", "gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"]
