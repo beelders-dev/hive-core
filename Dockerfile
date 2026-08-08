@@ -22,4 +22,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["sh", "-c", "echo '=== GUNICORN COMMAND IS RUNNING ===' && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"]
+CMD ["sh", "-c", "gunicorn config.wsgi:application --bind 0.0.0.0:$PORT --access-logfile - --error-logfile - --log-level debug"]
