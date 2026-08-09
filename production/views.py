@@ -365,19 +365,24 @@ class CancelProductionView(LoginRequiredMixin, View):
         )
 
         if prod_batch.status != ProductionBatch.Status.IN_PROGRESS:
+
             for batch_ingredient in prod_batch.batch_ingredients.all():
                 try:
                     ProductionService.reinstate(batch_ingredient, prod_batch.batch_qty)
+
                 except ValidationError as e:
+
                     print("Error: ", e.message)
 
         form = BatchCancellationForm(request.POST, instance=prod_batch)
 
         if form.is_valid():
+
             prod_batch = form.save(commit=False)
             prod_batch.status = ProductionBatch.Status.CANCELLED
             prod_batch.cancelled_at = timezone.now()
             prod_batch.save()
+            print("Cancelled?: ", prod_batch.status == ProductionBatch.Status.CANCELLED)
 
         return render(
             request,

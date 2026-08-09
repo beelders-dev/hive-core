@@ -113,12 +113,14 @@ class ProductionService:
 
         for purchase in batch_ingredient.ingredient.purchases.order_by("purchased_at"):
 
-            if purchase.get_stock_difference <= qty_to_reinstate:
+            purchase_difference = purchase.qty_remaining - purchase.qty_purchased
+
+            if purchase_difference <= qty_to_reinstate:
                 purchase.qty_remaining += qty_to_reinstate
                 qty_to_reinstate = 0
                 purchase.save()
 
             else:
                 purchase.qty_remaining = purchase.qty_purchased
-                qty_to_reinstate = purchase.get_stock_difference
+                qty_to_reinstate = purchase_difference
                 purchase.save()
