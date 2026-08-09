@@ -53,14 +53,15 @@
         </div>
     </form>
     <script>
-        const unitRadios = document.querySelectorAll('input[name="unit"]');
-        const thresholdUnit = document.getElementById('threshold-unit');
+        document.addEventListener("change", function (event) {
+            if (event.target.matches('input[name="unit"]')) {
+                const thresholdUnit =
+                    document.getElementById("threshold-unit");
 
-        unitRadios.forEach(radio => {
-            radio.addEventListener('change', () => {
-                thresholdUnit.textContent =
-                    radio.value === 'g' ? 'grams' : 'milliliters';
-            });
+                if (thresholdUnit) {
+                    thresholdUnit.textContent = event.target.value;
+                }
+            }
         });
     </script>
 {% endblock modal_content %}
