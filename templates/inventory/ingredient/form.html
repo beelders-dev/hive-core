@@ -40,7 +40,9 @@
                 Low Stock Alert (<span id="threshold-unit">grams</span>)
             </label>
             {{ form.low_stock_threshold }}
-            <p class="mt-1 text-xs text-slate-500">Choose when the system should warn you that this ingredient is running low.</p>
+            <p class="mt-1 text-xs text-slate-500">
+                Choose when the system should warn you that this ingredient is running low. (Optional)
+            </p>
             <span class="text-sm text-red-500">{{ form.low_stock_threshold.errors }}</span>
         </div>
         <div class="flex items-center justify-end gap-3  border-slate-100 pt-4">
