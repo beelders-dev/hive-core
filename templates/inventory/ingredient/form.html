@@ -20,14 +20,25 @@
             <span class="text-sm text-red-500">{{ form.name.errors }}</span>
         </div>
         <div>
-            <label for="{{ form.unit.id_for_label }}"
-                   class="mb-1 block text-sm font-medium text-slate-700">Base Unit</label>
-            {{ form.unit }}
+            <div>
+                <label class="mb-2 block text-sm font-medium text-slate-700">Base unit</label>
+                <div class="grid grid-cols-2 gap-3">
+                    {% for radio in form.unit %}
+                        <label class="flex cursor-pointer items-center gap-3 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-50 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50 has-[:checked]:text-blue-700">
+                            {{ radio.tag }}
+                            <span>{{ radio.choice_label }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+                {% if form.unit.errors %}<p class="mt-1 text-sm text-red-600">{{ form.unit.errors.0 }}</p>{% endif %}
+            </div>
             <span class="text-sm text-red-500">{{ form.unit.errors }}</span>
         </div>
         <div>
             <label for="{{ form.low_stock_threshold.id_for_label }}"
-                   class="mb-1 block text-sm font-medium text-slate-700">Low Stock Alert</label>
+                   class="mb-1 block text-sm font-medium text-slate-700">
+                Low Stock Alert (<span id="threshold-unit">grams</span>)
+            </label>
             {{ form.low_stock_threshold }}
             <p class="mt-1 text-xs text-slate-500">Choose when the system should warn you that this ingredient is running low.</p>
             <span class="text-sm text-red-500">{{ form.low_stock_threshold.errors }}</span>
@@ -39,4 +50,15 @@
             <button type="submit" class="action button-primary">Submit</button>
         </div>
     </form>
+    <script>
+        const unitRadios = document.querySelectorAll('input[name="unit"]');
+        const thresholdUnit = document.getElementById('threshold-unit');
+
+        unitRadios.forEach(radio => {
+            radio.addEventListener('change', () => {
+                thresholdUnit.textContent =
+                    radio.value === 'g' ? 'grams' : 'milliliters';
+            });
+        });
+    </script>
 {% endblock modal_content %}
