@@ -134,3 +134,21 @@ button {
 .header-container {
     @apply mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between;
 }
+
+
+/* STOCK BADGE */
+.stock-badge {
+    @apply inline-flex items-center justify-center rounded-full border px-2.5 py-1 text-center text-xs font-medium leading-none;
+}
+
+.stock-badge-out {
+    @apply border-red-200 bg-red-50 text-red-700;
+}
+
+.stock-badge-low {
+    @apply border-amber-200 bg-amber-50 text-amber-700;
+}
+
+.stock-badge-in {
+    @apply border-green-200 bg-green-50 text-green-700;
+}

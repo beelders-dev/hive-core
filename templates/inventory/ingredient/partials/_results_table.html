@@ -1,30 +1,42 @@
 {% load humanize %}
-<div class=" overflow-hidden bg-white">
-    <div class="max-h-[420px] overflow-y-auto ">
-        <div class="sticky top-0 z-10 grid grid-cols-12   bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
-            <div class="col-span-3 px-5 py-3">Id</div>
-            <div class="col-span-3 px-5 py-3">Ingredient</div>
-            <div class="col-span-3 px-5 py-3 text-right">Stock</div>
-            <div class="col-span-3 px-5 py-3 text-center">Status</div>
+<div class="overflow-hidden bg-white">
+    <div class="max-h-[420px] overflow-y-auto">
+        <!-- Table Header -->
+        <div class="sticky top-0 z-10 grid grid-cols-12 bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
+            <!-- ID -->
+            <div class="col-span-2 hidden px-4 py-3 sm:block sm:px-5">ID</div>
+            <!-- Ingredient -->
+            <div class="col-span-6 px-4 py-3 sm:col-span-4 sm:px-5">Ingredient</div>
+            <!-- Stock -->
+            <div class="col-span-3 px-4 py-3 text-right sm:col-span-2 sm:px-5">Stock</div>
+            <!-- Status -->
+            <div class="col-span-3 px-4 py-3 text-center sm:col-span-4 sm:px-5">Status</div>
         </div>
+        <!-- Results -->
         <div class="divide-y divide-slate-100">
             {% for ingredient in ingredient_list %}
-                <div class="grid grid-cols-12 items-center bg-white transition duration-400 hover:bg-slate-100">
-                    <div class="col-span-3 px-5 py-4">
-                        <a href="{{ ingredient.get_absolute_url }}"
-                           class=" text-sm text-slate-900 hover:text-blue-500">{{ ingredient.id|stringformat:"s"|slice:":8"|upper }}</a>
+                <a href="{{ ingredient.get_absolute_url }}"
+                   class="grid grid-cols-12 items-center bg-white transition duration-200 hover:bg-slate-50">
+                    <!-- ID -->
+                    <div class="col-span-2 hidden px-4 py-3 text-sm text-slate-900 sm:block sm:px-5 sm:py-4">
+                        {{ ingredient.id|stringformat:"s"|slice:":8"|upper }}
                     </div>
-                    <div class="col-span-3 px-5 py-4">
+                    <!-- Ingredient -->
+                    <div class="col-span-6 min-w-0 px-4 py-3 sm:col-span-4 sm:px-5 sm:py-4">
                         <p class="truncate font-medium text-slate-900">{{ ingredient.name }}</p>
-                        <p class="mt-1 text-xs text-slate-500">Unit: {{ ingredient.get_unit_display }}</p>
+                        <p class="mt-1 truncate text-xs text-slate-500">Unit: {{ ingredient.get_unit_display }}</p>
                     </div>
-                    <div class="col-span-3 px-5 py-4 text-right">
-                        <p class="font-mono text-sm font-semibold text-slate-900">{{ ingredient.current_stock|floatformat:2|intcomma }}</p>
+                    <!-- Stock -->
+                    <div class="col-span-3 min-w-0 px-4 py-3 text-right sm:col-span-2 sm:px-5 sm:py-4">
+                        <p class="truncate font-mono text-sm font-semibold text-slate-900">
+                            {{ ingredient.current_stock|floatformat:2|intcomma }}
+                        </p>
                     </div>
-                    <div class="col-span-3 px-5 py-4">
+                    <!-- Status -->
+                    <div class="col-span-3 px-4 py-3 sm:px-5 sm:py-4">
                         <div class="flex justify-center">{% include "components/_stock_badge.html" with ingredient=ingredient %}</div>
                     </div>
-                </div>
+                </a>
             {% empty %}
                 <div class="flex min-h-[260px] flex-col items-center justify-center px-6 py-12 text-center">
                     <p class="text-sm font-medium text-slate-700">No ingredients found</p>
