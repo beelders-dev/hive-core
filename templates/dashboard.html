@@ -8,7 +8,7 @@
             <!-- Page Header -->
             {% include "components/_page_header.html" with page_title="Dashboard" page_description="Monitor your ingredients, recipes, and production readiness in one place." %}
             <!-- Statistics -->
-            <div class="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <div class="mb-8 grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
                 {% include "components/_stat_card.html" with label="Ingredients" value=total_ingredients helper="Inventory items tracked" badge="Inventory" badge_class="bg-blue-100 text-blue-700" %}
                 {% include "components/_stat_card.html" with label="Recipes" value=total_recipes helper="Production formulas saved" badge="Production" badge_class="bg-violet-100 text-violet-700" %}
                 {% include "components/_stat_card.html" with label="Low Stock" value=low_stock_count helper="Below stock threshold" badge="Warning" border_class="border-amber-200" value_class="text-amber-600" badge_class="bg-amber-100 text-amber-700" %}
@@ -19,32 +19,32 @@
                 <div class="space-y-8 lg:col-span-2">
                     <!-- Quick Actions -->
                     <section>
-                        <div class="grid gap-3 sm:grid-cols-2">
+                        <div class="grid grid-cols-2 gap-3 sm:gap-4">
                             <button hx-get="{% url 'inventory:create' %}"
                                     hx-target="#modal-root"
                                     class="rounded-lg bg-blue-600 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-blue-700">
-                                <div class="grid justify-items-center gap-2">
+                                <div class="flex items-center justify-center gap-2 sm:grid sm:justify-items-center sm:gap-2">
                                     <p>Add Ingredient</p>
                                     {% include "components/svgs/main_dashboard/_add_ingredient.svg" %}
                                 </div>
                             </button>
                             <a href="{% url 'production:recipe_create' %}"
                                class="rounded-lg bg-slate-900 px-4 py-3 text-center text-sm font-semibold text-white transition hover:bg-slate-800">
-                                <div class="grid justify-items-center gap-2">
+                                <div class="flex items-center justify-center gap-2 sm:grid sm:justify-items-center sm:gap-2">
                                     <p>Create Recipe</p>
                                     {% include "components/svgs/main_dashboard/_create_recipe.svg" %}
                                 </div>
                             </a>
                             <a href="{% url 'inventory:index' %}"
                                class="rounded-lg border border-slate-300 px-4 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-                                <div class="grid justify-items-center gap-2">
+                                <div class="flex items-center justify-center gap-2 sm:grid sm:justify-items-center sm:gap-2">
                                     <p>View Inventory</p>
                                     {% include "components/svgs/main_dashboard/_view_inventory.svg" %}
                                 </div>
                             </a>
                             <a href="{% url 'production:index' %}"
                                class="rounded-lg border border-slate-300 px-4 py-3 text-center text-sm font-semibold text-slate-700 transition hover:bg-slate-50">
-                                <div class="grid justify-items-center gap-2">
+                                <div class="flex items-center justify-center gap-2 sm:grid sm:justify-items-center sm:gap-2">
                                     <p>View Recipes</p>
                                     {% include "components/svgs/main_dashboard/_view_recipe.svg" %}
                                 </div>
@@ -57,10 +57,10 @@
                         {% if low_stock_ingredients %}
                             <div class="divide-y divide-slate-200">
                                 {% for ingredient in low_stock_ingredients %}
-                                    <div class="grid grid-cols-1 gap-1 px-4 py-4 text-sm sm:grid-cols-3 sm:items-center sm:gap-4 sm:px-6">
+                                    <div class="grid grid-cols-3 items-center gap-2 px-4 py-3 text-sm sm:gap-4 sm:px-6 sm:py-4">
                                         <p class="truncate font-medium text-slate-900">{{ ingredient.name }}</p>
-                                        <p class="text-slate-600">{{ ingredient.current_stock }} {{ ingredient.unit }}</p>
-                                        <p class="font-medium text-amber-600 sm:text-right">Low Stock</p>
+                                        <p class="truncate text-slate-600">{{ ingredient.current_stock }} {{ ingredient.unit }}</p>
+                                        <p class="truncate text-right font-medium text-amber-600">Low Stock</p>
                                     </div>
                                 {% endfor %}
                             </div>
@@ -85,7 +85,7 @@
                                         <div class="flex min-w-0 items-center gap-4">
                                             <div class="min-w-0 flex-1">
                                                 <p class="truncate font-medium text-slate-900">{{ recipe.name }}</p>
-                                                <p class="mt-1 text-sm text-slate-500">View recipe details</p>
+                                                <p class="hidden md:block mt-1 text-sm text-slate-500">View recipe details</p>
                                             </div>
                                             <div class="shrink-0 text-slate-400">{% include "components/svgs/_chevron_right.svg" %}</div>
                                         </div>
