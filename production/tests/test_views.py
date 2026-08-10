@@ -650,7 +650,28 @@ class CancelProductionViewTests(TestCase):
             qty_needed=Decimal("100"),
         )
 
-    def test_cancel_production_view_renders_correct_modal_template(self):
+    def test_cancel_production_view_renders_correct_template(self):
+        self.client.post(
+            reverse("production:create_batch", kwargs={"pk": self.recipe.pk}),
+            data={"batch": self.recipe},
+            HTTP_HX_REQUEST="true",
+        )
+        batch = ProductionBatch.objects.get(recipe=self.recipe)
+        response = self.client.get(
+            reverse(
+                "production:cancel",
+                kwargs={
+                    "pk": batch.pk,
+                },
+            )
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(
+            response, "production/batch/partials/_cancel_modal_form.html"
+        )
+
+    def test_cancel_production_view_renders_correct_success_template(self):
         self.client.post(
             reverse("production:create_batch", kwargs={"pk": self.recipe.pk}),
             data={"batch": self.recipe},
