@@ -695,7 +695,7 @@ class CancelProductionViewTests(TestCase):
         self,
     ):
 
-        response = self.client.post(
+        self.client.post(
             reverse("production:create_batch", kwargs={"pk": self.recipe.pk}),
             data={"batch": self.recipe},
             HTTP_HX_REQUEST="true",
@@ -718,7 +718,7 @@ class CancelProductionViewTests(TestCase):
     def test_cancel_production_view_does_not_reinstate_quantites_when_production_is_in_progress(
         self,
     ):
-        response = self.client.post(
+        self.client.post(
             reverse("production:create_batch", kwargs={"pk": self.recipe.pk}),
             data={"batch": self.recipe},
             HTTP_HX_REQUEST="true",
