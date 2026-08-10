@@ -369,9 +369,7 @@ class CancelProductionView(LoginRequiredMixin, View):
             for batch_ingredient in prod_batch.batch_ingredients.all():
                 try:
                     ProductionService.reinstate(batch_ingredient, prod_batch.batch_qty)
-
                 except ValidationError as e:
-
                     print("Error: ", e.message)
 
         form = BatchCancellationForm(request.POST, instance=prod_batch)
@@ -382,7 +380,6 @@ class CancelProductionView(LoginRequiredMixin, View):
             prod_batch.status = ProductionBatch.Status.CANCELLED
             prod_batch.cancelled_at = timezone.now()
             prod_batch.save()
-            print("Cancelled?: ", prod_batch.status == ProductionBatch.Status.CANCELLED)
 
         return render(
             request,

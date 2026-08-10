@@ -649,26 +649,25 @@ class CancelProductionViewTests(TestCase):
             ingredient=self.flour,
             qty_needed=Decimal("100"),
         )
-        self.batch = ProductionBatch.objects.create(
-            user=self.user,
-            recipe=self.recipe,
-            batch_qty=Decimal("100"),
-            recipe_name=self.recipe.name,
-            est_cost=Decimal("100"),
-        )
-        self.url = reverse(
-            "production:cancel",
-            kwargs={
-                "pk": self.batch.pk,
-            },
-        )
 
-    def test_cancel_production_view_renders_correct_template(self):
-        response = self.client.get(self.url)
-
+    def test_cancel_production_view_renders_correct_modal_template(self):
+        self.client.post(
+            reverse("production:create_batch", kwargs={"pk": self.recipe.pk}),
+            data={"batch": self.recipe},
+            HTTP_HX_REQUEST="true",
+        )
+        batch = ProductionBatch.objects.get(recipe=self.recipe)
+        response = self.client.post(
+            reverse(
+                "production:cancel",
+                kwargs={
+                    "pk": batch.pk,
+                },
+            )
+        )
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(
-            response, "production/batch/partials/_cancel_modal_form.html"
+            response, "production/batch/oob/_action_btn_reload.html"
         )
 
     def test_cancel_production_view_reinstates_quantites_when_production_not_started(
@@ -676,26 +675,45 @@ class CancelProductionViewTests(TestCase):
     ):
 
         response = self.client.post(
-            self.url,
-            data={"batch": self.batch.pk},
+            reverse("production:create_batch", kwargs={"pk": self.recipe.pk}),
+            data={"batch": self.recipe},
             HTTP_HX_REQUEST="true",
         )
+        batch = ProductionBatch.objects.get(recipe=self.recipe)
+
+        response = self.client.post(
+            reverse(
+                "production:cancel",
+                kwargs={
+                    "pk": batch.pk,
+                },
+            )
+        )
+
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.flour.current_stock, Decimal("300"))
         self.assertNotEqual(self.flour.current_stock, Decimal("200"))
 
-    def test_cancel_production_view_doesn_not_reinstate_quantites_when_production_started(
+    def test_cancel_production_view_does_not_reinstate_quantites_when_production_is_in_progress(
         self,
     ):
-        self.batch.status = self.batch.Status.CANCELLED
-        self.batch.save()
-
         response = self.client.post(
-            self.url,
-            data={"batch": self.batch.pk},
+            reverse("production:create_batch", kwargs={"pk": self.recipe.pk}),
+            data={"batch": self.recipe},
             HTTP_HX_REQUEST="true",
         )
+        batch = ProductionBatch.objects.get(recipe=self.recipe)
+        batch.status = batch.Status.IN_PROGRESS
+        batch.save()
 
+        response = self.client.post(
+            reverse(
+                "production:cancel",
+                kwargs={
+                    "pk": batch.pk,
+                },
+            )
+        )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.flour.current_stock, Decimal("200"))
         self.assertNotEqual(self.flour.current_stock, Decimal("300"))
