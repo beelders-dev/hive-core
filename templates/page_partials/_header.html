@@ -1,8 +1,9 @@
 <header class="sticky top-0 z-50 border-b border-slate-700 bg-slate-900 shadow-sm">
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div class="flex h-16 items-center justify-between">
-            <a href="{% url 'home' %}" class="flex items-center gap-2">
-                <div class="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-600">
+        <div class="flex min-h-16 items-center justify-between gap-4">
+            <!-- Logo -->
+            <a href="{% url 'home' %}" class="flex shrink-0 items-center gap-2">
+                <div class="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-blue-600">
                     <svg class="h-5 w-5 text-white"
                          fill="none"
                          stroke="currentColor"
@@ -15,6 +16,7 @@
                     Hive<span class="text-blue-400">Core</span>
                 </span>
             </a>
+            <!-- Navigation -->
             {% if user.is_authenticated %}
                 {% include "components/_nav_links.html" %}
             {% endif %}
