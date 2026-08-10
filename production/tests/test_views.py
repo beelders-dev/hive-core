@@ -691,7 +691,7 @@ class CancelProductionViewTests(TestCase):
             response, "production/batch/oob/_action_btn_reload.html"
         )
 
-    def test_cancel_production_view_reinstates_quantites_when_production_not_started(
+    def test_cancel_production_view_reinstates_quantities_when_not_started(
         self,
     ):
 
@@ -713,9 +713,13 @@ class CancelProductionViewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.flour.current_stock, Decimal("300"))
-        self.assertNotEqual(self.flour.current_stock, Decimal("200"))
+        batch.refresh_from_db()
+        self.assertEqual(
+            batch.status,
+            ProductionBatch.Status.CANCELLED,
+        )
 
-    def test_cancel_production_view_does_not_reinstate_quantites_when_production_is_in_progress(
+    def test_cancel_production_view_does_not_reinstate_quantities_when_in_progress(
         self,
     ):
         self.client.post(
@@ -737,4 +741,8 @@ class CancelProductionViewTests(TestCase):
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(self.flour.current_stock, Decimal("200"))
-        self.assertNotEqual(self.flour.current_stock, Decimal("300"))
+        batch.refresh_from_db()
+        self.assertEqual(
+            batch.status,
+            ProductionBatch.Status.CANCELLED,
+        )
