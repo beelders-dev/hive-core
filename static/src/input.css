@@ -20,7 +20,7 @@
 
 
 .card {
-    @apply rounded-md border border-slate-100 bg-white shadow-md m-2 p-3 
+    @apply rounded-md border border-slate-100 bg-white p-3 shadow-md sm:p-4;
 }
 
 .htmx-indicator {
@@ -87,15 +87,11 @@ textarea {
 /* Reusables */
 
 .action {
-    @apply  transition-colors duration-200 hover:bg-slate-50 font-medium px-4 py-2 rounded ;
+    @apply  transition-colors duration-200 hover:bg-slate-50 font-medium px-4 py-2 rounded;
 }
 
 a {
     @apply block hover:text-slate-500 text-slate-800 
-}
-
-button {
-    @apply shadow-sm text-sm focus:ring-2 focus:outline-none focus:ring-offset-2
 }
 
 /* Primary */
@@ -151,4 +147,18 @@ button {
 
 .stock-badge-in {
     @apply border-green-200 bg-green-50 text-green-700;
+}
+
+.tab-button {
+    @apply relative whitespace-nowrap px-4 py-3 text-sm font-medium text-slate-500 transition-colors
+           hover:text-slate-900;
+}
+
+.tab-button-active {
+    @apply text-blue-600 bg-blue-200;
+}
+
+.tab-button-active::after {
+    content: "";
+    @apply absolute inset-x-0 bottom-0 h-0.5 bg-blue-600;
 }

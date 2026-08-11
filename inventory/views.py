@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.core.exceptions import ValidationError
+from django.http import HttpResponse
 
 from django.views.generic import (
     ListView,
@@ -10,7 +11,9 @@ from django.views.generic import (
     DetailView,
     UpdateView,
     TemplateView,
+    View,
 )
+
 from django.urls import reverse_lazy
 
 from .models import Ingredient, IngredientPurchase, PurchaseAdjustment
@@ -113,15 +116,43 @@ class IngredientDetailView(LoginRequiredMixin, DetailView):
     model = Ingredient
     template_name = "inventory/ingredient/detail.html"
     context_object_name = "ingredient"
+    extra_context = {"active_tab": "overview"}
 
 
-class PurchaseListView(LoginRequiredMixin, ListView):
-    model = IngredientPurchase
-    template_name = "inventory/purchase/partials/_list.html"
-    context_object_name = "purchases"
+class IngredientOverviewView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        ingredient = get_object_or_404(Ingredient, pk=pk, user=self.request.user)
 
-    def get_queryset(self):
-        return IngredientPurchase.objects.filter(ingredient_id=self.kwargs["pk"])
+        return render(
+            request,
+            "inventory/ingredient/oob/_tab_switch.html",
+            {
+                "ingredient": ingredient,
+                "active_tab": "overview",
+            },
+        )
+
+
+class PurchaseListView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+
+        ingredient = get_object_or_404(
+            Ingredient,
+            pk=pk,
+            user=request.user,
+        )
+
+        purchases = IngredientPurchase.objects.filter(ingredient=ingredient)
+
+        return render(
+            request,
+            "inventory/ingredient/oob/_tab_switch.html",
+            {
+                "purchases": purchases,
+                "ingredient": ingredient,
+                "active_tab": "purchases",
+            },
+        )
 
 
 class PurchaseDetailView(LoginRequiredMixin, DetailView):

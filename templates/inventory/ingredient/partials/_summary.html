@@ -1,33 +1,29 @@
-<div class="card h-[420px]">
-    <div class="border-b border-slate-200 p-5">
-        <h2 class="text-base font-semibold text-slate-900"></h2>
-        <p class="mt-1 text-sm text-slate-500"></p>
-        {% include "components/card/_header.html" with title="Ingredient Summary" subtitle="Basic information about this ingredient." %}
-    </div>
-    <div class="grid grid-cols-1 gap-5 p-5 text-sm sm:grid-cols-2">
-        <div>
+<div class="card overflow-hidden">
+    {% include "components/card/_header.html" with title="Ingredient Summary" subtitle="Basic information about this ingredient." %}
+    <div class="grid grid-cols-2 gap-x-4 gap-y-5 p-4 text-sm sm:gap-x-6 sm:gap-y-6 sm:p-5">
+        <div class="min-w-0">
             <p class="font-medium text-slate-500">Name</p>
-            <p class="mt-1 font-semibold text-slate-900">{{ ingredient.name }}</p>
+            <p class="mt-1 truncate font-semibold text-slate-900">{{ ingredient.name }}</p>
         </div>
-        <div>
+        <div class="min-w-0">
             <p class="font-medium text-slate-500">Base Unit</p>
             <p class="mt-1 font-semibold text-slate-900">{{ ingredient.get_unit_display }}</p>
         </div>
-        <div class="sm:col-span-1">
+        <div class="min-w-0">
             <p class="font-medium text-slate-500">Ingredient ID</p>
             <p class="mt-1 break-all font-mono text-xs text-slate-800">{{ ingredient.id|stringformat:"s"|slice:":8"|upper }}</p>
         </div>
-        <div class="sm:col-span-1">
+        <div class="min-w-0">
             <p class="font-medium text-slate-500">Low Stock Threshold</p>
-            <p class="mt-1 break-all font-mono text-xs text-slate-800">{{ ingredient.low_stock_threshold }}</p>
+            <p class="mt-1 font-mono text-xs text-slate-800">{{ ingredient.low_stock_threshold }}</p>
         </div>
-        <div class="sm:col-span-1">
+        <div class="min-w-0">
             <p class="font-medium text-slate-500">Created</p>
-            <p class="mt-1  font-mono text-xs text-slate-800">{{ ingredient.created_at|date:"F j, Y, g:i A" }}</p>
+            <p class="mt-1 font-mono text-xs text-slate-800">{{ ingredient.created_at|date:"F j, Y, g:i A" }}</p>
         </div>
-        <div class="sm:col-span-1">
+        <div class="min-w-0">
             <p class="font-medium text-slate-500">Modified</p>
-            <p class="mt-1  font-mono text-xs text-slate-800">{{ ingredient.modified_at|date:"F j, Y, g:i A" }}</p>
+            <p class="mt-1 font-mono text-xs text-slate-800">{{ ingredient.modified_at|date:"F j, Y, g:i A" }}</p>
         </div>
     </div>
 </div>

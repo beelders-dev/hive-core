@@ -1,0 +1,12 @@
+<nav class="flex overflow-x-auto" aria-label="Ingredient sections">
+        <button type="button"
+                class="tab-button {% if active_tab == 'overview' %}tab-button-active{% endif %}"
+                hx-get="{% url 'inventory:ingredient_overview' ingredient.pk %}"
+                hx-target="#detail-content"
+                hx-swap="innerHTML">Overview</button>
+        <button type="button"
+                class="tab-button {% if active_tab == 'purchases' %}tab-button-active{% endif %}"
+                hx-get="{% url 'inventory:purchase_list' ingredient.pk %}"
+                hx-target="#detail-content"
+                hx-swap="innerHTML">Purchases</button>
+</nav>

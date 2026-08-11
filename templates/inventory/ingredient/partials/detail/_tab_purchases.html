@@ -1,0 +1,6 @@
+<div class="card overflow-hidden">
+    {% include "components/card/_header.html" with title="Stock Purchases" subtitle="All stock entries recorded for this ingredient." %}
+    <div id="ingredient-purchase-list">
+        {% include "inventory/purchase/partials/_list.html" with purchases=purchases %}
+    </div>
+</div>
