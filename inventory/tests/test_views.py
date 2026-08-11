@@ -2,6 +2,7 @@ from datetime import date
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from decimal import Decimal
 from ..models import Ingredient, IngredientPurchase, PurchaseAdjustment
@@ -285,12 +286,28 @@ class PurchaseListViewTests(TestCase):
         )
         self.url = reverse("inventory:purchase_list", kwargs={"pk": self.ingredient.pk})
 
-    def test_purchase_list_view_renders_object_and_correct_template(self):
+    def test_purchase_list_view_renders_tab_switch(self):
         response = self.client.get(self.url)
+
         self.assertEqual(response.status_code, 200)
-        purchases = response.context["purchases"]
-        self.assertEqual(list(purchases), [self.purchase])
-        self.assertTemplateUsed(response, "inventory/purchase/partials/_list.html")
+
+        self.assertEqual(
+            list(response.context["purchases"]),
+            [self.purchase],
+        )
+
+        self.assertEqual(
+            response.context["active_tab"],
+            "purchases",
+        )
+
+        self.assertTemplateUsed(
+            response,
+            "inventory/ingredient/oob/_tab_switch.html",
+        )
+
+        self.assertContains(response, 'id="tab-buttons"')
+        self.assertContains(response, 'hx-swap-oob="innerHTML"')
 
     def test_purchase_list_view_requires_login(self):
         self.client.logout()
@@ -549,4 +566,26 @@ class PurchaseAdjustmentCreateView(TestCase):
         self.assertRedirects(
             response,
             f"{reverse('login')}?next={self.url}",
+        )
+
+
+class IngredientOverviewViewTests(TestCase):
+    def setUp(self):
+        self.user = get_user_model().objects.create_user(
+            username="Mike", password="testpass123"
+        )
+        self.client.force_login(self.user)
+        self.ingredient = Ingredient.objects.create(user=self.user, name="Flour")
+        self.url = reverse(
+            "inventory:ingredient_overview", kwargs={"pk": self.ingredient.pk}
+        )
+
+    def test_ingredient_overview_view_renders_correct_template(self):
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(
+            response,
+            "inventory/ingredient/oob/_tab_switch.html",
         )
