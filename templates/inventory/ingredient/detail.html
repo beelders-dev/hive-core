@@ -18,7 +18,7 @@
                         class="action button-delete">Delete</button>
             </div>
         </div>
-        <div id="tab-buttons">{% include "inventory/ingredient/partials/detail/_tab_buttons.html" %}</div>
-        <div id="detail-content">{% include "inventory/ingredient/partials/detail/_tab_overview.html" %}</div>
+        {% include "inventory/ingredient/partials/detail/_tab_overview.html" %}
+        {% include "inventory/ingredient/partials/detail/_tab_purchases.html" %}
     </div>
 {% endblock content %}

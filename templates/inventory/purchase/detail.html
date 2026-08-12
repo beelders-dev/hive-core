@@ -1,14 +1,15 @@
 {% extends "base.html" %}
 {% load humanize %}
 {% block content %}
-    <div class="mx-auto max-w-7xl px-6 py-10">
-        <!-- Header -->
+    <div class="mx-auto max-w-7xl px-4 py-8 font-sans sm:px-6 sm:py-10">
+        <!-- Back -->
         <a href="{{ object.ingredient.get_absolute_url }}" class="action">← Back</a>
+        <!-- Header -->
         <div class="header-container">
-            <div class="flex-1">
+            <div class="min-w-0 flex-1">
                 {% include "components/_page_header.html" with page_title="Purchase Detail" page_description="Review this ingredient purchase record." %}
             </div>
-            <div>
+            <div class="flex flex-wrap gap-2 sm:gap-3">
                 <button class="action button-secondary"
                         hx-get="{% url 'inventory:purchase_update' purchase.pk %}"
                         hx-target="#modal-root"
@@ -19,11 +20,12 @@
                         hx-swap="innerHTML">Adjust Stock</button>
             </div>
         </div>
-        <div class="grid grid-cols-12 gap-6">
+        <!-- Content -->
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
             <!-- Purchase Card -->
-            <section class="col-span-8 overflow-hidden card">
+            <section class="card overflow-hidden lg:col-span-8">
                 <!-- Card Header -->
-                <div>
+                <div class="border-b border-slate-200">
                     {% include "components/card/_header.html" with title=purchase.ingredient.name subtitle="Purchase ID: "|add:purchase.short_id %}
                 </div>
                 <!-- Summary -->
@@ -31,10 +33,11 @@
                 <!-- Details -->
                 <div id="main-info">{% include "inventory/purchase/partials/_main_info.html" %}</div>
                 <!-- Footer -->
-                <div class="flex justify-end border-t border-slate-200 bg-slate-50 px-8 py-5"></div>
+                <div class="border-t border-slate-200 bg-slate-50 px-4 py-4 sm:px-6"></div>
             </section>
             <!-- Adjustment List -->
             <aside id="adjustment-list"
+                   class="card min-w-0 overflow-hidden lg:col-span-4"
                    hx-get="{% url 'inventory:adjustment_list' purchase.pk %}"
                    hx-trigger="load"
                    hx-swap-oob="true">

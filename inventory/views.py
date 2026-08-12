@@ -116,21 +116,6 @@ class IngredientDetailView(LoginRequiredMixin, DetailView):
     model = Ingredient
     template_name = "inventory/ingredient/detail.html"
     context_object_name = "ingredient"
-    extra_context = {"active_tab": "overview"}
-
-
-class IngredientOverviewView(LoginRequiredMixin, View):
-    def get(self, request, pk):
-        ingredient = get_object_or_404(Ingredient, pk=pk, user=self.request.user)
-
-        return render(
-            request,
-            "inventory/ingredient/oob/_tab_switch.html",
-            {
-                "ingredient": ingredient,
-                "active_tab": "overview",
-            },
-        )
 
 
 class PurchaseListView(LoginRequiredMixin, View):
@@ -146,11 +131,10 @@ class PurchaseListView(LoginRequiredMixin, View):
 
         return render(
             request,
-            "inventory/ingredient/oob/_tab_switch.html",
+            "inventory/purchase/partials/_list.html",
             {
                 "purchases": purchases,
                 "ingredient": ingredient,
-                "active_tab": "purchases",
             },
         )
 
