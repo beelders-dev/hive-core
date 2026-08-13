@@ -19,6 +19,7 @@ from django.urls import reverse_lazy
 from .models import Ingredient, IngredientPurchase, PurchaseAdjustment
 from .forms import IngredientForm, IngredientPurchaseForm, PurchaseAdjustmentForm
 from .services import PurchaseAdjustmentService
+from .tab_config import ingredient_detail_tabs
 
 
 class InventoryHomeView(LoginRequiredMixin, TemplateView):
@@ -116,16 +117,11 @@ class IngredientDetailView(LoginRequiredMixin, DetailView):
     model = Ingredient
     template_name = "inventory/ingredient/detail.html"
     context_object_name = "ingredient"
+    extra_context = {"active_tab": "overview"}
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        context["overview_url"] = reverse(
-            "inventory:ingredient_overview", kwargs={"pk": self.object.pk}
-        )
-        context["purchase_list_url"] = reverse(
-            "inventory:purchase_list", kwargs={"pk": self.object.pk}
-        )
+        context["tabs"] = ingredient_detail_tabs(self.object)
         return context
 
 
@@ -140,9 +136,11 @@ class IngredientOverviewView(LoginRequiredMixin, View):
 
         return render(
             request,
-            "inventory/ingredient/partials/detail/_tab_overview.html",
+            "inventory/ingredient/oob/_tab_switch.html",
             {
                 "ingredient": ingredient,
+                "active_tab": "overview",
+                "tabs": ingredient_detail_tabs(ingredient),
             },
         )
 
@@ -160,10 +158,13 @@ class PurchaseListView(LoginRequiredMixin, View):
 
         return render(
             request,
-            "inventory/purchase/partials/_list.html",
+            # "inventory/purchase/partials/_list.html",
+            "inventory/ingredient/oob/_tab_switch.html",
             {
                 "purchases": purchases,
                 "ingredient": ingredient,
+                "active_tab": "purchases",
+                "tabs": ingredient_detail_tabs(ingredient),
             },
         )
 

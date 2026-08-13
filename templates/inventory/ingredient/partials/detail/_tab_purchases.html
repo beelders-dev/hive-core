@@ -2,8 +2,8 @@
     {% include "components/card/_header.html" with title="Stock Purchases" subtitle="Track purchase history, quantities, costs, and remaining stock." %}
     <div class="border-t border-slate-100">
         <div id="ingredient-purchase-list"
-             hx-get="{% url 'inventory:purchase_list' ingredient.pk %}"
-             hx-trigger="load"
-             hx-include="this">{% include "inventory/purchase/partials/_list.html" %}</div>
+             hx-get="{% url 'inventory:purchase_list' ingredient.pk %}">
+            {% include "inventory/purchase/partials/_list.html" %}
+        </div>
     </div>
 </div>

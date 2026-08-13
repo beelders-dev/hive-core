@@ -1,8 +1,8 @@
 <div id="tab-buttons" hx-swap-oob="innerHTML">
-    {% include "inventory/ingredient/partials/detail/_tab_buttons.html" with active_tab=active_tab tab_url=tab_url %}
+    {% include "components/tab/_tabs.html" with tabs=tabs active_tab=active_tab target="#tab-content" %}
 </div>
-{% if active_tab == 'overview' %}
+{% if active_tab == "overview" %}
     {% include "inventory/ingredient/partials/detail/_tab_overview.html" with ingredient=ingredient %}
-{% elif active_tab == 'purchases' %}
-    {% include "inventory/ingredient/partials/detail/_tab_purchases.html" with purchases=purchases %}
+{% elif active_tab == "purchases" %}
+    {% include "inventory/ingredient/partials/detail/_tab_purchases.html" with ingredient=ingredient %}
 {% endif %}

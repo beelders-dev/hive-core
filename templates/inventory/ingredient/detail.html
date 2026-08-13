@@ -18,12 +18,9 @@
                         class="action button-delete">Delete</button>
             </div>
         </div>
-        <button hx-get="{{ overview_url }}"
-                hx-target="#tab-content"
-                hx-swap="innerHTML">Overview</button>
-        <button hx-get="{{ purchase_list_url }}"
-                hx-target="#tab-content"
-                hx-swap="innerHTML">Purchases</button>
+        <div id="tab-buttons">
+            {% include "components/tab/_tabs.html" with tabs=tabs active_tab=active_tab target="#tab-content" %}
+        </div>
         <div id="tab-content">{% include "inventory/ingredient/partials/detail/_tab_overview.html" %}</div>
     </div>
 {% endblock content %}
