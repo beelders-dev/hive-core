@@ -117,6 +117,35 @@ class IngredientDetailView(LoginRequiredMixin, DetailView):
     template_name = "inventory/ingredient/detail.html"
     context_object_name = "ingredient"
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["overview_url"] = reverse(
+            "inventory:ingredient_overview", kwargs={"pk": self.object.pk}
+        )
+        context["purchase_list_url"] = reverse(
+            "inventory:purchase_list", kwargs={"pk": self.object.pk}
+        )
+        return context
+
+
+class IngredientOverviewView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+
+        ingredient = get_object_or_404(
+            Ingredient,
+            pk=pk,
+            user=request.user,
+        )
+
+        return render(
+            request,
+            "inventory/ingredient/partials/detail/_tab_overview.html",
+            {
+                "ingredient": ingredient,
+            },
+        )
+
 
 class PurchaseListView(LoginRequiredMixin, View):
     def get(self, request, pk):
