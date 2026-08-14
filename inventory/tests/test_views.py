@@ -195,7 +195,7 @@ class IngredientUpdateViewTests(TestCase):
             response, "inventory/ingredient/oob/_update_success.html"
         )
 
-    def test_ingredient_update_view_ingredient_updated(self):
+    def test_ingredient_update_view_updates_ingredient(self):
         response = self.client.post(
             self.url,
             data={

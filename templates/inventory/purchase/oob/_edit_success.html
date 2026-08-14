@@ -1,4 +1,6 @@
-<div id="purchase-summary" hx-swap-oob="innerHTML">{% include "inventory/purchase/partials/_summary.html" %}</div>
+<div id="purchase-summary" hx-swap-oob="innerHTML">
+    {% include "inventory/purchase/partials/detail/_summary.html" %}
+</div>
 <div id="modal-root" hx-swap-oob="true"></div>
-<div id="main-info" hx-swap-oob="true">{% include "inventory/purchase/partials/_main_info.html" %}</div>
+<div id="main-info" hx-swap-oob="true">{% include "inventory/purchase/partials/detail/_main_info.html" %}</div>
 {% include "components/toast/_toast_oob.html" with message=message type=type %}
