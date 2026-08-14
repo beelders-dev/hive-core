@@ -1,5 +1,5 @@
 <div id="tab-buttons" hx-swap-oob="innerHTML">
-    {% include "components/tab/_tabs.html" with tabs=tabs active_tab=active_tab target="#tab-content" %}
+    {% include "components/tab/_tabs.html" with tabs=tabs active_tab=active_tab target="ingredient-detail-content" %}
 </div>
 {% if active_tab == "overview" %}
     {% include "inventory/ingredient/partials/detail/_tab_overview.html" with ingredient=ingredient %}

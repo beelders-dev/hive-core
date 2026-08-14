@@ -19,8 +19,8 @@
             </div>
         </div>
         <div id="tab-buttons">
-            {% include "components/tab/_tabs.html" with tabs=tabs active_tab=active_tab target="#tab-content" %}
+            {% include "components/tab/_tabs.html" with tabs=tabs active_tab=active_tab target="ingredient-detail-content" %}
         </div>
-        <div id="tab-content">{% include "inventory/ingredient/partials/detail/_tab_overview.html" %}</div>
+        <div id="ingredient-detail-content">{% include "inventory/ingredient/partials/detail/_tab_overview.html" %}</div>
     </div>
 {% endblock content %}

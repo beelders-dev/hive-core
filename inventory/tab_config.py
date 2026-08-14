@@ -20,3 +20,24 @@ def ingredient_detail_tabs(ingredient):
             ),
         },
     ]
+
+
+def purchase_detail_tabs(purchase):
+    return [
+        {
+            "id": "overview",
+            "label": "Overview",
+            "url": reverse(
+                "inventory:purchase_overview",
+                kwargs={"pk": purchase.pk},
+            ),
+        },
+        {
+            "id": "adjustments",
+            "label": "Adjustments",
+            "url": reverse(
+                "inventory:adjustment_list",
+                kwargs={"pk": purchase.pk},
+            ),
+        },
+    ]

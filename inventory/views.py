@@ -19,7 +19,7 @@ from django.urls import reverse_lazy
 from .models import Ingredient, IngredientPurchase, PurchaseAdjustment
 from .forms import IngredientForm, IngredientPurchaseForm, PurchaseAdjustmentForm
 from .services import PurchaseAdjustmentService
-from .tab_config import ingredient_detail_tabs
+from .tab_config import ingredient_detail_tabs, purchase_detail_tabs
 
 
 class InventoryHomeView(LoginRequiredMixin, TemplateView):
@@ -158,7 +158,6 @@ class PurchaseListView(LoginRequiredMixin, View):
 
         return render(
             request,
-            # "inventory/purchase/partials/_list.html",
             "inventory/ingredient/oob/_tab_switch.html",
             {
                 "purchases": purchases,
@@ -173,6 +172,28 @@ class PurchaseDetailView(LoginRequiredMixin, DetailView):
     model = IngredientPurchase
     context_object_name = "purchase"
     template_name = "inventory/purchase/detail.html"
+    extra_context = {"active_tab": "overview"}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["tabs"] = purchase_detail_tabs(self.object)
+
+        return context
+
+
+class PurchaseOverviewView(LoginRequiredMixin, View):
+    def get(self, request, pk):
+        purchase = get_object_or_404(IngredientPurchase, pk=pk)
+
+        return render(
+            request,
+            "inventory/purchase/oob/_tab_switch.html",
+            {
+                "purchase": purchase,
+                "active_tab": "overview",
+                "tabs": purchase_detail_tabs(purchase),
+            },
+        )
 
 
 class PurchaseCreateView(LoginRequiredMixin, CreateView):
@@ -265,14 +286,23 @@ class PurchaseUpdateView(LoginRequiredMixin, UpdateView):
         )
 
 
-class PurchaseAdjustmentListView(LoginRequiredMixin, ListView):
-    model = PurchaseAdjustment
-    template_name = "inventory/adjustment/partials/_list.html"
-    context_object_name = "adjustment_list"
+class PurchaseAdjustmentListView(LoginRequiredMixin, View):
+    def get(self, request, pk):
 
-    def get_queryset(self):
-        purchase = IngredientPurchase.objects.get(pk=self.kwargs["pk"])
-        return purchase.adjustments.all()
+        purchase = get_object_or_404(
+            IngredientPurchase,
+            pk=self.kwargs["pk"],
+        )
+
+        return render(
+            request,
+            "inventory/purchase/oob/_tab_switch.html",
+            {
+                "adjustment_list": purchase.adjustments.all(),
+                "active_tab": "adjustments",
+                "tabs": purchase_detail_tabs(purchase),
+            },
+        )
 
 
 class PurchaseAdjustmentCreateView(LoginRequiredMixin, CreateView):

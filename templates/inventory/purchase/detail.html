@@ -20,28 +20,10 @@
                         hx-swap="innerHTML">Adjust Stock</button>
             </div>
         </div>
-        <!-- Content -->
-        <div class="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
-            <!-- Purchase Card -->
-            <section class="card overflow-hidden lg:col-span-8">
-                <!-- Card Header -->
-                <div class="border-b border-slate-200">
-                    {% include "components/card/_header.html" with title=purchase.ingredient.name subtitle="Purchase ID: "|add:purchase.short_id %}
-                </div>
-                <!-- Summary -->
-                <div id="purchase-summary">{% include "inventory/purchase/partials/_summary.html" %}</div>
-                <!-- Details -->
-                <div id="main-info">{% include "inventory/purchase/partials/_main_info.html" %}</div>
-                <!-- Footer -->
-                <div class="border-t border-slate-200 bg-slate-50 px-4 py-4 sm:px-6"></div>
-            </section>
-            <!-- Adjustment List -->
-            <aside id="adjustment-list"
-                   class="card min-w-0 overflow-hidden lg:col-span-4"
-                   hx-get="{% url 'inventory:adjustment_list' purchase.pk %}"
-                   hx-trigger="load"
-                   hx-swap-oob="true">
-            </aside>
+        <div id="purchase-detail-tab-buttons">
+            {% include "components/tab/_tabs.html" with tabs=tabs active_tab=active_tab target="purchase-detail-content" %}
         </div>
+        <!-- Content -->
+        <div id="purchase-detail-content">{% include "inventory/purchase/partials/detail/_purchase_overview.html" %}</div>
     </div>
 {% endblock content %}

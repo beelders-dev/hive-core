@@ -3,7 +3,7 @@
                 <button type="button"
                         class="tab-button {% if active_tab == tab.id %}tab-button-active{% endif %}"
                         hx-get="{{ tab.url }}"
-                        hx-target="{{ target }}"
+                        hx-target="#{{ target }}"
                         hx-swap="innerHTML">{{ tab.label }}</button>
         {% endfor %}
 </nav>
