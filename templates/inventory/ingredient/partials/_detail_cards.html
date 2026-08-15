@@ -1,0 +1,4 @@
+{% load humanize %}
+{% include "components/_metric_card.html" with label="Total Inventory Value" value=ingredient.total_inventory_value|floatformat:2|intcomma prefix="₱" %}
+{% include "components/_metric_card.html" with label="Current Stock" value=ingredient.current_stock|floatformat:2|intcomma suffix=ingredient.get_unit_display %}
+{% include "components/_metric_card.html" with label="Average Cost / "|add:ingredient.unit value=ingredient.average_unit_cost|floatformat:2 prefix="₱" suffix=ingredient.unit %}

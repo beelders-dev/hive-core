@@ -1,7 +1,12 @@
-<!-- Stats -->
-<div id="ingredient-stats"
-     class="mb-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4">
-    {% include "inventory/ingredient/partials/_stat_cards.html" %}
+<div class="grid sm:grid-cols-2">
+    <div class="order-1 col-span-1 sm:order-2">
+        <div id="ingredient-stats">
+            <div class="grid grid-cols-2 gap-3 p-3  overflow-hidden">
+                {% include "inventory/ingredient/partials/_detail_cards.html" %}
+            </div>
+        </div>
+    </div>
+    <div class="order-2 col-span-1 sm:order-1">
+        <div id="ingredient-summary">{% include "inventory/ingredient/partials/detail/_summary.html" %}</div>
+    </div>
 </div>
-<!-- Ingredient Summary -->
-<div id="ingredient-summary">{% include "inventory/ingredient/partials/detail/_summary.html" %}</div>

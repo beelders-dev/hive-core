@@ -5,7 +5,12 @@
         <a href="{% url 'inventory:index' %}" class="action">← Back</a>
         <!-- Header -->
         <div class="header-container">
-            <div class="min-w-0 flex-1">{% include "components/_page_header.html" with page_title=ingredient.name %}</div>
+            <div class="min-w-0 flex-1">
+                <div class="flex flex-wrap items-center gap-3">
+                    {% include "components/_page_header.html" with page_title=ingredient.name %}
+                </div>
+                {% comment %} {% include "components/_stock_badge.html" %} {% endcomment %}
+            </div>
             <div class="flex flex-wrap gap-2 sm:gap-3">
                 <button hx-get="{% url 'inventory:purchase_create' ingredient.pk %}"
                         hx-target="#modal-root"

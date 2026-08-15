@@ -1,7 +1,16 @@
 {% if ingredient.stock_status == "out" %}
-    <span class="stock-badge stock-badge-out">Out of Stock</span>
+    <span class="stock-badge stock-badge-out px-3 py-1.5 text-sm sm:px-4 sm:py-2 sm:text-base">
+        <span class="sm:hidden">Out</span>
+        <span class="hidden sm:inline">Out of Stock</span>
+    </span>
 {% elif ingredient.stock_status == "low" %}
-    <span class="stock-badge stock-badge-low">Low Stock</span>
+    <span class="stock-badge stock-badge-low px-3 py-1.5 text-sm sm:px-4 sm:py-2 sm:text-base">
+        <span class="sm:hidden">Low</span>
+        <span class="hidden sm:inline">Low Stock</span>
+    </span>
 {% else %}
-    <span class="stock-badge stock-badge-in">In Stock</span>
+    <span class="stock-badge stock-badge-in px-3 py-1.5 text-sm sm:px-4 sm:py-2 sm:text-base">
+        <span class="sm:hidden">In Stock</span>
+        <span class="hidden sm:inline">In Stock</span>
+    </span>
 {% endif %}
