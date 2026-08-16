@@ -2,7 +2,7 @@
     {% include "components/tab/_tabs.html" with tabs=tabs active_tab=active_tab target="ingredient-detail-content" %}
 </div>
 {% if active_tab == "overview" %}
-    {% include "inventory/ingredient/partials/detail/_tab_overview.html" with ingredient=ingredient %}
+    {% include "inventory/ingredient/partials/detail/_overview.html" with ingredient=ingredient %}
 {% elif active_tab == "purchases" %}
-    {% include "inventory/purchase/partials/_list.html" with ingredient=ingredient %}
+    {% include "inventory/purchase/partials/detail/_list.html" with ingredient=ingredient %}
 {% endif %}
