@@ -4,5 +4,5 @@
 {% if active_tab == "overview" %}
     {% include "inventory/ingredient/partials/detail/_tab_overview.html" with ingredient=ingredient %}
 {% elif active_tab == "purchases" %}
-    {% include "inventory/ingredient/partials/detail/_tab_purchases.html" with ingredient=ingredient %}
+    {% include "inventory/purchase/partials/_list.html" with ingredient=ingredient %}
 {% endif %}

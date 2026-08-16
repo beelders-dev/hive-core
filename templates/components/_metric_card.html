@@ -3,7 +3,6 @@
     <div class="mt-1.5 flex items-baseline gap-1">
         {% if prefix %}<span class="text-xs font-semibold text-slate-400 sm:text-sm">{{ prefix }}</span>{% endif %}
         <span class="font-mono text-base font-bold tracking-tight text-slate-900 sm:text-xl">{{ value|default:"0" }}</span>
-        {% if suffix %}<span class="text-[9px] font-medium text-slate-400 sm:text-xs">{{ suffix }}</span>{% endif %}
     </div>
     {% if helper %}<p class="mt-1 text-[9px] leading-relaxed text-slate-500 sm:text-xs">{{ helper }}</p>{% endif %}
 </div>
