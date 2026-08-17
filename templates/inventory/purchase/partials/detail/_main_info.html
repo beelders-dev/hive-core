@@ -20,19 +20,21 @@
             </dd>
         </div>
     </dl>
-    <h3 class="main-info-title mt-6 sm:mt-8">Metadata</h3>
-    <dl class="divide-y divide-slate-100">
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4 sm:py-4">
-            <dt class="text-xs font-medium text-slate-500 sm:text-sm">Created At</dt>
-            <dd class="min-w-0 break-words text-sm text-slate-900 sm:col-span-2">
-                {{ purchase.created_at|date:"F j, Y, g:i A" }}
-            </dd>
-        </div>
-        <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4 sm:py-4">
-            <dt class="text-xs font-medium text-slate-500 sm:text-sm">Last Modified</dt>
-            <dd class="min-w-0 break-words text-sm text-slate-900 sm:col-span-2">
-                {{ purchase.modified_at|date:"F j, Y, g:i A" }}
-            </dd>
-        </div>
-    </dl>
+    <div class="hidden md:block">
+        <h3 class="main-info-title mt-6 sm:mt-8">Metadata</h3>
+        <dl class="divide-y divide-slate-100">
+            <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4 sm:py-4">
+                <dt class="text-xs font-medium text-slate-500 sm:text-sm">Created At</dt>
+                <dd class="min-w-0 break-words text-sm text-slate-900 sm:col-span-2">
+                    {{ purchase.created_at|date:"F j, Y, g:i A" }}
+                </dd>
+            </div>
+            <div class="grid grid-cols-1 gap-1 py-3 sm:grid-cols-3 sm:gap-4 sm:py-4">
+                <dt class="text-xs font-medium text-slate-500 sm:text-sm">Last Modified</dt>
+                <dd class="min-w-0 break-words text-sm text-slate-900 sm:col-span-2">
+                    {{ purchase.modified_at|date:"F j, Y, g:i A" }}
+                </dd>
+            </div>
+        </dl>
+    </div>
 </div>

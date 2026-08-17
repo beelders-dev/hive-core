@@ -9,21 +9,49 @@
             <div class="min-w-0 flex-1">
                 {% include "components/_page_header.html" with page_title="Purchase Detail" page_description="Review this ingredient purchase record." %}
             </div>
-            <div class="flex flex-wrap gap-2 sm:gap-3">
+            <div class="flex flex-wrap justify-end gap-2 sm:gap-3">
                 <button class="action button-secondary"
                         hx-get="{% url 'inventory:purchase_update' purchase.pk %}"
                         hx-target="#modal-root"
-                        hx-swap="innerHTML">Edit Purchase Stock</button>
-                <button class="action button-success"
+                        hx-swap="innerHTML">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="24"
+                         height="24"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         class="lucide lucide-pen-line-icon lucide-pen-line">
+                        <path d="M13 21h8" />
+                        <path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" />
+                    </svg>
+                </button>
+                <button class="action button-secondary"
                         hx-get="{% url 'inventory:adjustment_create' purchase.pk %}"
                         hx-target="#modal-root"
-                        hx-swap="innerHTML">Adjust Stock</button>
+                        hx-swap="innerHTML">
+                    <svg xmlns="http://www.w3.org/2000/svg"
+                         width="24"
+                         height="24"
+                         viewBox="0 0 24 24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         stroke-linecap="round"
+                         stroke-linejoin="round"
+                         class="lucide lucide-plus-icon lucide-plus">
+                        <path d="M5 12h14" />
+                        <path d="M12 5v14" />
+                    </svg>
+                </button>
             </div>
         </div>
         <div id="purchase-detail-tab-buttons">
             {% include "components/tab/_tabs.html" with tabs=tabs active_tab=active_tab target="purchase-detail-content" %}
         </div>
         <!-- Content -->
-        <div id="purchase-detail-content">{% include "inventory/purchase/partials/detail/_purchase_overview.html" %}</div>
+        <div id="purchase-detail-content">{% include "inventory/purchase/partials/detail/_overview.html" %}</div>
     </div>
 {% endblock content %}

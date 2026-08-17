@@ -3,11 +3,11 @@
     <div class="grid grid-cols-2 divide-x divide-slate-100">
         <!-- Primary Details -->
         <div class="grid gap-5 p-4">
-            <div>
+            <div class="hidden md:block">
                 <p class="text-xs font-medium uppercase tracking-wide text-slate-500">Name</p>
                 <p class="mt-1.5 truncate text-sm font-semibold text-slate-900">{{ ingredient.name }}</p>
             </div>
-            <div>
+            <div class="hidden md:block">
                 <p class="text-xs font-medium uppercase tracking-wide text-slate-500">Base Unit</p>
                 <p class="mt-1.5 text-sm font-semibold text-slate-900">{{ ingredient.get_unit_display }}</p>
             </div>
@@ -26,11 +26,11 @@
                 <p class="mt-1.5 font-mono text-xs text-slate-700"
                    title="{{ ingredient.id }}">{{ ingredient.short_id }}</p>
             </div>
-            <div>
+            <div class="hidden md:block">
                 <p class="text-xs font-medium uppercase tracking-wide text-slate-500">Created</p>
                 <p class="mt-1.5 text-sm text-slate-700">{{ ingredient.created_at|date:"F j, Y, g:i A" }}</p>
             </div>
-            <div>
+            <div class="hidden md:block">
                 <p class="text-xs font-medium uppercase tracking-wide text-slate-500">Last Modified</p>
                 <p class="mt-1.5 text-sm text-slate-700">{{ ingredient.modified_at|date:"F j, Y, g:i A" }}</p>
             </div>
