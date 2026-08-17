@@ -1,5 +1,24 @@
 {% load humanize %}
-<div class="card overflow-hidden">
+<div class=" overflow-hidden">
+    <div class="flex justify-end p-2">
+        <button hx-get="{% url 'inventory:purchase_create' ingredient.pk %}"
+                hx-target="#modal-root"
+                class="action button-ghost">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="24"
+                 height="24"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 class="lucide lucide-plus-icon lucide-plus">
+                <path d="M5 12h14" />
+                <path d="M12 5v14" />
+            </svg>
+        </button>
+    </div>
     {% if purchases %}
         <!-- Desktop Header -->
         <div class="hidden grid-cols-7 gap-4 border-b border-slate-200 bg-slate-50/80 px-5 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:grid">
@@ -12,10 +31,10 @@
             <div class="text-right">Cost</div>
         </div>
         <!-- Purchase List -->
-        <div class="divide-y divide-slate-200">
+        <div class="space-y-2.5 sm:space-y-0">
             {% for purchase in purchases %}
                 <a href="{% url 'inventory:purchase' purchase.id %}"
-                   class="group block odd:bg-slate-100/70 hover:bg-slate-200/60 focus:bg-slate-200/60 focus:outline-none">
+                   class="group block rounded-lg border border-slate-200 bg-white shadow-sm transition hover:border-slate-300 hover:bg-slate-50 hover:shadow sm:rounded-none sm:border-0 sm:border-b sm:border-slate-200 sm:bg-transparent sm:shadow-none sm:hover:border-slate-200 sm:hover:bg-slate-50/70 sm:hover:shadow-none focus:outline-none focus:ring-2 focus:ring-slate-200">
                     <!-- Desktop -->
                     <div class="hidden grid-cols-7 items-center gap-4 px-5 py-4 sm:grid">
                         <div class="font-mono text-xs text-slate-500">{{ purchase.short_id }}</div>
@@ -39,7 +58,7 @@
                         <div class="text-right font-mono text-sm font-semibold text-slate-900">₱{{ purchase.total_cost|intcomma }}</div>
                     </div>
                     <!-- Mobile -->
-                    <div class="px-4 py-3.5 sm:hidden">
+                    <div class="px-4 py-4 sm:hidden">
                         <!-- Header -->
                         <div class="flex items-start justify-between gap-3">
                             <div class="min-w-0">
@@ -49,7 +68,7 @@
                             <p class="shrink-0 font-mono text-sm font-semibold text-slate-900">₱{{ purchase.total_cost|intcomma }}</p>
                         </div>
                         <!-- Stock -->
-                        <div class="mt-3 flex items-center justify-between border-y border-slate-100 py-2.5">
+                        <div class="mt-3 flex items-center justify-between py-2.5">
                             <div>
                                 <p class="text-[10px] font-medium uppercase tracking-wide text-slate-400">Remaining</p>
                                 {% if purchase.qty_remaining > 0 %}
