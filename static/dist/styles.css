@@ -2984,6 +2984,10 @@ a:hover {
     grid-column: span 8 / span 8;
   }
 
+  .lg\:hidden {
+    display: none;
+  }
+
   .lg\:grid-cols-12 {
     grid-template-columns: repeat(12, minmax(0, 1fr));
   }
