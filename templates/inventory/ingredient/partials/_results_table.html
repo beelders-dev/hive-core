@@ -1,45 +1,49 @@
 {% load humanize %}
-<div class="overflow-hidden bg-white">
+<div class="overflow-hidden rounded-xl border border-slate-200 bg-white">
     <div class="max-h-[420px] overflow-y-auto">
-        <!-- Table Header -->
-        <div class="sticky top-0 z-10 grid grid-cols-12 bg-slate-50 text-xs font-semibold uppercase tracking-wide text-slate-500">
-            <!-- ID -->
-            <div class="col-span-2 hidden px-4 py-3 sm:block sm:px-5">ID</div>
-            <!-- Ingredient -->
-            <div class="col-span-6 px-4 py-3 sm:col-span-4 sm:px-5">Ingredient</div>
-            <!-- Stock -->
-            <div class="col-span-3 px-4 py-3 text-right sm:col-span-2 sm:px-5">Stock</div>
-            <!-- Status -->
-            <div class="col-span-3 px-4 py-3 text-center sm:col-span-4 sm:px-5">Status</div>
+        <!-- Desktop Header -->
+        <div class="sticky top-0 z-10 hidden grid-cols-12 border-b border-slate-200 bg-slate-50/95 text-xs font-semibold uppercase tracking-wide text-slate-500 backdrop-blur sm:grid">
+            <div class="col-span-2 px-5 py-3">ID</div>
+            <div class="col-span-4 px-5 py-3">Ingredient</div>
+            <div class="col-span-2 px-5 py-3 text-right">Stock</div>
+            <div class="col-span-4 px-5 py-3 text-center">Status</div>
         </div>
         <!-- Results -->
         <div class="divide-y divide-slate-100">
             {% for ingredient in ingredient_list %}
                 <a href="{{ ingredient.get_absolute_url }}"
-                   class="grid grid-cols-12 items-center bg-white transition duration-200 hover:bg-slate-50">
+                   class="group grid grid-cols-12 items-center px-4 py-4 transition-colors hover:bg-slate-50 active:bg-slate-100 sm:px-0 sm:py-0">
                     <!-- ID -->
-                    <div class="col-span-2 hidden px-4 py-3 text-sm text-slate-900 sm:block sm:px-5 sm:py-4">
-                        {{ ingredient.id|stringformat:"s"|slice:":8"|upper }}
+                    <div class="col-span-2 hidden px-5 py-4 text-sm text-slate-500 sm:block">
+                        <span class="font-mono text-xs">{{ ingredient.id|stringformat:"s"|slice:":8"|upper }}</span>
                     </div>
                     <!-- Ingredient -->
-                    <div class="col-span-6 min-w-0 px-4 py-3 sm:col-span-4 sm:px-5 sm:py-4">
-                        <p class="truncate font-medium text-slate-900">{{ ingredient.name }}</p>
-                        <p class="mt-1 truncate text-xs text-slate-500">Unit: {{ ingredient.get_unit_display }}</p>
+                    <div class="col-span-6 min-w-0 sm:col-span-4 sm:px-5 sm:py-4">
+                        <p class="truncate font-medium text-slate-900 transition-colors group-hover:text-slate-700">{{ ingredient.name }}</p>
+                        <p class="mt-1 text-xs text-slate-500">{{ ingredient.get_unit_display }}</p>
                     </div>
                     <!-- Stock -->
-                    <div class="col-span-3 min-w-0 px-4 py-3 text-right sm:col-span-2 sm:px-5 sm:py-4">
-                        <p class="truncate font-mono text-sm font-semibold text-slate-900">
-                            {{ ingredient.current_stock|floatformat:2|intcomma }}
-                        </p>
+                    <div class="col-span-3 min-w-0 text-right sm:col-span-2 sm:px-5 sm:py-4">
+                        <p class="tabular-nums text-sm font-semibold text-slate-900">{{ ingredient.current_stock|floatformat:2|intcomma }}</p>
+                        <p class="mt-1 text-[11px] text-slate-400 sm:hidden">stock</p>
                     </div>
                     <!-- Status -->
-                    <div class="col-span-3 px-4 py-3 sm:px-5 sm:py-4">
-                        <div class="flex justify-center">{% include "components/_stock_badge.html" with ingredient=ingredient %}</div>
+                    <div class="col-span-3 flex justify-end sm:col-span-4 sm:justify-center sm:px-5 sm:py-4">
+                        {% include "components/_stock_badge.html" with ingredient=ingredient %}
                     </div>
                 </a>
             {% empty %}
                 <div class="flex min-h-[260px] flex-col items-center justify-center px-6 py-12 text-center">
+                    <div class="mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-slate-100">
+                        <svg class="h-5 w-5 text-slate-400"
+                             fill="none"
+                             stroke="currentColor"
+                             viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0H4" />
+                        </svg>
+                    </div>
                     <p class="text-sm font-medium text-slate-700">No ingredients found</p>
+                    <p class="mt-1 text-xs text-slate-500">Try adjusting your search or add an ingredient.</p>
                 </div>
             {% endfor %}
         </div>
