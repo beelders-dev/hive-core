@@ -5,12 +5,8 @@
         <a href="{% url 'inventory:index' %}" class="action">← Back</a>
         <!-- Header -->
         <div class="header-container">
-            <div class="min-w-0 flex-1">
-                <div class="flex flex-wrap items-center gap-3">
-                    {% include "components/_page_header.html" with page_title=ingredient.name %}
-                </div>
-            </div>
-            <div class="flex flex-wrap gap-2 sm:gap-3 justify-end">
+            {% include "components/_page_header.html" with page_title=ingredient.name %}
+            <div class="header-actions">
                 <button hx-get="{% url 'inventory:update' ingredient.pk %}"
                         hx-target="#modal-root"
                         class="action button-secondary">

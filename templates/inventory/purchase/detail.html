@@ -9,7 +9,7 @@
             <div class="min-w-0 flex-1">
                 {% include "components/_page_header.html" with page_title="Purchase Detail" page_description="Review this ingredient purchase record." %}
             </div>
-            <div class="flex flex-wrap justify-end gap-2 sm:gap-3">
+            <div class="header-actions">
                 <button class="action button-secondary"
                         hx-get="{% url 'inventory:purchase_update' purchase.pk %}"
                         hx-target="#modal-root"

@@ -3,10 +3,8 @@
     <div class="mx-auto my-6 max-w-7xl px-4 font-sans sm:my-10 sm:px-6 lg:px-8">
         <!-- Page Header -->
         <div class="header-container">
-            <div class="flex-1">
-                {% include "components/_page_header.html" with page_title="Ingredients" page_description="Manage your ingredients, monitor available stock, and keep your recipe costs accurate." %}
-            </div>
-            <div class="flex justify-end">
+            {% include "components/_page_header.html" with page_title="Inventory" page_description="Manage your ingredients, monitor available stock, and keep your recipe costs accurate." %}
+            <div class="header-actions">
                 <button hx-get="{{ create_ingredient_url }}"
                         hx-target="#modal-root"
                         hx-swap="true"

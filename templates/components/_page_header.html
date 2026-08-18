@@ -1,5 +1,6 @@
-<header class=" w-full  border-slate-200 pb-2 pl-2 tracking-wide sm:mb-3  sm:pl-2">
-    <h1 class="text-2xl font-bold text-slate-900 sm:text-3xl">{{ page_title }}</h1>
-    <p class="hidden text-sm text-slate-600 ">{{ page_description }}</p>
-    <div class="h-[2px] w-full bg-slate-300"></div>
+<header class="mb-5 pb-4 sm:mb-6 sm:pb-5">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">{{ page_title }}</h1>
+    {% if page_description %}
+        <p class="mt-1.5 max-w-2xl text-sm leading-relaxed text-slate-500">{{ page_description }}</p>
+    {% endif %}
 </header>
