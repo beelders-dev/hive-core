@@ -9,10 +9,10 @@
             {% include "components/_page_header.html" with page_title="Dashboard" page_description="Monitor your ingredients, recipes, and production readiness in one place." %}
             <!-- Statistics -->
             <div class="mb-8 grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
-                {% include "components/_stat_card.html" with label="Ingredients" value=total_ingredients helper="Inventory items tracked" badge="Inventory" badge_class="bg-blue-100 text-blue-700" %}
-                {% include "components/_stat_card.html" with label="Recipes" value=total_recipes helper="Production formulas saved" badge="Production" badge_class="bg-violet-100 text-violet-700" %}
-                {% include "components/_stat_card.html" with label="Low Stock" value=low_stock_count helper="Below stock threshold" badge="Warning" border_class="border-amber-200" value_class="text-amber-600" badge_class="bg-amber-100 text-amber-700" %}
-                {% include "components/_stat_card.html" with label="Out of Stock" value=out_of_stock_count helper="Needs immediate restocking" badge="Critical" border_class="border-red-200" value_class="text-red-600" badge_class="bg-red-100 text-red-700" %}
+                {% include "components/_stat_card.html" with label="Ingredients" value=total_ingredients helper="Inventory items tracked" badge="Inventory" badge_class="bg-blue-100 text-blue-700" badge_dot_class="bg-blue-500" %}
+                {% include "components/_stat_card.html" with label="Recipes" value=total_recipes helper="Production formulas saved" badge="Production" badge_class="bg-violet-100 text-violet-700" badge_dot_class="bg-violet-500" %}
+                {% include "components/_stat_card.html" with label="Low Stock" value=low_stock_count helper="Below stock threshold" badge="Warning" card_class="border-amber-200" badge_class="bg-amber-100 text-amber-700" badge_dot_class="bg-amber-500" %}
+                {% include "components/_stat_card.html" with label="Out of Stock" value=out_of_stock_count helper="Needs immediate restocking" badge="Critical" card_class="border-red-200" badge_class="bg-red-100 text-red-700" badge_dot_class="bg-red-500" %}
             </div>
             <div class="grid gap-8 lg:grid-cols-3">
                 <!-- Left Column -->
